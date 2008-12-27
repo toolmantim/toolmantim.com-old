@@ -1,0 +1,32 @@
+!!! Strict
+%html{"xml:lang" => "en", :lang => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %title= @page_title
+    
+    %link{:href => "http://feeds.feedburner.com/toolmantim", :rel => "alternate", :title => "Recent articles", :type => "application/atom+xml"}/
+
+    %link{:href => "/stylesheets/toolmantim.css", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    /[if lt IE 7]
+      %link{:href => "/stylesheets/ie.css", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+
+    %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
+    %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
+
+    %script{:src => "/javascripts/codehighlighter/code_highlighter.js", :type => "text/javascript"}
+
+  %body
+    .content
+      %h1
+        %a{ :href => "/" }
+          %img{ :src => "/images/logo.png?1166739391", :height => "60", :alt => "toolmantim", :width => "228" }/
+
+      %ul.navigation
+        %li
+          %a{ :href => "/articles" } Articles
+        %li
+          %a{ :href => "http://tumble.toolmantim.com" } blog-a-log
+        %li
+          %a{ :href => "http://flickr.com/photos/toolmantim" } photos
+  
+      = yield

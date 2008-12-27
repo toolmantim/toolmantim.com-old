@@ -1,0 +1,406 @@
+html {
+  background: #000;
+  color: #fff;
+  font-family: Georgia;
+}
+body {
+  padding-bottom: 100px;
+}
+body, html {
+  margin: 0;
+  padding: 0;
+}
+.content {
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 2em;
+}
+a img {
+  border: none;
+}
+h1 {
+  font-size: 250%;
+  margin-bottom: 0.2em;
+}
+h1 a {
+  color: #fff;
+}
+h1 span {
+  color: #888;
+}
+h1 a:hover {
+  color: #fff;
+}
+h1 a:hover span {
+  color: #229ADC;
+}
+h2 {
+  color: #FFC500;
+}
+a {
+  color: #229ADC;
+  text-decoration: none;
+}
+a:hover {
+  color: #42BAFB;
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, .navigation {
+  text-shadow: 0 0 0 #000;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+h1, h2, h3 {
+  letter-spacing: -0.08em;  
+  text-transform: uppercase;
+}
+h1 {
+  letter-spacing: -0.12em;
+}
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover {
+  text-decoration: none;
+}
+
+div.previously {
+  margin-bottom: 20px;
+}
+.previously h4 {
+  margin: 0.3em 0;
+}
+.previously h4 .date, .previously h4 .comments {
+  text-transform: none;
+  font-family: Georgia; 
+  color: #888;
+  font-weight: normal;
+  font-size: 90%;
+  margin-right: 0.3em;
+}
+
+.previously h4 .comments {
+  color: #999;
+}
+
+.article h3 {
+  text-transform: none;
+  font-size: 150%;
+  margin-top: 1.5em;
+  margin-bottom: 0.2em;
+}
+.article .body {
+  line-height: 140%;
+}
+.article .body p {
+  margin: 0.75em 0;
+}
+.article code {
+  letter-spacing: 0;
+  line-height: 130%;
+}
+.article .body pre {
+  margin-bottom: 2em;
+}
+.article {
+  margin-top: 2em;
+}
+.article .published {
+  margin-top: 0;
+  color: #888;
+}
+.article .body blockquote {
+  border: 1px solid #444;
+  background-color: #333;
+  font-color: #ddd;
+  margin-left: 1.5em;
+  font-family: "Hoefler Text";
+  padding: 1px 1px 1px 0.3em;
+}
+.article .body blockquote p {
+  margin: 0.3em;
+}
+
+.comments h3 {
+  clear: left;
+  margin-top: 2em;
+}
+.comment .author {
+  color: #999;
+  margin: 0.5em 0 0 0;
+  font-size: 140%;
+}
+.comment .body p {
+  margin-top: 0.5em;
+}
+#comment-submission-message {
+  padding: 1em; /* To pad it when used as an anchor */
+  background-color: #444;
+}
+
+p.none {
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+  color: #888;
+  font-size: 150%;
+}
+#newcomment {
+  margin-top: 1em;
+  float: left;
+  width: 40em;
+  padding-bottom: 2em;
+}
+#newcomment label,
+#newcomment input,
+#newcomment textarea {
+  display: block;
+  float: left;
+}
+#newcomment textarea {
+  font-size: 95%;
+  width: 25em;
+  height: 10em;
+}
+#newcomment input.text-field {
+  width: 15em;
+  font-size: 130%;
+}
+#newcomment label {
+  width: 5em;
+  text-align: right;
+  clear: left;
+  margin-top: 5px;
+  margin-right: 3px;
+}
+#newcomment .submit {
+  clear: left;
+  padding-top: 1em;
+  margin-left: 5em;
+}
+#newcomment .help {
+  float: left;
+  display: block;
+  color: #999;
+}
+#comment_url_label .optional {
+  position: relative;
+  top: -1em;
+  left: 25em;
+}
+#newcomment h2 {
+  margin-top: 0;
+}
+#comment-token {
+  display: none;
+}
+
+.footer {
+  clear: both;
+  margin-top: 2.5em;
+ background-image: url(../images/footer-bg.gif);
+  background-repeat: repeat-x;
+  background-position: top left;
+  border-top: 1px solid #333;
+}
+.footer .feeds a {
+  margin-right: 1em;
+}
+
+
+.footer .quip {
+  margin-top: 1em;
+  float: right;
+  color: #333;
+}
+
+p.notice {
+  padding: 10px;
+  border: #f89838 1px dashed;
+}
+p.notice .date {
+  color: #f89838;
+}
+
+.article a.thumb, .article a.thumb2, .article img.thumb, .article img.thumb2 {
+  border: 1px solid #f89838;
+  margin-bottom: 8px;
+}
+.article a.thumb, .article img.thumb {
+  float: left;
+  margin-right: 10px;
+}
+.article a.thumb2, .article img.thumb2 {
+  float: right;
+  margin-left: 10px;
+}
+
+.article a.thumb img, .article a.thumb2 img {
+  border: none;
+  margin: 0;
+}
+
+.article strong.update {
+  color: #f89838;
+  font-style: italic;
+}
+
+.column {
+  float: left;
+  margin-bottom: 1.5em;
+}
+.column h2 {
+  margin-bottom: 0em;
+}
+.column h3 {
+  margin-top: 0.5em;
+}
+.column p.links {
+  margin-top: -0.5em;
+}
+.column p.published {
+  margin-top: -0.3em;
+}
+#column-life {
+  padding: 0 3%;
+  width: 45%;
+}
+#column-tech {
+  padding: 0 3%;
+  width: 41%;
+}
+
+.workshopad {
+  float: left;
+  width: 41%;
+  padding: 0 3%;
+}
+
+dl.gigs {
+  clear: left;
+}
+dl.gigs dt {
+  margin-top: 0.7em;
+  margin-bottom: 0.2em;
+}
+dl.gigs dd {
+  margin-left: 0;
+  padding-left: 30px;
+}
+dl.gigs dd img {
+  vertical-align: middle;
+}
+
+ul.navigation {
+  position: absolute;
+  top: 30px;
+  left: 225px;
+  text-transform: uppercase;
+}
+ul.navigation li {
+  display: inline;
+  margin: 0 0.4em;
+  padding: 0;
+  border-bottom: 3px solid #333;
+}
+ul.navigation a {
+  color: #ddd;
+}
+
+table.gigs-legend {
+  border-collapse: collapse;
+  color: #ddd;
+  font-style: italic;
+}
+table.gigs-legend caption {
+  margin-left: 20px;
+  padding-left: 0;
+}
+table.gigs-legend th, table.gigs-legend td {
+  border: 1px solid #666;
+  padding: 3px 3px;
+}
+table.gigs-legend td {
+  background-color: #444;
+  padding: 3px 9px 3px 5px;
+}
+
+dl.translations dt {
+  margin: 0.5em 0 0 0;
+  font-style: italic;
+}
+
+dl.translations dd {
+  margin: 0;
+}
+
+/*
+	Code highlighting
+    VibrantInk colours from Justin Palmer @ http://encytemedia.com
+*/
+
+ pre {
+   padding: 5px 8px;
+   overflow: auto;
+   width: 100%;
+ }
+ pre, code {
+   background-color: #222;
+ }
+
+ /** RUBY / JAVASCRIPT **/
+ code span.comment {
+ 	color: #BD48B3;
+ }
+
+ code span.string {
+ 	color: #99FF00;
+ }
+
+ code span.brackets {
+
+ }
+
+ code span.symbol {
+ 	color: #6BCFF7;
+ }
+
+ code span.keywords {
+ 	color: #FF8400;
+ }
+
+ /** HTML **/
+ code.html span.tag {
+ 	color: #fff;
+ }
+
+ code.html span.attribute {
+ 	color: #FFD500;
+ }
+
+ code.html span.string {
+ 	color: #99FF00;
+ }
+
+ code.html span.comment {
+ 	color: #999;
+ }
+
+ code.html span.doctype {
+ 	color: #D7FF80;
+ }
+
+/** CSS **/
+code.css .selectors {
+  color: #f60;
+}
+
+code.css .properties {
+  color: #995;
+}
+
+/** SHELL **/
+code.shell {
+  color: #999;
+}
+code.shell span.keywords {
+ 	color: #fff;
+}

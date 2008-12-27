@@ -1,1 +1,7 @@
-= @articles.sort.last.title
+- @page_title = "Tim Lucas - toolmantim.com"
+
+- last_article = @articles.last
+
+Recent article:
+%a{:href => article_path(last_article)}= last_article.title
+%em= last_article.published
