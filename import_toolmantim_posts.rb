@@ -12,7 +12,7 @@ end
 
 Article.eager(:comments).filter(:category_id => 1).all.each do |article|
   f = File.open("articles/#{article[:permalink]}.haml", "w")
-  f.puts "-# title: #{article[:title_html].gsub("'",'\\\'')}"
+  f.puts "-# title: #{article[:title_html]}"
   f.puts "-# published: #{article[:published_at].strftime("%Y-%m-%d")}"
   f.puts "-# updated: #{article[:modified_at].strftime("%Y-%m-%d")}" if article[:modified_at]
   f.puts 
@@ -23,7 +23,7 @@ Article.eager(:comments).filter(:category_id => 1).all.each do |article|
     f.puts
     f.puts "#comments.comments"
     f.puts "  %h3 Comments"
-    f.puts "  <p class='old-comments'>New comments are no longer being accepted.</p>"
+    f.puts "  %p.old-comments New comments are no longer being accepted."
     f.puts "  %ol"
     article.comments.each do |comment|
       f.puts "    %li#comment_#{comment[:id]}"
