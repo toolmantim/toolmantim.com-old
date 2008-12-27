@@ -1,0 +1,140 @@
+-# title: Installing Django on <span class="caps">OSX</span>
+-# published: 2006-05-31
+
+:textile
+  Whilst "Django":http://www.djangoproject.com/ is checking out of SVN I'll give you a quick checklist to get it up and running on OSX.
+  
+  # Install "MySQL":http://dev.mysql.com/downloads/mysql/5.0.html#Mac_OS_X
+  # Install "darwinports":http://darwinports.opendarwin.org/getdp/
+  # @$ sudo port install subversion@
+  # @$ sudo port install python24@
+  # Add @/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin@ to your path (before $PATH so as to use Python 2.4)
+  # Download and extract "mysql-python bindings":http://sourceforge.net/projects/mysql-python
+  # Change dir into the extracted mysql-python
+  # @$ python setup.py build@
+  # @$ sudo python setup.py install@
+  # @$ mkdir ~/django@
+  # @$ svn co http://code.djangoproject.com/svn/django/trunk/ ~/django/django_src@
+  # Add @$HOME/django/django_src/django/bin@ to your path
+  # Add @export PYTHONPATH=$PYTHONPATH:$HOME/django/django_src:$HOME/django/django_projects@ to your .profile
+  
+  And there you have it:
+  
+  <pre><code>
+  $ django-admin.py
+  usage: django-admin.py action [options]
+  actions:
+    adminindex [appname ...]
+      Prints the admin-index template snippet for the given app name(s).
+  ...
+  </code></pre>
+  
+  Instead of placing it in @~/django@ you could have put it somewhere nicer, like @/usr/local/django@, but I thought I'd keep it consistent with "Jeff Croft's article on setting up DJango on dreamhost":http://www2.jeffcroft.com/2006/may/11/django-dreamhost/.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_245
+      %p.author
+        Allan
+      .body
+        :textile
+          Excellent, concise instructions, thought i would add a wee bit of clarity that might help:
+          
+          Step 5: If using default bash shell the actual code should be:
+          <code>
+          echo 'PATH=/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:$PATH' >> ~/.bash_profile
+          </code>
+          then:
+          <code>
+          source .bash_profile
+          </code>
+          Step 12:
+          <code>
+          echo 'PATH=$PATH:$HOME/django/django_src/django/bin' >> ~/.bash_profile
+          </code>
+          then, again:
+          <code>
+          source .bash_profile
+          </code>
+          Step 13:
+          <code>
+          echo 'export PYTHONPATH=$PYTHONPATH:$HOME/django/django_src:$HOME/django/django_projects' >> ~/.profile
+          </code>
+          finally:
+          <code>
+          source .profile
+          </code>
+          
+          Cheers TT!
+    %li#comment_246
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Allan! Glad you found it useful.
+          
+          Apologies for the line breaks...
+    %li#comment_250
+      %p.author
+        %a{:href => 'http://datafly.net'} Sean Schertell
+      .body
+        :textile
+          Can you please explain the difference between .profile and .bash_profile ?
+          
+          Why is some stuff going in one and other stuff in the other?
+    %li#comment_253
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Most (all?) shells have their own preferred config file, and then fall back on @.profile@. If it's BASH specific it should probably go into @.bash_profile@. I'm usually too lazy to pay much attention...
+          
+          Why Allan's last step suggests using @.profile@ beats me.
+    %li#comment_269
+      %p.author
+        %a{:href => 'http://mullerdigital.com'} Nick Muller
+      .body
+        :textile
+          That was sweet Tim!
+          
+          cheers, very much
+    %li#comment_303
+      %p.author
+        Allan
+      .body
+        :textile
+          That my newbie mistake, you're quite right - the final step should have been consistant with the rest and read .bash_profile' not '.profile'.  But as Tim's instructions indicate you can use .profile all the way through, I just put up what worked for me!
+    %li#comment_339
+      %p.author
+        %a{:href => 'http://www.sanbaldo.com'} baldo
+      .body
+        :textile
+          how to make this step in osx?
+          
+          Add $HOME/django/django_src/django/bin to your path
+          
+          I don't know where is the "path" thing..
+    %li#comment_340
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          baldo: See the first comment by Allan above.
+    %li#comment_787
+      %p.author
+        %a{:href => 'http://www.themoleskin.com'} Kelsey Ruger
+      .body
+        :textile
+          Just wondering. Since you are already installing Darwinports, why can't you use that to install Django? Does it not work?
+    %li#comment_1527
+      %p.author
+        %a{:href => 'http://drvid.ca'} D. Starr
+      .body
+        :textile
+          Screw MacPorts, just...
+          
+          sudo easy_install http://code.djangoproject.com/svn/django/trunk/
+          
+          Nothing wrong with the Python that comes in Leopard. You will need setuptools at least for this.

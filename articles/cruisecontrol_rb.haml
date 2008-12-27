@@ -1,0 +1,13 @@
+-# title: CruiseControl.rb
+-# published: 2007-03-10
+
+:textile
+  "!http://farm1.static.flickr.com/157/383094433_d1ae3a2458_m.jpg(Diversion - Andy Lock)!":http://flickr.com/photos/andydrew/383094433/
+  
+  Alexy from "Thoughtworks":http://www.thoughtworks.com/ mentioned "CruiseControl.rb":http://cruisecontrolrb.thoughtworks.com/ on the rails-core list the other day, which though having been around since January, I hadn't heard of or seen mentioned around the traps.
+  
+  It looks like it'll be the official tool, and place, that Rails will do it's CI testing against different databases and operating systems. I don't think CC.rb can do it yet, but if the "builder" could be located on a remote machine it'd make something like this even more useful, not to mention less costly for TW.
+  
+  We were using "Cereberus":http://cerberus.rubyforge.org/ which was working just fine, but having a web interface to view the previous builds etc is so appealing I just couldn't resist ditching it for CC.rb. About 30 minutes after downloading it I had CC.rb set up a running here at "Job Futures":http://www.jobfutures.com.au, building the code for our main app (which takes 6 minutes!) after each checkin and firing off emails notifying us of errors. Nice work guys!
+  
+  There's no official announcement of CC.rb yet, but I hear that it's soon reaching 1.0, which is when it'll be officially announced.

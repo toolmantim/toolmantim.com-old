@@ -1,0 +1,120 @@
+-# title: Setting up Capistrano on Segpub
+-# published: 2006-05-26
+-# updated: 2007-09-12
+
+:textile
+  *(update)Update:* Everything's been updated for Capistrano 2.
+  
+  Before deploying your application onto "Segpub":http://segpub.com you want to make sure it's production ready (otherwise Jeremy will hunt you down). So what's production ready? Well that depends, but you should at least do the following:
+  
+   * Freeze your version of Rails into @/vendor/rails@
+   * Use the ActiveRecord session store
+  
+  All done? Time to configure your app for "Capistrano":http://rubyforge.org/projects/capistrano/. If you haven't installed Capistrano, you'll want to do that now:
+  
+  @$ gem install capistrano@
+  
+  <a href="http://www.flickr.com/photos/toolmantim/135301539/"><img src="http://static.flickr.com/44/135301539_ea790e7112_m.jpg" width="240" height="160" alt="Life on Lido, II" /></a>
+  
+  h3. Apply Capistrano
+  
+  Change into your application's directory and create the capistrano files:
+  
+  <pre><code>
+  $ capify .
+        create  Capfile
+        exists  config
+        create  config/deploy.rb
+  </code></pre>
+  
+  The following two files are created in your application directory:
+  
+  # @Capfile@ - The file cap loads by default
+  # @config/deploy.rb@ - The deployment "recipe"
+  
+  You can have a look at what cap tasks are available by invoking cap with a -T:
+  
+  @$ cap -T@
+  
+  The ones of most interest are @deploy@ and @deploy:cleanup@.
+  
+  <a href="http://www.flickr.com/photos/toolmantim/127112515/"><img src="http://static.flickr.com/48/127112515_e842063b66_m.jpg" width="240" height="160" alt="Étagère" /></a>
+  
+  h3. Customise the recipe
+  
+  Open up @config/deploy.rb@ and have a look around. Look good? Replace the contents of the file with the contents of my "Segpub Capistrano Family Recipe":http://svn.aviditybytes.com/rails/libs/segpub_capistrano_recipe/deploy.rb.
+  
+  At the top you'll notice:
+  
+  @# You MUST change the following settings to suit your application@
+  
+  Well what are you waiting for, go and change them!
+  
+  <a href="http://www.flickr.com/photos/toolmantim/127114137/"><img src="http://static.flickr.com/54/127114137_ae8e76c2b1_m.jpg" width="240" height="160" alt="" /></a>
+  
+  h3. Initial setup of your Segpub account
+  
+  Execute setup on your local machine:
+  
+  @$ cap deploy:setup@
+  
+  enter your password, and voil&#224;!
+  
+  If you SSH into your account and go to @apps/myapp/@ you'll see it's created two directories: @releases@ and @shared@.
+  
+  <a href="http://www.flickr.com/photos/toolmantim/120672458/"><img src="http://static.flickr.com/46/120672458_226ca00411_m.jpg" width="240" height="161" alt="Colourful Ducky" /></a>
+  
+  h3. Deploy your application
+  
+  And the final step, execute the following on your machine:
+  
+  @$ cap deploy:update@
+  
+  If you check your segpub account you'll notice Capistrano has checked your app out of SVN into the @releases@ directory as well as symlinked the directory @current@ to point to the new release.
+  
+  If you store your @config/database.yml@ in SVN then your job is done. Send a ticket off to Segpub support and they'll set up the rest.
+  
+  A good quick test to see if everything works is to load up the production console of your application. SSH into Segpub, browse to your app's @current@ directory and type:
+  
+  @$ ./script/console production@
+  
+  Then query one of your model's to see if the database is working correctly:
+  
+  @>> User.find(:all)@
+  
+  If, like me, you don't have your @config/database.yml@ checked into SVN then before this you'll need to follow a few extra steps.
+  
+  <a href="http://www.flickr.com/photos/toolmantim/120672334/"><img src="http://static.flickr.com/44/120672334_3c66c67320_m.jpg" width="240" height="160" alt="" /></a>
+  
+  h3. Hooking up resources not stored in SVN
+  
+  To get my app working I'll need to ssh in and manually create my @database.yml@ in the @shared@ directory. I'll also need to add an @after_update_code@ task to my deployment recipe which will create a symlink from the new deployment to the shared file.
+  
+  The @after_update_code@ task is fairly simple, and goes something like this:
+  
+  <pre><code>
+  namespace :deploy do  
+    desc "Link in the production database.yml"
+    task :after_update_code do
+      run "ln -nfs \#{shared_path}/config/database.yml \#{release_path}/config/database.yml"
+    end
+  end</code></pre>
+  
+  This exact task is included in my "Segpub Capistrano Family Recipe":http://svn.aviditybytes.com/rails/libs/segpub_capistrano_recipe/deploy.rb, so go steal it from there if you need.
+  
+  h3. Further tweaking
+  
+  It's a good idea to "set up a cron job to clear your sessions":http://www.realityforge.org/articles/2006/03/01/removing-stale-rails-sessions every so often.
+  
+  *(update)Update:* Avoid having to type in your password everytime and "set yourself up with a public key":http://forums.segpub.com.au/viewtopic.php?id=24.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_177
+      %p.author
+        %a{:href => 'http://segpub.com.au'} Jeremy
+      .body
+        :textile
+          Great work Tim!

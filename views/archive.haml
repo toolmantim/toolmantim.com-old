@@ -1,4 +1,12 @@
-%ol
-  - for article in @articles.sort
+%ol.timeline.archive
+  - for year in @articles_by_year_then_month.keys.sort.reverse
     %li
-      %a{:href => "/articles/#{article.slug}"}= article.title
+      %h1= year
+      %ol
+        - for month in @articles_by_year_then_month[year].keys.sort.reverse
+          %li
+            %h2= Date.new(2008, month, 1).strftime("%B")
+            %ol
+              - for article in @articles_by_year_then_month[year][month].sort
+                %li
+                  %a{:href => "/articles/#{article.slug}"}= article.title

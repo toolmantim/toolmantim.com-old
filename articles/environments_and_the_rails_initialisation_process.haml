@@ -1,0 +1,205 @@
+-# title: Environments and the Rails initialisation process
+-# published: 2006-12-27
+-# updated: 2006-12-27
+
+:textile
+  _When should I set up application constants_?
+  
+  _When is it safe in the initialisation process to use the Rails libraries_?
+  
+  _Where should I add code to perform application initialisation operations_?
+  
+  Though most people understand that your environment files are the key to answering some of these problems, how to actually solve them is not well known.
+  
+  I'll attempt to clarify what to use and when to use it. Out of this discussion we can hopefully add the relevant documentation to the Rails core for 1.2 onwards.
+  
+  Keep in mind that i'm only describing the default versions of the Rails generated <code>environment.rb</code> and <code>boot.rb</code>. You could, if you wanted, customise these however you like. 
+  
+  h3. First step in loading your Rails application
+  
+  The first step to your Rails application being loaded is the "requiring" of your <code>environment.rb</code> file. In fact, this is the first of 3 lines that makes up the FCGI dispatcher, <code>dispatch.fcgi</code>:
+  
+  <pre><code class="ruby">
+  require File.dirname(__FILE__) + "/../config/environment"
+  require 'fcgi_handler'
+  
+  RailsFCGIHandler.process!
+  </code></pre>
+  
+  It's within your <code>environment.rb</code> that the entire Rails environment and application environment is set up, ready to start taking requests.
+  
+  Your default <code>environment.rb</code> looks something like this:
+  
+  <pre><code class="ruby">
+  require File.join(File.dirname(__FILE__), 'boot')
+  
+  Rails::Initializer.run do |config|
+    # config
+  end
+  </code></pre>
+  
+  h3. boot.rb
+  
+  The first thing your environment.rb does is load <code>boot.rb</code>, which does two things:
+  
+  # Set the <code>RAILS_ROOT</code> constant
+  # Adds the Rails libraries and your application's code to the <code>LOAD_PATH</code>
+  
+  That's it for <code>boot.rb</code>.
+  
+  h3. Rails::Initializer.run and per-environment configs
+  
+  The second thing your environment.rb does is execute <code>Rails::Initializer.run</code>.
+  
+  After "require"ing the Rails framework, your environment's specific config file is loaded. In development, this would be <code>config/environments/development.rb</code>.
+  
+  Though the Rails framework has been "required", you _can not_ consider the Rails framework or your application as being loaded when you are in the enviroment's config file (I found this out "the hard way":http://toolmantim.com/article/2006/12/9/avoid_db_calls_when_setting_up_your_environment). This means you can't use ActiveRecord and you can't reference plugins.
+  
+  So where does that leave us?
+  
+  One option would be to move environment-specific initialisation into the <code>environment.rb</code> file, below the <code>Rails::Initializer.run</code> block:
+  
+  <pre><code class="ruby">
+  require File.join(File.dirname(__FILE__), 'boot')
+  
+  Rails::Initializer.run do |config|
+    # config
+  end
+  
+  # Set up app-wide configs
+  
+  if RAILS_ENV == "production"
+    # Set up some caches
+  end
+  if RAILS_ENV == "development"
+    # Set up some development mocks
+  end
+  if RAILS_ENV == "test"
+    # Set up some testing mocks
+  end
+  </code></pre>
+  
+  Yuck! Now we've scattered each environment's configuration all over the shop.
+  
+  How can we keep each environment's code neatly tucked away in <code>config/environments/</code>, whilst keeping in mind the Rails framework hasn't yet loaded in the environment's config file?
+  
+  The answer: <code>Configuration#after_initialize</code>.
+  
+  h3. config.after_initialize
+  
+  From the rdocs:
+  
+  bq. Sets a block which will be executed after rails has been fully initialized. Useful for per-environment configuration which depends on the framework being fully initialized.
+  
+  For example, you might need to replace/mock a method in a class that depends on the Rails framework, or set an environment-specific plugin configuration. This is what you'd do in after_initialize.
+  
+  I've moved putting all app-specific calls in my environment files into <code>after_initialize</code> blocks for consistency.
+  
+  h3. config.to_prepare
+  
+  The <code>Dispatcher#to_prepare</code> method is similar to <code>Configuration#after_initialize</code>, but is used to execute code before each request, rather than on application initialization.
+  
+  If you have classes that are being reloaded on each request during development, and want to set certain class attributes or other settings after they are reloading, you'll want to specify them in <code>to_prepare</code> rather than <code>after_initialize</code>. 
+  
+  What might look like this in your <code>config/environments/production.rb</code>:
+  
+  <pre><code class="ruby">
+  config.after_initialize do
+    SystemPaths.system_config_file = "\#{RAILS_ROOT}/configs/system.yml"
+  end
+  </code></pre>
+  
+  might look like this in <code>config/environments/development.rb</code>:
+  
+  <pre><code class="ruby">
+  config.to_prepare do
+    SystemPaths.system_config_file = "\#{RAILS_ROOT}/configs/system.yml"
+  end
+  </code></pre>
+  
+  h3. Environment vs Model
+  
+  If you've hit a wall trying to do something in your environment, maybe the behaviour should really belong in your model? Environment's shouldn't really execute a whole bunch of code, they're really just meant to set up your application so it can be invoked (via the console, via script/runner, via the dispatcher or otherwise).
+  
+  See my previous article "avoid DB calls when setting up your environment":http://toolmantim.com/article/2006/12/9/avoid_db_calls_when_setting_up_your_environment for a more concrete example of trying to do too much in your environment initialisation.
+  
+  h3. So where are all the hooks?
+  
+  All the places you have a chance to initialise code when setting up your environment, in order of execution:
+  
+  !http://www.toolmantim.com/images/blog/rails-environment-config-hooks.gif(Diagram showing execution order and location of the different initialisation hooks)!
+  
+  # _config/environment.rb_: before the initializer block
+  # _config/environment.rb_: inside the initializer block
+  # _config/environments/\#{RAILS_ENV}.rb_: top level
+  # _config/environments/\#{RAILS_ENV}.rb_: after_initialize
+  # _environment.rb_: after the initializer block
+  
+  and also the less used, but still notable, <code>config.to_prepare</code>, which gets executed by the Dispatcher on a per-request basis.
+  
+  h3. Which one to use?
+  
+  Naturally, the next question will be "I have situation X. Where should I do my configuration?" Unfortunately there's no easy answer, and all I can say is "it depends."
+  
+  If the initialisation code does not depend on the Rails framework or any plugins, it can be placed anywhere.
+  
+  If the initialisation code does depend on Rails or any plugins being available, it can be placed in either an after_initialize block or at the bottom of environment.rb.
+  
+  I hope this article clarifies things somewhat. If we can digest this kind of information into the Rails documentation (preferably as a patch to the docs and generated config files) then hopefully people won't be confused by this simple yet somewhat scary config initialisation process.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_433
+      %p.author
+        %a{:href => 'http://anthonyeden.com/'} Anthony Eden
+      .body
+        :textile
+          Nice article, Tim. There's all kinds of nuggests in Rails which you really have to dig for, but most of them are worth the effort.
+    %li#comment_435
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Tim, I came across a need for this just the other day. Had a plugin that added functionality to acts_as_tree but Rails insisted that acts_as_tree wasn't part of ActiveRecord::Base, this explains why.
+    %li#comment_447
+      %p.author
+        %a{:href => 'http://www.eadz.co.nz/'} Eadz
+      .body
+        :textile
+          Hey, Nice article! Needed to know how to find RAILS_ROOT but hey it's already there :)
+    %li#comment_533
+      %p.author
+        Frederick Hill
+      .body
+        :textile
+          Very helpful, Tim.  I've been struggling with initialization issues and this was exactly the information I needed.
+    %li#comment_542
+      %p.author
+        %a{:href => 'http://contentfree.com'} Dave Myron
+      .body
+        :textile
+          Good find, Tim. I've been frustrated with the environment-specific configs until today. #after_initialize will be very handy (and it'll keep my environment.rb free from clutter). Thanks for posting this article!
+    %li#comment_569
+      %p.author
+        %a{:href => 'http://blog.seesaw.it'} Paolo Dona
+      .body
+        :textile
+          Thanks for this very useful post!
+    %li#comment_854
+      %p.author
+        Shannon
+      .body
+        :textile
+          How would one "initialize a model" on application startup? 
+          
+          I have a error that comes up only upon the FIRST request made to a particular model. Any request thereafter works.... This leads me to think that the model is not loaded in memory -- or initialized -- until after the first request. Any ideas????
+          
+          mcphersonz AT gmail DOT com
+    %li#comment_1469
+      %p.author
+        lleb
+      .body
+        :textile
+          Great article. It's exactly what I was looking for... thank you for this writing !

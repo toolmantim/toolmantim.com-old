@@ -1,0 +1,85 @@
+-# title: So what is Rails, anyway?
+-# published: 2006-12-21
+
+:textile
+  From an email convo with a colleague. I'm guessing many people have similar questions, so I'll just put it out there.
+  
+  bq. How different is it compared to asp, php or cfm?
+  
+  It's a bit different to your asp, php, cfm style application in terms of that there's an actual self-contained application directory, that contains all your files within it. Unit tests, models, database schemas, documentation, everything. To get it up and running you can't just slap files into a directory and point Apache to it, you have to "start" the Rails application and point Apache to it. This is why hosting is a little bit more tricky.
+  
+  bq. Is it a totally different way of writing code or does it have similarity to anything else?
+  
+  The Ruby language is similar to Javascript in that it's highly dynamic, you can modify classes at runtime, and has some very elegant language features. It's similar to Python in that it gets lumped into the "scripting language" category, and it's similar to Java in that it's laid on object-oriented foundations. Check out "try ruby!":http://tryruby.hobix.com/ to give you a feel for the language. If you've done ActionScript, Java, Python, object-oriented PHP you'll feel right at home (or, more likely, a sunny island resort, sipping a pina colada and being surrounded by sexy lookin people).
+  
+  bq. If you had to put a finger on what is the best feature Ruby on Rails can perform... what would it be?
+  
+  Instead of one I'll give a rundown of the facets which make it a great tool. Rails gives apps a cohesive feel, and a really nice separation of the model (database related stuff) and the controller and view. It does so in a way that requires only a little bit of learning and lets you get up-and-running really fast. It also scales really well to team work... the tools are designed to help work in small teams. It also has all the nice best-practices built in, and its all based on open-source solutions. And the community rocks.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_416
+      %p.author
+        %a{:href => 'http://www.themaninblue.com'} Cameron Adams
+      .body
+        :textile
+          If the website is actually a running application, what happens when you change the files?
+    %li#comment_417
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          If it's just a view change that doesn't involve any big code changes then you'll see your change immediately.
+          
+          If not, you have to "reload" your Rails application.
+          
+          In a usual set up you don't modify a live Rails site directly--you modify the files in your source code repository (e.g. Subversion) and use a command line tool called "Capistrano":http://rubyforge.org/projects/capistrano to update the entire application in one fell swoop over SSH.
+    %li#comment_418
+      %p.author
+        %a{:href => 'http://leftjustified.net/'} Andrew Krespanis
+      .body
+        :textile
+          Having spent the last week neck deep in RoR, I'm verging on becoming a convert myself. 
+          Every time I get a new feature working, I immediately think "oh man, that would have taken X times longer in PHP" 
+          
+          In fact, I rewrote a work-in-progress app  in Rails in 2 hours and got it up to the same point as 8 hours of PHP coding. This is after doing nothing but PHP for the past two years!
+          
+          I think the best bit of coding for Rails is all the code you don't have to write. 
+          
+          Maybe one day I'll even understand half your blog posts ;P
+    %li#comment_419
+      %p.author
+        %a{:href => 'http://kay.smoljak.com/'} Kay Smoljak
+      .body
+        :textile
+          Rails is a framework for Ruby, right? Rather than comparing it to PHP, ASP or CFM, would it be more accurate to compare it to Cake for PHP, or Fusebox for CF? I dunno much about Cake but Fusebox "compiles" the execution paths so making a change to the controller requires forcing a re-parse before the changes will "take". Fusebox doesn't have all the Ajax stuff built in but it's pretty schmicko none the less, and has a great community too.
+    %li#comment_420
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Andrew: Interesting! What ya working on? ;)
+          
+          Kay: Yep, Rails is a framework, but it's also a set of stigmas and approaches to development of quality, secure, tested and open applications, as well as covering the deployment and maintainance cycles.
+          
+          Part of what's great about developing a site in Rails, and Ruby, is that you're dealing with a programming language that really holds its own. PHP, as a programming language, and Coldfusion, which barely struggles to cover the basics of a programming language, aren't nearly as enjoyable to program in.
+          
+          The reason for my post above was to explain the "Rails approach" to a non-web-programmer, somebody w/o the resources or wanting to give it a try themselves. If you're a web developer yourself there's really no excuse for not giving it a go (interestingly, "PHP coders seem the most likely":http://www.sitepoint.com/blogs/2006/10/09/php-developers-most-likely-to-switch-to-rails/ to give it a shot).
+          
+          Ignore the Ajax stuff with Rails... it's the least interesting technical part, and has been of zero use to me in the last handful of projects I've worked on (all custom, clean, unobtrusive JS).
+          
+          There's many great web dev communities to join, but I haven't found any who are so into using version control, automated deployment and are open to sharing code and approaches. The brilliant minds we have turning up at the Sydney Rails meetup never ceases to amaze me!
+    %li#comment_423
+      %p.author
+        %a{:href => 'http://duckdown.blogspot.com'} James
+      .body
+        :textile
+          What would it take to get Ruby on Rails bloggers to not only understand but amplify http://www.openidenabled.com/openid/libraries/ruby
+    %li#comment_424
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          James: No idea, but probably not a random, unrelated comment ;)

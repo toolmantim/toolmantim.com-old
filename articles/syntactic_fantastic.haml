@@ -1,0 +1,39 @@
+-# title: Syntactic fantastic
+-# published: 2006-09-08
+
+:textile
+  I could rewrite Ruby syntax all day. 
+  
+  From "ActiveResource::Connection":http://dev.rubyonrails.org/browser/trunk/activeresource/lib/active_resource/connection.rb?rev=5068:
+  <pre><code>
+  def http
+    unless @http
+      @http             = Net::HTTP.new(@site.host, @site.port)
+      @http.use_ssl     = @site.is_a?(URI::HTTPS)
+      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @http.use_ssl
+    end
+  
+    @http
+  end
+  </code></pre>
+  
+  Using a bit of @||=@ and Rails' @returning@ we can get the same result without a temporary variable and less logic to follow:
+  
+  <pre><code>
+  def http
+    @http ||= begin
+      returning(Net::HTTP.new(@site.host, @site.port)) do |http|
+        http.use_ssl     = @site.is_a?(URI::HTTPS)
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE if http.use_ssl
+      end
+    end
+  end
+  </code></pre>
+  
+  Isn't that sexier?
+  
+  @@http ||=@ says to me "use @http or set it"
+  
+  @returning@ doesn't quite read as nicely because it sounds like I want to return what I passed in (i.e. the new HTTP object) when in fact it returns the result of the block.
+  
+  ...and I wish I didn't need that @begin@ after the @||=@

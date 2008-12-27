@@ -1,0 +1,51 @@
+-# title: Mocking OpenID authentication for offline development
+-# published: 2007-12-03
+
+:textile
+  From a situation that arose at "Railscamp '07 v2":http://flickr.com/photos/toolmantim/sets/72157603347852310/...
+  
+  Have an OpenID app that you're wanting to develop offline but you can't because the open_id_authentication plugin needs to perform the remote authentication? It's simply a matter of redefining, aka mocking, the 
+  <code>authenticate_with_open_id</code> method.
+  
+  In your <code>config/environments/development.rb</code> append:
+  
+  <pre><code class="ruby">config.after_initialize do
+    require 'openid_auth_mock'
+  end</code></pre>
+  
+  and create the corresponding <code>lib/openid_auth_mock.rb</code> file containing:
+  
+  <pre><code class="ruby"># Mocks the OpenID auth to always return :successful
+  OpenIdAuthentication.module_eval do
+    protected
+      def authenticate_with_open_id(identity_url, fields)
+        yield OpenIdAuthentication::Result[:successful], identity_url, nil
+      end
+  end</code></pre>
+  
+  Voil&#224;!
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1375
+      %p.author
+        %a{:href => 'http://lachstock.com.au'} Lachlan Hardy
+      .body
+        :textile
+          Simple, cool goodness. Nice one!
+          
+          Now if only we'd done any work on that project past that stage... ;)
+    %li#comment_1376
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          If I only I wasn't totally burnt out from the overnighters leading up to railscamp :\
+    %li#comment_1409
+      %p.author
+        %a{:href => 'http://lachstock.com.au'} Lachlan Hardy
+      .body
+        :textile
+          Here here!

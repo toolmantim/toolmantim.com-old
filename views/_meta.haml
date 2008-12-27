@@ -1,0 +1,26 @@
+.meta
+  .about
+    %p I'm Tim Lucas, a web app designer and developer currently in Sydney&nbsp;Oz.
+    %p
+      I run the web&nbsp;application design and development company <a
+      href="http://agencyrainford.com/">Agency Rainford</a>, <a
+      href="http://www.slideshare.net/toolmantim/">present</a> on various
+      technical topics, <a href="http://flickr.com/photos/toolmantim">snap the
+      occasional photo</a>, <a href="http://twitter.com/toolmantim">tweet</a>
+      my going-ons, share <a href="http://github.com/toolmantim">teh codes</a>
+      and post other tid-bits to the&nbsp;<a
+      href="http://tumble.toolmantim.com/">tumble</a>.
+
+  .articles
+    %p
+      Most recently I published
+      %a{:href => article_path(@articles.first)}= @articles.first.title
+      on
+      %em== #{@articles.first.published.strftime("%d %B %y")}.
+
+    %p.browse
+      Browse <a href="/articles">previously published articles</a>
+      as well as <a href="/projects">recently launched&nbsp;projects</a>.
+
+    %p.contact
+      Shoot an email to <span class="email">t.lucas@#{thisdomain}</span> and say&nbsp;hello.

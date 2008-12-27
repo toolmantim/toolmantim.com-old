@@ -1,0 +1,65 @@
+-# title: Avoid DB calls when setting up your environment
+-# published: 2006-12-09
+
+:textile
+  As one of my projects has increased in complexity I've started to use the environment.rb and the other specific environments to set up mocks and other tidbits.
+  
+  For example, here I'm setting the current @Locale@ based on @RegionPreference@, which is an ActiveRecord model, from within @environment.rb@:
+  <pre><code class="ruby">
+  Locales.current = Locales.locale_for_timezone(RegionPreference.find_or_initialize.timezone) rescue nil
+  </code></pre>
+  
+  This was all fine and dandy until I tried to set the app on a new machine. 
+  
+  <pre><code>
+  $ rake db:schema:load RAILS_ENV=staging
+  (in /usr/home/voicebox)
+  rake aborted!
+  SQLite3::SQLException: no such table: region_preferences:
+  SELECT * FROM region_preferences LIMIT 1
+  </code></pre>
+  
+  What happened?
+  
+  @db:schema:load@ depends on the @environment@ task, which loads your Rails environment. The same goes for @db:migrate@. My environment was being loaded and trying to call the database before @db:schema:load@ could do it's job.
+  
+  Lesson: <strong>Accessing your database from within your environment set up is evil.</strong>
+  
+  You can't assume your database exists, or is an up-to-date version, when your environment's are being executed.
+  
+  The fix? Moving the code to the model where it should have been in the first place.
+  
+  <pre><code class="ruby">
+  module Locales
+    def self.current
+      @@current ||= locale_for_timezone(RegionPreference.find_or_initialize.timezone)
+    end
+  end
+  </code></pre>
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_439
+      %p.author
+        %a{:href => 'http://interblah.net'} James Adam
+      .body
+        :textile
+          I'm not sure that I'd agree it's evil to do these things in <tt>environment/*</tt> - just that Rails doesn't support it. Here's hoping that 2.0 will bring a reconsidered startup routine that makes what seems natural, actually possible :)
+    %li#comment_1537
+      %p.author
+        Brian Hartin
+      .body
+        :textile
+          By extension, this means that you shouldn't reference any models either, if your models do any 'class-load time' database calls, e.g.<br/><br/>
+          <pre>
+          class StatusCode < ActiveRecord::Base
+            # Define constants representing each status
+            APPROVED = self.find(...)
+            DENIED = # ...
+            # ...
+          end
+          </pre>
+          
+          I'm currently thinking on the best way to solve that one.

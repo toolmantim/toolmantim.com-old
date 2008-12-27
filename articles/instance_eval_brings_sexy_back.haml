@@ -1,0 +1,175 @@
+-# title: instance_eval brings sexy back
+-# published: 2006-11-29
+
+:textile
+  Accessing regex matches can often create ugly code.
+  
+  For example, take the following code:
+  <pre><code class="ruby">
+  time_components = /(\d+):(\d+):(\d+)/.match("17:00:34")
+  time_components[1] # => "17"
+  time_components[2] # => "00"
+  time_components[3] # => "34"
+  </code></pre>
+  
+  That's not too bad in this trivial example, but if you start to use the regex Match object multiple times it starts to create ugly code. "[1]" isn't exactly the most descriptive label for that chunk of data is it?
+  
+  Marcel's "funky post on projectionist showing a sexy use of just-in-time methods":http://project.ioni.st/post/966#post-966 using <code>instance_eval</code> and <code>class <<</code> has had me thinking lately, and I refactored some code yesterday to make these regex's a bit more sexy.
+  
+  <pre><code class="ruby">
+  time_components = /(\d+):(\d+):(\d+)/.match("17:00:34")
+  time_components.instance_eval do
+    def hours; self[1] end
+    def minutes; self[2] end
+    def seconds; self[3] end
+  end
+  </code></pre>
+  
+  You can now just refer to the components by what they actually represent:
+  <pre><code class="ruby">
+  time_components.hours # => "17"
+  time_components.minutes # => "00"
+  time_components.seconds # => "34"
+  time_components.class # => MatchData
+  </code></pre>
+  
+  How sexy is that? And look mah, it's still a <code>MatchData</code> object.
+  
+  You can make it even sexier and break it down to a single statement by making <code>instance_eval</code> return <code>self</code>:
+  
+  <pre><code class="ruby">
+  time_components = /(\d+):(\d+):(\d+)/.match("17:00:34").instance_eval do
+    def hours; self[1] end
+    def minutes; self[2] end
+    def seconds; self[3] end
+    self
+  end
+  
+  time_components.hours # => "17"
+  </code></pre>
+  
+  In the app I'm working on we're calling out to the system to get some stats, and then munging that data to provide information to the view. Combining the above techniques I ended up with:
+  
+  <pre><code class="ruby">
+  def memory
+    @memory ||= begin
+      system_sysctl.instance_eval do
+        def values; split.map(&:to_i) end
+        def total; values.inject(0) { |v, total| total + v } end
+        def free; values.last end
+        def used; total - free end
+        def percent_used; (used.to_f / total.to_f) * 100 end
+        self
+      end
+    end
+  end
+  
+  def system_sysctl
+    `sysctl ...`
+  end
+  </code></pre>
+  
+  And now my view can simply refer to the following:
+  <pre><code>@system.memory.percent_used</code></pre>
+  
+  Hot, no?
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_374
+      %p.author
+        %a{:href => 'http://sultanasandwich.com'} James Hill
+      .body
+        :textile
+          mmm.. instance_eval is sexy i just used it a while back for a nearly identical use.. adding a yearweek method similar to sql's yearweak to a date object.
+          
+          date.instance_eval do
+             def yearweek
+                self.cwyear.to_s + sprintf("%02d", self.cweek)
+             end
+          end
+    %li#comment_375
+      %p.author
+        %a{:href => 'http://sultanasandwich.com'} James Hill
+      .body
+        :textile
+          if only it was formatted!!!
+    %li#comment_376
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          If only ;)
+    %li#comment_377
+      %p.author
+        %a{:href => 'http://sultanasandwich.com'} James Hill
+      .body
+        :textile
+          thanks mate : D
+    %li#comment_378
+      %p.author
+        %a{:href => 'http://myles.id.au'} Myles Byrne
+      .body
+        :textile
+          Nice work tim. Doing an index access on matchdata objects has always bugged me too.
+          
+          You could also give the matchdata class some love directly:
+          
+          <pre><code>
+          class MatchData
+            def matchnames(*names)
+              names.each_with_index do |name, index|
+                self.instance_eval "def \#{name}; self[\#{index+1}] end"
+              end
+              self
+            end
+          end
+          </code></pre>
+          
+          and then do:
+          
+          <pre><code>
+          time_components = /(\d+):(\d+):(\d+)/.match("17:00:34").matchnames(:hours, :mins, :secs)
+          time_components.hours
+          </code></pre>
+    %li#comment_379
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Now that, is hot.
+          
+          How about adding <code>matchnames</code> to NilClass and have it return nil, so you can still keep the sexy chaining if it doesn't match the string.
+    %li#comment_381
+      %p.author
+        %a{:href => 'http://errtheblog.com'} Chris
+      .body
+        :textile
+          hot hot hot.
+          
+          (Tim + Myles) += 1
+    %li#comment_390
+      %p.author
+        %a{:href => 'http://www.rubyinside.com/'} Peter Cooper
+      .body
+        :textile
+          I've posted more about this, along with an implementation for String#match (my preferred poison) at <a href="http://www.rubyinside.com/improving-stringmatch-with-instance_eval-315.html">http://www.rubyinside.com/improving-stringmatch-with-instance_eval-315.html</a>
+          
+          Thanks guys!
+    %li#comment_813
+      %p.author
+        Johan Tam
+      .body
+        :textile
+          syntax error, unexpected ';' 
+          def values; split.map(&;:to_i) end
+          
+          An error came out while running your code above, what exactly does "&;:to_i' mean then? 
+    %li#comment_832
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Whoops. Johan: problem with RedCloth! Sorry...

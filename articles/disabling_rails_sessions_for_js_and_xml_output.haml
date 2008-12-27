@@ -1,0 +1,20 @@
+-# title: Disabling Rails sessions for JS and <span class="caps">XML</span> output
+-# published: 2006-10-05
+
+:textile
+  Every time your Rails app assigns a session to a visitor it creates a cookie with the session id and a relevant entry in the session store.
+  
+  Whilst developing <a href="http://connections.webdirections.org/">Web Connections</a> I noticed sessions were being created for the JS and XML calls.
+  
+  Apart from the performance overhead, you don't really want to force cookies on users of the JS and XML output of your application.
+  
+  So how do you disable sessions for the JS and XML requests? I just disabled sessions for all non-HTML requests:
+  
+  <pre><code class="ruby">
+  class ApplicationController < ActionController::Base
+    session :off, :if => lambda { |request|
+      request.parameters[:format] &&
+      request.parameters[:format] != 'html'
+    }
+  end
+  </code></pre>

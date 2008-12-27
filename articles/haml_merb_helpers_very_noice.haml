@@ -1,0 +1,86 @@
+-# title: <span class="caps">HAML</span> + Merb Helpers? Very noice.
+-# published: 2008-04-17
+
+:textile
+  A year after the "Merb":http://merbivore.com and "HAML":http://haml.hamptoncatlin.com/ gravy train whooshed by I'm finally giving them a run for their money.
+  
+  ...and whilst the snippet below may be old news to some, I'm sure there's a bunch of us whom might not have had the pleasure of using both HAML and Merb Helpers.
+  
+  Witness the following piece of view code:
+  
+  <pre><code>%h2 New post
+  
+  - form_for(@post, :action => url(:admin_posts)) do
+    %p= text_control      :title,  :label => "Title"
+    %p= text_control      :slug,   :label => "Slug"
+    %p= text_area_control :body,   :label => "Body"
+    %p= select_control    :format, :label => "Format",
+                                   :collection => Formatter.formatters, 
+                                   :selected => MenkiConfig.default_post_format
+    %p
+      = submit_button "Publish"
+      = submit_button "Save as Draft"
+  </code></pre>
+  
+  See the lack of block parameter on the <code>form_for</code>? Notice the <code>:label</code> option. A <code>select_control</code> whose API simply works. Very noice.
+  
+  The end result:
+  
+  <pre><code><h2>New post</h2>
+  <form method="post" action="/admin/posts">
+  <p>
+    <label for="post_title">Title</label><input type="text" class="text" name="post[title]" value="" id="post_title"/>
+  </p>
+  <p>
+    <label for="post_slug">Slug</label><input type="text" class="text" name="post[slug]" value="" id="post_slug"/>
+  </p>
+  <p>
+    <label for="post_body">Body</label><textarea name="post[body]" id="post_body"></textarea>
+  </p>
+  <p>
+    <label for="post_format">Format</label><select name="post[format]" id="post_format"><option value="html">html</option><option value="textile">textile</option><option value="markdown" selected="selected">markdown</option><option value="haml">haml</option></select>
+  </p>
+  <p>
+    <button type="submit">Publish</button>
+    <button type="submit">Save as Draft</button>
+  </p>
+  </form></code></pre>
+  
+  If you're writing your own view code and not being handed HTML mockups, or you can get your designer to speak "HAML":http://haml.hamptoncatlin.com/, I highly recommend checking it out.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1485
+      %p.author
+        Jason
+      .body
+        :textile
+          Have tried HAML and SASS but ultimately felt adding another layer of cream on the cake did not make for a tastier cake.
+          
+          HTML is a basic building block. Many people understand it. It's straight forward. Adding another level of abstraction complicates things. HAML is nice, but be careful!
+    %li#comment_1530
+      %p.author
+        Rob Mathews
+      .body
+        :textile
+          HAML is taking stuff I just had all figured out, and making it impossible to do simple stuff like selects and forms, all to save a few characters. Very clever (not). Also, documentation of the basic stuff is crap. This site here is the first one I've seen that deigns to discuss how to write a form post in haml, for example.
+    %li#comment_1531
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Rob: the form markup above is Merb specific, not even template language specific, so if you're using Rails the above probably won't work.
+          
+          Agreed that there could be some more beginner level HAML doccos... the RDoc's isn't the best thing at times.
+          
+          In vanilla HAML a form post would look like:
+          
+          <pre><code>
+          %form{:action => "/register", :method => "post"}
+            %p
+              %select{:name => "title"}
+                %option{:value => "mr"} Mr
+                %option{:value => "ms"} Ms
+          </code></pre> 

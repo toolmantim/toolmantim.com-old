@@ -1,0 +1,96 @@
+-# title: Logging Rails to SysLog with SyslogLogger
+-# published: 2007-06-06
+
+:textile
+  "!http://farm1.static.flickr.com/152/416312921_da7fca7647_m.jpg(Logs by arbeer.de)!":http://flickr.com/photos/sauerlandthemen/416312921/
+  
+  
+  One of the benefits of switching your Rails app to use SysLog is taking advantage of your OS's system-wide logging, as well as having finer grained control over how to process your log messages. For example, you can split the logs up based on Rails app, mongrel process, or even by app server if you're using remote syslog.
+  
+  We'll use <a href="http://segment7.net/">Eric Hodel</a>'s <a href="http://seattlerb.rubyforge.org/SyslogLogger/">SyslogLogger</a> Ruby Logger drop-in to get our app talking to SysLog.
+  
+  Firstly, we'll chuck the SyslogLogger library into our Rails app's vendor directory:
+  
+  <pre><code>
+  cd vendor
+  curl http://rubyforge.org/frs/download.php/20520/SyslogLogger-1.4.0.tgz -L | tar -zxvv
+  </code></pre>
+  
+  We then need to set it up in @environment.rb@ (or a specific environment file such as @production.rb@). We need to add its @lib@ directory to the load path and set it as the @DEFAULT_RAILS_LOGGER@:
+  
+  <pre><code class="ruby"># Use SysLogger rather than the default logger.
+  # 
+  # see http://seattlerb.rubyforge.org/SyslogLogger/
+  # for example /etc/syslog.conf setups
+  $:.unshift File.join(RAILS_ROOT, "vendor", "SyslogLogger-1.4.0", "lib")
+  require 'syslog_logger'
+  config.logger = RAILS_DEFAULT_LOGGER = SyslogLogger.new('my_rails_app')</code></pre>
+  
+  To test it we'll load up @script/console@ and give it a whirl:
+  
+  <pre><code class="ruby">>> RAILS_DEFAULT_LOGGER.error "Hello my lil SysLog"</code></pre>
+  
+  and check our log, @/var/system.log@ in OSX's case, to see the results :
+  
+  <pre><code>Jun  6 16:30:11 tim my_rails_app[2923]: Hello my lil SysLog</code></pre>
+  
+  woohoo!
+  
+  ...and now we're using SysLog we can use Eric's other tool,  "ProductionLogAnalyzer":http://rubyforge.org/frs/shownotes.php?group_id=1513&release_id=11750, to identify performance bottleknecks of our application. Geoffrey Grosenbach (aka topfunky) wrote a "Hodel3000CompliantLogger":http://nubyonrails.com/articles/2007/01/03/a-hodel-3000-compliant-logger-for-the-rest-of-us if you want to use this tool without SysLog).
+  
+  Read more about SysLog on your SysLog daemon's man page (on OSX check out the man pages for @syslog@, @syslogd@ and @syslogd.conf@).
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_627
+      %p.author
+        Jez
+      .body
+        :textile
+          Can you specify which logger to use? ie: send to local7, etc.
+    %li#comment_629
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Jez: Yep, you specify that in @SyslogLogger.new('my_rails_app')@... so in my case it's setting the sender to be "my_rails_app"
+    %li#comment_630
+      %p.author
+        Dylan
+      .body
+        :textile
+          Using this with metalog and I'm sure any drop in replacement will work too.
+          
+          There's also "Analogger":http://analogger.swiftcore.org/index.html available if you want to use something other than the default.
+    %li#comment_650
+      %p.author
+        %a{:href => 'http://sweetspot.dm'} adam
+      .body
+        :textile
+          hey guys,
+          I was wondering if anyone came up with a way to get around the collapsing of return characters when msgs are logged to SysLog.  At least that is what occurs on CentOS.
+          
+          reading formatted msgs rather than text sprinkled with '\r\n' is much easier on the eyes.
+          
+          thanks!
+          Adam
+    %li#comment_1441
+      %p.author
+        %a{:href => 'http://www.rubyplus.org'} Bala Paranj
+      .body
+        :textile
+          My app uses one codebase to handle requests from different vendors. I would like to separate the log file so that each vendor gets their own log file. How can I do that? TIA.
+    %li#comment_1442
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Bala: I don't think it's possible to do that on a per-request basis. Maybe have different mogrels for different vendors, implement your own logging or do some log analysis?
+    %li#comment_1447
+      %p.author
+        %a{:href => 'http://www.ianlesperance.com'} Ian Lesperance
+      .body
+        :textile
+          Tim:  Actually, Jez was asking if you can specify a custom facility (which is different than the program name) for use by Syslog.  SyslogLogger 1.4 doesn't allow you to do this, instead relying on Syslog to use its default "user" facility.  I've submitted "a patch":http://rubyforge.org/tracker/index.php?func=detail&aid=18635&group_id=1513&atid=5923 for this, though, so hopefully it will be addressed.

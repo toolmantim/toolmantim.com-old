@@ -1,0 +1,43 @@
+-# title: New Flickr Set <span class="caps">SMS</span> Notifications
+-# published: 2007-08-14
+
+:textile
+  My sister recently complained it was annoying keeping up-to-date with my flickr photos, exclaiming "Can't I get an SMS notification or something?!".
+  
+  Like an excited boy with a vision for a new lego masterpiece to build I ran home and tried to mashup as many possibly services to get the result I wanted: creating a "Yahoo Pipe":http://pipes.yahoo.com that called the "Flickr API":http://www.flickr.com/services/api/ to get the list of set and producing an RSS feed, which in turn feeds a most probably existing RSS to "Twitter":http://twitter.com service and then using Twitter to fire SMS notifications to my family when I create new "Flickr sets":http://flickr.com/photos/toolmantim/sets/.
+  
+  It turns out I was in luck: "rss2twitter.com":http://rss2twitter.com existed, I quickly whipped up "a pipe to turn the flickr sets into an RSS feed":http://pipes.yahoo.com/pipes/pipe.info?_id=MM6SXntI3BGZxnVhAsqenA and added the feed to rss2twitter. Then I waited, and waited, and waited, and read the FAQ saying it can take up to an hour, and waited, and then did some googling and realised rss2twitter is no longer ticking away and polling feeds and publishing twits. The twit!
+  
+  So plan b it was: write a little twitter bot, cause "they're all the rage now":http://blog.allen.com.au/2007/8/7/triple-j-twitter don't ya know.
+  
+  One small migration, a little bit of Hpricot and 12 lines of Ruby had this running every ten minutes:
+  
+  <pre><code class="ruby">
+  #!/usr/bin/env ruby
+  
+  require File.dirname(__FILE__) + '/../config/environment'
+  require 'open-uri'
+  require 'twitter' # from vendor
+  gem 'hpricot', '>=0.6'
+  
+  RECENT_SETS_URI = "http://api.flickr.com/services/rest?user_id=\#{FLICKR_USER_ID}&method=flickr.photosets.getList&api_key=\#{FLICKR_API_KEY}"
+  existing_set_ids = FlickrSet.find(:all, :select => 'set_id').map(&:set_id)
+  
+  flickr_sets = (Hpricot.XML(open(RECENT_SETS_URI))/:photoset).sort_by {|s| s.attributes["id"].to_i}.collect do |set|
+    set_id, title = set.attributes["id"], (set/:title).inner_html
+    unless existing_set_ids.include?(set_id)
+      FlickrSet.transaction do
+        FlickrSet.create(:set_id => set_id)
+        Twitter::Base.new(FLICKR_TWITTER_EMAIL, FLICKR_TWITTER_PASSWORD).post("added the set \#{title}")
+      end
+    end
+  end
+  </code></pre>
+  
+  The result: "http://twitter.com/toolmanflickr":http://twitter.com/toolmanflickr
+  
+  If I had just done it that way in the beginning it would have saved me hours, but then anybody could have set up the same thing for their twitter account as opposed to needing a server with access to Ruby.
+  
+  I'm not sure how long twitter can sustain their image as a free SMS distribution mechanism, but it sure beats 20c per message.
+  
+  Now, if only I can get my family to sign up for the dang thing.

@@ -1,0 +1,91 @@
+-# title: Safari, URLs, the semi-colon and one night in Paris
+-# published: 2006-09-19
+-# updated: 2007-03-09
+
+:textile
+  <strong class="update">Update:</strong> Manfred (of fingertips) has "released a plugin":http://www.fngtps.com/2007/03/url-encoded-semicolons-http-authentication-and-safari to fix Safari whilst we wait for Apple to update OS X.
+  
+  My production site is spitting the dummy with Safari whenever there's a semi-colon in the URL.
+  
+  As far as I can tell you don't need to escape semi-colons, and every other browser works just fine.
+  
+  In the mean time, here's the dirtiest of dirty hacks to ensure semi-colons get escaped.
+  
+  In application.rb:
+  
+  <pre><code class="ruby">
+  def url_for(options = {}, *parameters_for_method_reference)
+    (result = super).is_a?(String) ? result.gsub(';','%3B') : result
+  end
+  </code></pre>
+  
+  Surely there's people running on Rails edge using the Rest stuff with Safari? I wonder what's causing it on this site. 
+   
+  Any recommendations on software for OS X to sniff the requests between Safari and Apache?
+  
+  _Update_: After "further discussion on rails-core":http://groups.google.com/group/rubyonrails-core/browse_thread/thread/9f7d8d2ae530a5da/0cae138836e0e558#0cae138836e0e558, the following would probably lock things down further:
+  
+  <pre><code class="ruby">
+  def url_for(options = {}, *parameters_for_method_reference)
+    if safari? && authenticated?
+      (url = super).is_a?(String) ? url.gsub(';','%3B') : url
+    else
+      super
+    end
+  end
+  
+  def safari?
+    request.env['HTTP_USER_AGENT'].to_s.include?('AppleWebKit')
+  end
+  
+  @@auth_headers = %w(X-HTTP_AUTHORIZATION HTTP_AUTHORIZATION Authorization)
+  def authenticated?
+    @@auth_headers.any? { |h| request.env.has_key?(h) }
+  end
+  </code></pre>
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_335
+      %p.author
+        %a{:href => 'http://www.smallroomsoftware.com'} Tom Riley
+      .body
+        :textile
+          I had the same problem on my test site (it worked fine for me locally). I was using http authentication to hide my test site from the world. and it turned out that safari wasn't sending the authentication information if the semicolon is present in the URL so lighttpd was returning a 401 error. You can spot this in the server access logs (note the 3rd element, the username, is blank).
+          
+          So unprotecting the site fixes the problem.
+    %li#comment_338
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Ahhh... thankyou Tom! I too found the problem whilst the site was still in testing. Didn't notice that in the Apache logs...
+    %li#comment_372
+      %p.author
+        %a{:href => 'http://www.fngtps.com'} Thijs van der Vossen
+      .body
+        :textile
+          We came across this some time ago, but I never thought about trying to escape the semicolon. Excellent suggestion.
+    %li#comment_452
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com/'} Dan Kubb
+      .body
+        :textile
+          I don't like escaping the URLs in ruby code, since I use caching alot, and I don't want other browsers to get one of those URLs.
+          
+          Instead I do the escaping on the client side using JavaScript.  Here's an example of how I do it using the jQuery library:
+          
+          <pre><code>
+          $(document).ready(function() {
+            if(jQuery.browser.safari) {
+              tags = { a: 'href', form: 'action' }
+              for ( var t in tags ) {
+                $(t + '[@' + tags[t] + '*=;]').each(function() {
+                  $(this).attr(tags[t], $(this).attr(tags[t]).replace(/;/g, '%3B'));
+                });
+              }
+            }
+          });
+          </code></pre>

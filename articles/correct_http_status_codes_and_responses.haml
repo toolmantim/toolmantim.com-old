@@ -1,0 +1,82 @@
+-# title: Correct <span class="caps">HTTP</span> status codes and responses?
+-# published: 2006-08-30
+
+:textile
+  I have 2 questions for the "REST":http://en.wikipedia.org/wiki/Representational_State_Transfer knowledgeable.
+  
+  _First question_: What would be the correct HTTP status code for the following, if the parameters supplied were not valid and the operation did not succeed:
+  # Creating a new resource (e.g. HTTP POST to @/tags/rails/posts/@)
+  # Trying to update a resource (e.g. HTTP PUT to @/tags/rails/posts/3@)
+  
+  I'm thinking:
+  # "403 Forbidden":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4, or maybe "400 Bad Request":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1 (but I think 400 is for a fundamentally malformed request, not just invalid parameters)
+  # "409 Conflict":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10, or possibly the same as above?
+  
+  _Second question_: If the user agent requests the format of the response in XML (i.e. "Accept: application/xml") what's a good way to return the validation errors?
+  
+  My initial thoughts:
+  <pre><code>
+  <error code="403" title="Forbidden" description="One or more of the parameters are invalid">
+    <invalid-parameters>
+      <parameter>
+        <name>/post/title</email>
+        <invalid-value></invalid-value>
+        <errors>
+          <error>must not be blank</error>
+        </errors>
+      </parameter>
+      <parameter>
+        <name>/post/author-id</name>
+        <invalid-value>-99</invalid-value>
+        <errors>
+          <error>does not exist</error>
+        </errors>
+      </parameter>
+    </invalid-parameters>
+  </error>
+  </code></pre>
+  
+  The parameter "name" in the error message should relate to the data they submitted with.
+  
+  If they submitted via XML (i.e. "Content-Type: application/xml") the parameter name is XPath to that parameter (e.g. @/post/title@).
+  
+  If they submitted via regular old url-encoding or multipart the parameter name is the same as they submitted (e.g. @post[title]@).
+  
+  Should we not even bother returning errors with this level of detail and just output a plain text message outlining the errors?
+  
+  Surely these roads have been well travelled?
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_309
+      %p.author
+        %a{:href => 'http://lindsayevans.com/'} Lindsay
+      .body
+        :textile
+          Hi Tim,
+          
+          Not sure how useful it is, but WEBDAV has a bunch of <a href="http://www.webdav.org/specs/rfc2518.html#status.code.extensions.to.http11">HTTP status code extensions</a>, in particular '422 Unprocessable Entity'
+          
+          On the error message: In most of my apps I'm displaying a generic 'there were errors' message, then highlighting each field that was invalid & displaying the appropriate message - so the more detail provided the better.
+    %li#comment_313
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Lindsay... that addresses part of the problem.
+          
+          Turns out "400 Validator Error" is "how they're looking at doing it":http://dev.rubyonrails.org/changeset/5068 in Rails 1.2, though they're just relying on the 400 status code, not the "Validation Error"
+    %li#comment_494
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com'} Dan Kubb
+      .body
+        :textile
+          In edge rails they're using 422 Unprocessable Entity.
+    %li#comment_836
+      %p.author
+        murphy
+      .body
+        :textile
+          That was helpful, thanks! I will use 422 from now on.

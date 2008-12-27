@@ -1,4 +1,27 @@
-%h1= @article.title
-
 .article
+  %h3
+    %a{:href => article_path(@article)}= @article.title
+
+  %p.published
+    %em
+      Published
+      = @article.published.strftime("%B %d, %Y")
+
   = @article_html
+
+  %h3 Feedback
+  %p.feedback
+    Email any feedback, typos or rants to <span class="email">t.lucas@#{thisdomain}</span>
+
+  - previous_article, next_article = previous_article(@article), next_article(@article)
+
+  - if (previous_article || next_article)
+    %h3 More reading&hellip;
+    - if previous_article
+      %p
+        Previously:
+        %a{:href => article_path(previous_article)}== #{previous_article.title}
+    - if next_article
+      %p
+        Next up:
+        %a{:href => article_path(next_article)}== #{next_article.title}

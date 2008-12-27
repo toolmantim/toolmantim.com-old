@@ -1,0 +1,106 @@
+-# title: Abusing err.. Using AR::Associations
+-# published: 2006-02-15
+-# updated: 2006-02-15
+
+:textile
+  "!http://static.flickr.com/40/100208637_cc626e5de1.jpg?v=0!":http://poignantguide.net/ruby/chapter-3.html
+  
+  In Francois Beausoleil's recent post on "Asymmetric Associations":http://blog.teksol.info/articles/2006/02/14/asymmetric-associations he showed the advantage of going with names and associations that are slightly unconventional (in the convention-over-configuration sense of the word).
+  
+  Sometimes there is only so far convention can take you.
+  
+  I think Francois is touching on a bigger issue that some Railer's might not be aware of: ActiveRecord::Associations can be used to build almost all of your model associations, including the not-so-conventional ones.
+  
+  For example, I've often seen code similar to the following:
+  <pre><code>
+  class User < ActiveRecord::Base
+    has_many :emails
+  
+    def unread_emails
+      Email.find_by_sql(["select * from \#{Email.table_name}# where read = 0 and user_id = ?", self.id])
+    end
+  end
+  </code></pre>
+  
+  You can accomplish exactly the same thing by adding a second association (oops... now updated to include class_name):
+  <pre><code>
+  class User < ActiveRecord::Base
+    has_many :emails
+    has_many :unread_emails, :class_name => 'Email', :condition => 'read = 0'
+  end
+  </code></pre>
+  
+  or, alternatively, by bolting on the unread method directly to the has_many association:
+  <pre><code>
+  class User < ActiveRecord::Base
+    has_many :emails do
+      def unread; find(:all, :condition => 'read = 0'); end
+    end
+  end
+  </code></pre>
+  
+  Another great example comes from "i2":http://dev.rubyonrails.org/browser/tools/i2/trunk, the app that powers the "rails wiki":http://wiki.rubyonrails.org:
+  <pre><code>
+  class Page < ActiveRecord::Base
+    belongs_to :book
+  
+    has_many :versions, :order => "created_at", :dependent => true
+    has_one  :current_version, :class_name => "Version", :order => "created_at DESC"
+  	 
+    def find_or_build_version(number = nil)
+      number ? versions[number.to_i - 1] : versions.build(:body => body)
+    end
+  
+    def body
+      current_version ? current_version.body : nil
+    end
+  
+    def to_param
+      title
+    end
+  end
+  </code></pre>
+  
+  There's a few cool tricks going on in this class, but for now we'll just look at the @current_version@ statement:
+  
+  <pre><code>has_one :current_version, :class_name => "Version", :order => "created_at DESC"</code></pre>
+  
+  Even though the Versions table has potentially thousands of records with the same page_id, the above line pulls out just one.
+  
+  So why does this work, even though its pointing to a table with many version records?
+  
+  has_one will take only a single record from the resulting query, similar to a @find(:first)@, using a SQL @limit@ clause.
+  
+  For more neat tricks have a look at the rest of the "i2 codebase":http://dev.rubyonrails.org/browser/tools/i2/trunk/app/ -- it's a cool little app.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_241
+      %p.author
+        %a{:href => 'http://trixnews.com'} Jacek Becela
+      .body
+        :textile
+          Is it possible to use these tricks with has_many :through assosciations in some way? (:class_name is ignored then)
+          
+          I want something like this:
+          
+          auction.cars
+          auction.sold_cars
+          auction.not_sold_cars
+          and so on. Car is associated with Auction through Exposure join model (Car can be exposed on many auctions).
+    %li#comment_255
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Good question... I haven't really tried. Give it a try and report back!
+    %li#comment_400
+      %p.author
+        rick
+      .body
+        :textile
+          has_many :through associations are unique, since they read a source association for info.  Use :source instead of :class_name or :foreign_key to configure it.
+          
+          has_many :sold_cars, :through => :exposures, :source => :car, :conditions => ...

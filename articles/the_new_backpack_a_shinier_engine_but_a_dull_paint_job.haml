@@ -1,0 +1,190 @@
+-# title: The new Backpack: a shinier engine but a dull paint job
+-# published: 2007-08-13
+
+:textile
+  Two weeks ago Sam Stevenson, 37signals hacker and creator of the widely used Prototype JS library, gave a scoop on some of the "under-the-hood changes to the latest release of Backpack":http://www.37signals.com/svn/posts/556-an-under-the-hood-look-at-the-new-backpack.
+  
+  After getting a chance to play with the new user interface I must say I'm totally unimpressed. It seems a lot of the initial subtle design decisions by Ryan Singer and Jason Fried have been lost, forgotten or simply compromised in favour of a super-simple back-end implementation.
+  
+  h3. Creating a new list
+  
+  Take for example the task of creating a new list and adding a few items:
+  
+  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="404" height="348">
+    <param name="src" value="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_1_adding_new_list_items.mov" />
+    <param name="controller" value="true" />
+    <param name="autoplay" value="false" />
+    <!--[if !IE]>-->
+    <object type="video/quicktime" data="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_1_adding_new_list_items.mov" width="404" height="348">
+      <param name="autoplay" value="false" />
+      <param name="controller" value="true" />
+    </object>
+    <!--<![endif]-->
+  </object>
+  
+  Three subtle and simple problems which make this interface less than ideal:
+  
+  # Having to wait for a server roundtrip when creating a new list
+  # Having to wait for a server roundtrip when adding a new list item (slowing down keyboard-efficient input)
+  # Not focusing the text field when adding a new list item (eliminating simple keyboard-only input)
+  
+  I'll ignore point 3 as a simple bug, though a pretty glaring one considering it eliminates keyboard-only input and would be an oft-used and highly repetitive action.
+  
+  h3. Nonjax: AKA Synchronous Ajax
+  
+  Why force the user to wait for a server roundtrip to create a new list? Why force the user to wait when adding a new list item? And no, I won't accept the answer: "but we saved 500 lines of code by making everything powered by RJS" -- that is a simple engineering problem.
+  
+  Adding a list item requires absolutely minimal validation and a simple result from the action: adding the new list or item to the page. Why not just go ahead and do it, assuming that everything is AOK?
+  
+  Pete from Unspace hit this nail on the head in "Facebook Just Gets It Right":http://rethink.unspace.ca/2007/3/8/facebook-just-gets-it-right (emphasis mine):
+  
+  <blockquote>
+  <p><em>If we can be confident that a transaction will succeed, then why not immediately update the user interface to reflect that they have performed an action, and not interrupt the flow?</em></p>
+  <p>...the status quo is that you click on a link or button, and the site is programmed to pop up a spinning status notification while it fetches new content from the server. When the transaction has completed, your interface is restored and the user can continue navigation.</p>
+  <p>Just because Ajax itself is asynchronous - you send a request and wait for it to succeed or fail - that's not how good user interfaces work, ever. Facebook assumes your action will be successful, because 98% of the time it will be, and the price of failure is quite low.. perhaps a status error box.</p>
+  </blockquote>
+  
+  You've got the same sorts of issues when deleting list items:
+  
+  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="404" height="348">
+    <param name="src" value="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_3_deleting_list_items.mov" />
+    <param name="controller" value="true" />
+    <param name="autoplay" value="false" />
+    <!--[if !IE]>-->
+    <object type="video/quicktime" data="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_3_deleting_list_items.mov" width="404" height="348">
+      <param name="autoplay" value="false" />
+      <param name="controller" value="true" />
+    </object>
+    <!--<![endif]-->
+  </object>
+  
+  Each time you have to confirm the popup and then waiting for a HTTP response--clunky! Not to mention good "'ol fittsy":http://en.wikipedia.org/wiki/Fitts'_law: on a 24" monitor with a browser that centres popups it makes for a lot of mouse cruising between the item's trash can icon and the "OK" button in the dialog box.
+  
+  h3. Facebook Get It
+  
+  The Facebook designers seem to be creating much more efficient UI in the async/Ajax department. Take for example marking messages read or unread:
+  
+  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="517" height="264">
+    <param name="src" value="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_4_facebook_marking_read_and_unread.mov" />
+    <param name="controller" value="true" />
+    <param name="autoplay" value="false" />
+    <!--[if !IE]>-->
+    <object type="video/quicktime" data="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_4_facebook_marking_read_and_unread.mov" width="517" height="264">
+      <param name="autoplay" value="false" />
+      <param name="controller" value="true" />
+    </object>
+    <!--<![endif]-->
+  </object>
+  
+  Notice the marking and unmarking of messages happens instantaneously where possible, with other parts of the UI waiting for the roundtrip.
+  
+  User interface items you directly interact with should react as quickly as possible. If you kick a ball towards a goal post you expect it to immediately roll along the ground as a result of your action. When you mark a message as read you're expecting the message to immediately change status. 
+  
+  The same level of thought seems to have gone into the interface for deleting messages:
+  
+  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="517" height="264">
+    <param name="src" value="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_5_facebook_deleting.mov" />
+    <param name="controller" value="true" />
+    <param name="autoplay" value="false" />
+    <!--[if !IE]>-->
+    <object type="video/quicktime" data="http://toolmantim.com/files/backpack_screenshots_aug_2007/backpack_basics_5_facebook_deleting.mov" width="517" height="264">
+      <param name="autoplay" value="false" />
+      <param name="controller" value="true" />
+    </object>
+    <!--<![endif]-->
+  </object>
+  
+  When deleting a message they remove it instantaneously and then updated the other bits of the UI with a roundtrip to the server. You'll also notice there's bug in the count at the bottom of the message list. You'll also notice the confirmation dialog is position near where the mouse hit the "Delete" link.
+  
+  h3. 37signals going the way of the UI dodo
+  
+  With only two UI brains and a bunch of Rails and Javascript engineers that are obviously making design decisions I don't like the odds of 37signals being able to produce the same polish that made their apps a hallmark of web user interface design.
+  
+  h3. Speedy Rails development: a blessing or curse?
+  
+  I always loved the fact that Rails was the perfect "magic behind the attractive and well designed curtains" (think Ryan Singer and Jason Fried handing DHH a well-designed prototype to bring to life) but it seems the majority of Rails applications launched in the past few years were driven by back-end design rather than front-end design, resulting in ugly interfaces and inefficient interactions.
+  
+  It's easy to get caught up in RJS, REST and all the juicy back-end technologies whilst forgetting what makes a truly elegant user interface: well thought out design with attention to detail; the same attributes that go into making an elegant Rails back-end.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_793
+      %p.author
+        %a{:href => 'http://www.adaruby.com/'} Hendy Irawan
+      .body
+        :textile
+          Yeah this is sad...
+          
+          They'll improve. I'm optimistic about it. :-)
+    %li#comment_795
+      %p.author
+        %a{:href => 'http://yeahnah.org'} Ryan Allen
+      .body
+        :textile
+          I completely agree with your REST sentiment. 37s always advocated UI out design, which I think is great. But REST (at least on the surface) turns that on it's head and says to design resource out, the complete opposite approach.
+          
+          Rails may not be the framework of choice in 5 years time, but good UI design will always be hallmark and worth investing in.
+          
+          Nice post.
+    %li#comment_796
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Ryan: Yep, if you're coding both the front-end and back-end implementations you're sure to make compromises. REST architecture is great as long as its not affecting the front-end design.
+    %li#comment_797
+      %p.author
+        %a{:href => 'http://andyhoward.id.au'} Andy Howard
+      .body
+        :textile
+          Ah dude, you're bang on the mark. I'm going to quote you on this when I'm justifying the value I bring as a UX guy... 
+          
+          "User interface items you directly interact with should react as quickly as possible."
+          
+          Need to keep those coders in line and keep them, *gasp*, thinking about the user.
+    %li#comment_798
+      %p.author
+        jason
+      .body
+        :textile
+          With your Facebook videos, at what point is it made clear that the server action was completed successfully?
+          
+          Are we only seeing a UI update without a server success status being shown?
+    %li#comment_799
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <blockquote>Jason: With your Facebook videos, at what point is it made clear that the server action was completed successfully?<br/><br/>Are we only seeing a UI update without a server success status being shown?</blockquote>
+          
+          Outside from the perspective of the system programmers there is no "server action" or "server success status."
+          
+          There is only a system, and a user interface which represents that system, and as long as the user interface is consistent and true to the state of the system then you shouldn't need explicit messages such as "Message successfully marked as read" or "Message successfully deleted".
+          
+          The best interactions are the most intuitive, not the most explicit.
+          
+          In saying that, the user interface should still respect the levels of trust and expectations of the user in defining what is intuitive and suitable. Sometimes you expect more than subtle feedback for important actions.
+          
+          I wouldn't want anything as trivial as marking a Facebook message as read, deleting a Facebook message or adding a Basecamp list item to require any more attention than is absolutely necessary.
+    %li#comment_801
+      %p.author
+        %a{:href => 'http://nubyonrails.com'} topfunky
+      .body
+        :textile
+          Great points. 
+          
+          I get into the habit of throwing up a spinner whenever an Ajax request is being made, but most of the time it's irrelevant. As long as errors are being shown when they happen, one might as well build the interface around success instead of waiting for the confirmation from the server.
+          
+          Maybe more research is needed into an RJS-type API that works preemptively. Javascript files could be generated in advance and included on initial page load. 
+          
+          Then Ruby programmers would get the benefit of auto-generated code without the need for another server roundtrip right when interactivity is needed most.
+          
+          The Unobtrusive Javascript Plugin did something like this but ended up saving less programmer time than just writing the Javascript directly.
+    %li#comment_808
+      %p.author
+        %a{:href => 'http://henrik.nyh.se'} Henrik N
+      .body
+        :textile
+          Excellent article. Thanks.

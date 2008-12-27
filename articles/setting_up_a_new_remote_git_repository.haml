@@ -1,0 +1,415 @@
+-# title: Setting up a new remote git repository
+-# published: 2007-12-05
+-# updated: 2008-01-09
+
+:textile
+  To collaborate in a distributed development process you'll need to push code to remotely accessible repositories.
+  
+  This is somewhat of a follow-up to the previous article "setting up a new rails app with git":http://toolmantim.com/article/2007/12/5/setting_up_a_new_rails_app_with_git.
+  
+  h3. For the impatient
+  
+  Set up the new bare repo on the server:
+  
+  <pre><code class="shell">$ ssh myserver.com
+  Welcome to myserver.com!
+  $ mkdir /var/git/myapp.git && cd /var/git/myapp.git
+  $ git --bare init
+  Initialized empty Git repository in /var/git/myapp.git
+  $ exit
+  Bye!
+  </code></pre>
+  
+  Add the remote repository and push:
+  
+  <pre><code class="shell">$ cd ~/Sites/myapp
+  $ git remote add origin ssh://myserver.com/var/git/myapp.git
+  $ git push origin master</code></pre>
+  
+  Set the local master branch to track the remote branch.
+  
+  Read further for a step-by-step explanation of what's going on.
+  
+  h3. Pre-flight sanity check
+  
+  Setting up a remote repository is fairly simple but somewhat confusing at first. Firstly, let's check out what remote repositories are being tracked in our git repo:
+  
+  <pre><code class="shell">$ cd ~/Sites/myapp
+  $ git remote</code></pre>
+  
+  None. Looking good. Now let's list all the branches:
+  
+  <pre><code class="shell">$ git branch -a
+  * master
+  </code></pre>
+  
+  Just one branch, the master branch. Let's have a look at @.git/config@:
+  
+  <pre><code class="shell">$ cat .git/config
+  [core]
+          repositoryformatversion = 0
+          filemode = true
+          bare = false
+          logallrefupdates = true</code></pre>
+  
+  A pretty bare-minimum config file.
+  
+  h3. Creating the bare remote repository
+  
+  Before we can push our local master branch to a remote repository we need to create the remote repository. To do this we'll ssh in and create it on the server:
+  
+  <pre><code class="shell">
+  $ ssh myserver.com
+  Welcome to myserver.com!
+  $ cd /var/git
+  $ mkdir myapp.git
+  $ cd myapp.git
+  $ git --bare init
+  Initialized empty Git repository in /var/git/myapp.git
+  $ exit
+  Bye!
+  </code></pre>
+  
+  A short aside about what git means by <em>bare</em>: A default git repository assumes that you'll be using it as your working directory, so git stores the actual bare repository files in a @.git@ directory alongside all the project files. Remote repositories don't need copies of the files on the filesystem unlike working copies, all they need are the deltas and binary what-nots of the repository itself. This is what "bare" means to git. Just the repository itself.
+  
+  h3. Adding the remote repository to our local git repository configuration
+  
+  Now that we've created the remote repository we'll add it to our local repository as a remote server called "origin" using @git remote add@, which is just a nicer way of updating our config file for us:
+  
+  <pre><code class="shell">
+  $ git remote add origin ssh://myserver.com/var/git/myapp.git</code></pre>
+  
+  Let's see what it added to the config file:
+  
+  <pre><code>[core]
+  	repositoryformatversion = 0
+  	filemode = true
+  	bare = false
+  	logallrefupdates = true
+  [remote "origin"]
+  	url = ssh://myserver.com/var/git/myapp.git
+  	fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
+  
+  We now have a remote repository "origin" that will fetch all of it's @refs/heads/*@ branches and store them in our local repo in @refs/remotes/origin/*@ when a @git fetch@ is performed.
+  
+  h3. Pushing to the remote repository
+  
+  The time has come to push our local master branch to the origin's master branch. We do that using the @git push <target> <local>@ command.
+  
+  <pre><code class="shell">
+  $ git push origin master
+  updating 'refs/heads/master'
+    from 0000000000000000000000000000000000000000
+    to   b379203bc187c2926f44a71eca3f901321ea42c6
+   Also local refs/remotes/origin/master
+  Generating pack...
+  Done counting 1374 objects.
+  Deltifying 1374 objects...
+   100% (1374/1374) done
+  Writing 1374 objects...
+   100% (1374/1374) done
+  Total 1374 (delta 89), reused 0 (delta 0)
+  refs/heads/master: 0000000000000000000000000000000000000000 -> b379203bc187c2926f44a71eca3f901321ea42c6
+  </code></pre>
+  
+  and that's all, folks. Further pushes can be done by repeating the @git push@ command.
+  
+  Now you can tell your co-conspirators to:
+  
+  <pre><code class="shell">$ git clone ssh://myserver.com/var/git/myapp.git</code></pre>
+  
+  and push and pull to your heart's content.
+  
+  h3. Track the remote branch
+  
+  You can specify the default remote repository for pushing and pulling using git-branch's track option. You'd normally do this by specifying the @--track@ option when creating your local master branch, but as it already exists we'll just update the config manually like so:
+  
+  <pre><code>[branch "master"]
+  	remote = origin
+  	merge = refs/heads/master
+  </code></pre>
+  
+  Now you can simply @git push@ and @git pull@.
+  
+  h3. Sharing the remote repository with the world
+  
+  If you want to set it up as a public repository be sure to check out the Git manual's chapter on "public git repositories":http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#public-repositories.
+  
+  h3. Working with remote repository branches
+  
+  @git remote show@ is used to inspect a remote repository. It goes and checks the remote repository to see what branches have been added and removed since the last @git fetch@.
+  
+  Doing a @git remote show@ at the moment only shows us the remote repo's master branch which we pushed earlier:
+  
+  <pre><code class="shell">$ git remote show origin
+  * remote origin
+    URL: ssh://myserver.com/var/git/myapp.git
+    Tracked remote branches
+      master</code></pre>
+  
+  Let's create a new local git repository and push to a new branch on the remote repository. We can then use @git remote show@ to see the new remote branch, @git fetch@ to mirror it into our local repo and @git checkout --track -b@ to create a local branch to do some work on it.
+  
+  We'll start by creating a new local repo and pushing some code to a new branch in the remote repository.
+  
+  <pre><code class="shell">$ mkdir /tmp/other-git
+  $ cd /tmp/other-git
+  $ git init
+  Initialized empty Git repository in /tmp/other-git
+  $ git remote add origin ssh://myserver.com/var/git/myapp.git
+  $ echo "Rails 2... woo" > afile
+  $ git add afile
+  $ git commit -m "Added afile"
+  Created initial commit 0ac9a74: Added afile
+   1 files changed, 1 insertions(+), 0 deletions(-)
+   create mode 100644 something
+  $ git push origin master:refs/heads/dev/rails-2
+  updating 'refs/heads/rails-2' using 'refs/heads/master'
+    from 0000000000000000000000000000000000000000
+    to   0ac9a7457f4b21c9e058d4c54d262584bf35e528
+   Also local refs/remotes/origin/rails-2
+  Generating pack...
+  Done counting 3 objects.
+  Deltifying 3 objects...
+   100% (3/3) done
+  Writing 3 objects...
+   100% (3/3) done
+  Total 3 (delta 0), reused 0 (delta 0)
+  Unpacking 3 objects...
+   100% (3/3) done
+  refs/heads/rails-2: 0000000000000000000000000000000000000000 -> 0ac9a7457f4b21c9e058d4c54d262584bf35e528
+  </code></pre>
+  
+  Now let's switch back to our old git repository and see if it detects the new branch on the remote repository:
+  
+  <pre><code class="shell">$ git remote show origin
+  * remote origin
+    URL: ssh://myserver.com/var/git/myapp.git
+    New remote branches (next fetch will store in remotes/origin)
+      dev/rails-2
+    Tracked remote branches
+      master
+  </code></pre>
+  
+  Let's update our mirror of the remote repository by doing a @git fetch@:
+  
+  <pre><code class="shell">$ git fetch
+  * refs/remotes/origin/master: storing branch 'dev/rails-2' of ssh://myserver.com/var/git/myapp.git
+    commit: b379203
+  $ git remote show origin
+  * remote origin
+    URL: ssh://myserver.com/var/git/myapp.git
+    Tracked remote branches
+      master
+      dev/rails-2</code></pre>
+  
+  We should now be able to see this in a our list of remote branches:
+  
+  <pre><code class="shell">$ git branch -a
+  * master
+  origin/dev/rails-2
+  origin/master</code></pre>
+  
+  If we then wanted to do some work on this remote @dev/rails-2@ branch we create a new local tracking branch like so:
+  
+  <pre><code class="shell">$ git checkout --track -b dev/rails-2 origin/dev/rails-2
+  Branch dev/rails-2 set up to track remote branch refs/remotes/origin/dev/rails-2.
+  Switched to a new branch "dev/rails-2"
+  </code></pre>
+  
+  To keep up-to-date and push new changesets we simply use @git push@ and @git pull@ when working in the local @dev/rails-2@ branch.
+  
+  Also notice, like we manually changed for master, @.git/config@ has a new entry for this new tracking branch:
+  
+  <pre><code>[branch "dev/rails-2"]
+  	remote = origin
+  	merge = refs/heads/dev/rails-2
+  </code></pre>
+  
+  h3. Further Reading
+  
+  "Sourcemage's Git Guide":http://wiki.sourcemage.org/Git_Guide has some very very handy real-life examples of git commands you'll often need.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1384
+      %p.author
+        Michael Koukoullis
+      .body
+        :textile
+          Okay now your making this stuff too easy ;)  No more guesswork. Thanks for the post dude.
+    %li#comment_1388
+      %p.author
+        %a{:href => 'http://saimonmoore.net'} Saimon Moore
+      .body
+        :textile
+          Tim,
+          
+          Have you seen <a href="http://scie.nti.st/2007/11/14/hosting-git-repositories-the-easy-and-secure-way">gitosis</a> ?
+    %li#comment_1389
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Michael</em>: no problemo! ;)
+          
+          <em>Saimon</em>: ah good idea to point out <a href="http://eagain.net/gitweb/?p=gitosis.git">gitosis</a>. It's a pretty kick-ass way to manage public git repositories. It's probably a good idea though to know how to set up remote git repositories manually, especially as gitosis is still under heavy development.
+    %li#comment_1390
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Saimon</em>: also I haven't actually tried gitosis yet, though I know <a href="http://drnicwilliams.com/">Dr Nic</a> had it up-and-running at railscamp and was yelling drunken praise
+    %li#comment_1400
+      %p.author
+        %a{:href => 'http://mega.blaix.com/'} Justin
+      .body
+        :textile
+          Super simple. I had no idea. I'm inching ever-closer to trying out git for myself...
+    %li#comment_1416
+      %p.author
+        Nico
+      .body
+        :textile
+          There's a minor bug in your instructions, I followed them to the letter and they did not work. You apparently cannot fetch from an empty repository, you have to push something into it first. In other words, your 'push' instructions should have come before your 'fetch' instructions.
+    %li#comment_1418
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Nico</em>: thanks you're right. I've restructed the entire article so it's now correct, as well as fleshing out how to interact with remote repositories.
+    %li#comment_1448
+      %p.author
+        Chris
+      .body
+        :textile
+          Wow, thanks a bunch. This was helpful.
+    %li#comment_1454
+      %p.author
+        %a{:href => 'http://www.bensblog.com'} Ben Poweski
+      .body
+        :textile
+          Excellent write up.
+          
+          Thanks!
+    %li#comment_1468
+      %p.author
+        %a{:href => 'http://www.exceptionz.com'} Maruis Marais
+      .body
+        :textile
+          Do you know how to create a bare repo without ssh'ing to the remote server? I'm trying to write a cap task to automate this process...
+    %li#comment_1474
+      %p.author
+        %a{:href => 'http://www.seanhodges.co.uk/~sean/medes'} Sean
+      .body
+        :textile
+          Hey thanks for the article, very useful. Bookmarked for safe keeping! :)
+    %li#comment_1478
+      %p.author
+        rxKaffee
+      .body
+        :textile
+          M. Marais. Unless your remote shell is setup as the limited git-sh, you should be able to run a remote command over non-interactive ssh from your automation script. Something along the lines of ...
+          ssh gituser@myserver.com "REP=code.git; mkdir $REP; cd $REP; git --bare init;"
+    %li#comment_1503
+      %p.author
+        Wladimir
+      .body
+        :textile
+          Thank you very much, using git is still like talking Chinese to me sometimes, but articles like this help a lot if I actually want to get stuff done :)
+    %li#comment_1508
+      %p.author
+        walter
+      .body
+        :textile
+          any idea how to add the ssh port number during git remote add origin, and, git push origin branchname?  Tried -p port : etc
+    %li#comment_1510
+      %p.author
+        %a{:href => 'http://ahri.net'} Adam
+      .body
+        :textile
+          walter: you can specify port as usual in the URL;
+          
+          ssh://foo.com:9999/foo.git
+          
+          
+          Tim: thanks a bunch for this guide, I'm really starting to enjoy using git and this is an invaluable quick reference!
+    %li#comment_1516
+      %p.author
+        %a{:href => 'http://letshead.to'} Jagtesh Chadha
+      .body
+        :textile
+          It was very helpful! Thank you Tim :-)
+    %li#comment_1517
+      %p.author
+        steve c
+      .body
+        :textile
+          Hey, don't know if you can help with this but when I do the push command I get this: (I have to C-c to stop it, it just "hangs")
+          
+          $ git push origin master
+          Counting objects: 3, done.
+          Writing objects: 100% (3/3), 208 bytes, done.
+          Total 3 (delta 0), reused 0 (delta 0)
+          
+          I know it's connecting fine, if I change the remote origin to something that is not a git repo it errors out, I just don't know how to change this >.>
+    %li#comment_1521
+      %p.author
+        %a{:href => 'http://droid.lv'} Arturs Aboltins
+      .body
+        :textile
+          Very helpful article. Explanation what goes in config files helped me a lot. Thanks! Good luck to you.
+    %li#comment_1522
+      %p.author
+        %a{:href => 'http://abhibera.googlepages.com'} Abhijit Bera
+      .body
+        :textile
+          Fantastic tutorial! Definitely the best guide I have come across. Even a first timer can follow this.
+    %li#comment_1528
+      %p.author
+        %a{:href => 'http://github.com/sr'} sr
+      .body
+        :textile
+          I wrote a bash function to automate the process. http://gist.github.com/7531
+    %li#comment_1529
+      %p.author
+        %a{:href => 'http://blog.infinitered.com'} Todd Werth
+      .body
+        :textile
+          Many thanks; well written and very helpful.
+    %li#comment_1532
+      %p.author
+        %a{:href => 'http://effectif.com'} Graham Ashton
+      .body
+        :textile
+          Cracking post - just what I was looking for, thanks.
+    %li#comment_1533
+      %p.author
+        %a{:href => 'http://www.hvmsolutions.co.in'} Gujjugeek
+      .body
+        :textile
+          Really helpful for a git novice like me. I spent majority of y'day trying to figure out a way to work with branches. didn't know it was so simple! thanks again.
+    %li#comment_1534
+      %p.author
+        %a{:href => 'http://catalyst.net.nz'} dekita
+      .body
+        :textile
+          This guide does a great job of covering the essential features of day to day git usage. Thanks!
+    %li#comment_1535
+      %p.author
+        %a{:href => 'http://www.markmcb.com'} Mark McBride
+      .body
+        :textile
+          Tim, great article!  I <a href="http://markmcb.com/2008/09/17/migrating-a-subversion-svn-project-and-server-to-git/">cited you</a> in an article I wrote specific moving Rails apps from Subversion.  One thing that stumped me when following your guide was how to push back to a remote branch that had been checked out locally and given a different name.  I threw up some notes on my blog about <a href="http://markmcb.com/2008/09/21/multiple-remote-git-branches-with-different-local-names/">how to git push to a remote branch with a name that doesn't match the local branch name</a>.  I how it helps other trying to do the same.
+    %li#comment_1551
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Instead of editing the config file manually to add the origin server, you could run:
+          
+            git-config branch.master.remote origin
+            git-config branch.master.merge refs/heads/master
+          
+          I have a fear of manually editing anything in the actual repository :)

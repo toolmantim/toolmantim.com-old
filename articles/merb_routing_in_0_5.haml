@@ -1,0 +1,217 @@
+-# title: Merb Routing in 0.5
+-# published: 2008-01-22
+
+:textile
+  <p><a href="http://merbivore.com/">Merb</a>'s routing shiznits needs some serious documentation love. Whilst I have a shot at getting some proper docpatches together here's an overview of how to use routing in Merb 0.5.</p>
+  
+  <h3>Path Matching</h3>
+  <p>
+  The @match@ method
+  defines how to route requests to controllers and actions.
+  </p>
+  <pre><code class="ruby">r.match("/contact").
+    to(:controller => "info", :action => "contact")</code></pre>
+  <p>
+  You can define placeholder parts of the url with <tt>:symbol</tt> notation.
+  These placeholders will be available in the params hash of your
+  controllers. For example:
+  </p>
+  <pre><code class="ruby">r.match("/books/:book_id/:action").
+    to(:controller => "books")</code></pre>
+  <p>
+  The placeholders can also be referenced in the <tt>to</tt> portion of the
+  route if necessary:
+  </p>
+  <pre><code class="ruby">r.match("/admin/:module/:controller/:action/:id").
+    to(:controller => ":module/:controller")</code></pre>
+  <h3>Named Routes</h3>
+  <p>
+  Use the @name@ method on a route to give it a name:
+  </p>
+  <pre><code class="ruby">r.match("/contact").
+    to(:controller => "info", :action => "contact").
+    name(:contact)</code></pre>
+  <p>
+  You can then easily reference the named route from controllers and views:
+  </p>
+  <pre><code class="ruby">url(:contact) # => "/contact"</code></pre>
+  <h3>Namespaces</h3>
+  <p>
+  Namespacing routes with @namespace@ is a convenient
+  way of specifying both the <tt>:path_prefix</tt> and <tt>:name_prefix</tt>
+  options:
+  </p>
+  <pre><code class="ruby">r.namespace :admin do |admin|
+    admin.match("/roles").
+      to(:controller => "roles", :action => "index").
+      name(:roles)
+  end</code></pre>
+  <p>
+  Reference a namespaced route by prefixing the route name with the
+  namespace:
+  </p>
+  <pre><code class="ruby">url(:admin_roles) # => "/admin/roles"</code></pre>
+  <h3>Resources</h3>
+  <p>
+  You can use Rails-like resource routing with @resources@:
+  </p>
+  <pre><code class="ruby">r.resources :posts</code></pre>
+  <p>
+  The routes generated are named after their resources:
+  </p>
+  <pre><code class="ruby">url(:posts)       #=> "/posts"
+  
+  @post = Post[1]
+  url(:post, @post) #=> "/posts/1"</code></pre>
+  <p>
+  You can nest resources using the same block syntax used for namespacing:
+  </p>
+  <pre><code class="ruby">r.resources :posts do |p|
+    p.resources :comments
+  end</code></pre>
+  <p>
+  To refer to a nested resource route simply use the child resource's
+  name. Notice in the following example there's no need to specify the
+  <tt>:post_id</tt> parameter as it's automatically inferred from
+  <tt>@comment</tt>.
+  </p>
+  <pre><code class="ruby">url(:comment, @comment) #=> "/posts/1/comments/2"</code></pre>
+  <p>
+  If you prefer the Rails 2 style of namespacing nested resources simply
+  specify the <tt>name_prefix</tt> on the child resource:
+  </p>
+  <pre><code class="ruby">r.resources :posts do |p|
+    p.resources :comments, :name_prefix => "post_"
+  end</code></pre>
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1424
+      %p.author
+        %a{:href => 'http://www.mr-eel.com'} Mr eel
+      .body
+        :textile
+          Nice one man. 
+          
+          The router has gotten a lot of love lately with stuff like namespaces. It's nice to have an overview I can point other people to.
+          
+          Thanks!
+    %li#comment_1425
+      %p.author
+        %a{:href => 'http://blog.mmediasys.com'} Luis Lavena
+      .body
+        :textile
+          I agree with Mr eel,
+          
+          A document of Merb routing is quite useful :-)
+          
+          Thank you for taking the time to post this!
+          (shared and starred under Google Reader)
+    %li#comment_1434
+      %p.author
+        %a{:href => 'http://siliconcarbon.blogspot.com'} Tony Pitale
+      .body
+        :textile
+          Is it possible to match patterns in a match, e.g.:
+          
+          r.match('/report/:id').where(:id is an integer).to....?
+    %li#comment_1435
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @tony: Yep! From router_spec.rb:
+          
+          <pre><code>
+          # Use square-bracket notation to replace param results with captures from the path
+          r.match(%r[^/movies/(\d+)-(\d+)-(\d+)$]).
+            to(:controller => "movies", :movie_id => "[1][2][3]", :action => "show")
+          </code></pre>
+    %li#comment_1436
+      %p.author
+        %a{:href => 'http://waferbaby.com/'} d
+      .body
+        :textile
+          Any idea what we can pass as conditions to match()? I wanna be able to match on POST or GET, if I can.
+    %li#comment_1437
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yep. Again from router_spec.rb:
+          
+          <pre><code>r.match("/login", :method => "get").
+            to(:controller => "sessions", :action => "new").
+            name(:login)
+          r.match("/login", :method => "post").
+            to(:controller => "sessions", :action => "create").
+            name(:login)</code></pre>
+          
+          Which reminds me of <a href="http://hassox.blogspot.com/2008/01/cool-stuff-with-merb-router.html">Daniel Neighman's sweet router hack</a> he posted not long ago.
+    %li#comment_1439
+      %p.author
+        %a{:href => 'http://hideoustriumph.tumblr.com/'} AndrewO
+      .body
+        :textile
+          Great post, Tim.  I was wondering though: can Merb do route globbing ("*path" style)?
+    %li#comment_1444
+      %p.author
+        Sergio Oliveira
+      .body
+        :textile
+          
+          I want to call MyModule::Core::MyController...
+          
+          Tried everything but nothing works!
+          
+          How?
+    %li#comment_1486
+      %p.author
+        %a{:href => 'http://blog.antarestrader.com'} Star Trader
+      .body
+        :textile
+          When using resources, how would one get the url to edit a resource?
+          
+          Taking you example above, what url() function would produce '/posts/edit/1'
+    %li#comment_1487
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @Star Trader:
+          
+          <pre><code>url(:edit_post, @post)</code></pre>
+    %li#comment_1495
+      %p.author
+        %a{:href => 'http://taylorredden.com'} taerb
+      .body
+        :textile
+          what i dont get is the url() for delete on a resource, and i see it you can do one of two things.
+          
+          
+          1) you could break restful design, and rename your destroy method to delete, and have your call look like this
+          <pre>
+          <code>
+            link_to 'Delete', url(:delete_post, post)
+          </code>
+          </pre>
+          
+          2) Or you could keep things restful and wrap your delete in a 
+          
+          <pre>
+          <code>
+            form_for(:post, :action => url(:post, post), :method=>:delete )
+          </code>
+          </pre>
+          
+          of course you would add the submit button  and such.
+          
+          Is there a third option I am not seeing?
+    %li#comment_1496
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @taylorredden Not sure what you're asking. There's really no URL to delete a resource, you just perform a DELETE on the resource itself (your example 2)

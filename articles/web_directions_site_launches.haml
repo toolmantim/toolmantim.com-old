@@ -1,0 +1,50 @@
+-# title: Web Directions site launches
+-# published: 2006-05-22
+
+:textile
+  The "Web Directions site":http://wd06.com has just been launched with all the juicy details and online registration.
+  
+  The registration system was built with Rails and thanks to the kind folk that are WD I'll be releasing a few "extracted":http://www.37signals.com/svn/archives2/rails_11_loaded_with_37s_extractions.php plugins in the coming weeks: SimpleAuthorisation, AccessibleFormBuilder and "eMatters":http://ematters.com.au support for "ActiveMerchant":http://home.leetsoft.com/am/.
+  
+  _SimpleAuthorisation_ allows you to add simple, HTTP-based, app-wide password protection for the initial stages of your application's development. Using it is a matter of:
+  <pre><code>
+  class ApplicationController < ActionController::Base
+    include SimpleAuthorisable
+    before_filter :simple_auth_required
+  end
+  </code></pre>
+  
+  and setting the username and password in your <code>environment.rb</code>.
+  
+  _AccessibleFormBuilder_ is a Rails 1.1 form builder that help output input labels which respect a model's validation. It'll allow you to use code such as:
+  <pre><code>
+  <dl class="horizontal-form billing">
+    <dt><%= f.label :name, :required => true %></dt>
+    <dd><%= f.text_field :name %></dd>
+    <dt><%= f.label :company %></dt>
+    <dd><%= f.text_field :company %></dd>
+    <dt><%= f.label :email, :required => true %></dt>
+    <dd><%= f.text_field :email %></dd>
+    <dt class="last">
+      <%= f.label :phone_number,
+                  :required => true,
+                  :value => "Ph. number" %>
+    </dt>
+    <dd class="last"><%= f.text_field :phone_number %></dd>
+  </dl>
+  </code></pre>
+  
+  It also ships with a few view helpers: <code>accessible_form_for</code> and <code>accessible_fields_for</code>.
+  
+  If you haven't already done so, go grab your ticket for WD06. If you're involved with web development you'd be crazy to miss this year's "killer lineup":http://www.webdirections.org/whos-speaking/.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_184
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          maiha on the "caboo.se blog":http://blog.caboo.se just released a "Htpasswd Plugin":http://blog.caboo.se/articles/2006/05/28/htpasswd-plugin which is more comprehensive than _SimpleAuthorisation_, so I've no longer any plans on releasing _SimpleAuthorisation_. Go grab his instead!

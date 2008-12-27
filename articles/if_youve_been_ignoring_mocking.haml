@@ -1,0 +1,185 @@
+-# title: If you&#8217;ve been ignoring mocking
+-# published: 2007-03-27
+-# updated: 2007-03-28
+
+:textile
+  ...now's the time to stop and check it out.
+  
+  Let's revisit the old conundrum of testing a controller that creates a model.
+  
+  Take for example, this simplified @ContactsController@:
+  
+  <pre><code class="ruby">
+  class ContactsController < ActionController::Base
+    # ...
+    def create
+      @contact = Contact.new(@params[:contact])
+      @contact.save!
+      redirect_to :action => 'index'
+    rescue ActiveRecord::RecordInvalid
+      render :action => 'new'
+    end
+    # ...
+  end
+  </code></pre>
+  
+  To test this controller using the real @Contact@ model, the controller would need to know how to create a valid @Contact@, which brings me to the crux of our problem:
+  
+  bq. Validation logic often changes; validation logic can sometimes be complex; and, validation logic should be tested, and only tested, in the model's tests.
+  
+  The @Contact@ class has an API, and when building and testing other parts of the system we should be able to assume that it implements it's API correctly. Testing that a @Contact@ satisfies its API is the responsibility of the @Contact@'s tests, nobody elses. What does all this mean: other tests that create and update Contacts should not need to know about what constitutes a valid Contact.
+  
+  Let's return to the original problem: testing that the @ContactsController@ does what it advertises.
+  
+  <pre><code class="ruby">
+  class ContactsControllerTest < Test::Unit::TestCase
+    def setup
+      @controller = ContactsController.new
+      @request    = ActionController::TestRequest.new
+      @response   = ActionController::TestResponse.new
+    end
+    def test_create_should_redisplay_edit_if_contact_invalid
+      # here we're copying the logic of what makes a valid contact
+      post :create, :contact => { :name => nil }
+      assert_response :success
+      assert_template :new
+    end
+    def test_create_should_redirect_after_creating_contact
+      # copying the logic, again
+      post :create, :contact => { :name => "bob" }
+      # we should somehow assert that save! was called, or we
+      # could test the DB was updated (though that's really up
+      # to Contact's tests)
+      assert_response :redirect
+    end
+  end
+  </code></pre>
+  
+  So here you see the problem of a controller needing to know what makes a valid @Contact@.
+  
+  The other problem with Rails standard functional testing is that the views get rendered, which means to mock the models you need to mock all the methods and attributes necessary for the view to render, when all you're really wanting to do is assert the controller does what it needs to do, with the minimum of mocking.
+  
+  As an aside: "RSpec":http://rspec.rubyforge.org addresses the mixing of view and controller tests by simply not rendering the views when doing a controller test. This is great, but rendering views is good for catching simple syntax errors in the erb, so I've found myself creating a spec with @integrate_views@ that calls all the actions to make sure the they don't blow up with a syntax error. Maybe somebody soon I'll ween myself off this habit too.
+  
+  Ignoring the need to keep the views happy, let's stick with @Test::Unit@ for now and sprinkle some "mocha":http://mocha.rubyforge.org to decouple the model implementation from the functional tests.
+  
+  <pre><code class="ruby">
+  require "mocha"
+  
+  class ContactsControllerTest < Test::Unit::TestCase
+    def setup
+      @controller = ContactsController.new
+      @request    = ActionController::TestRequest.new
+      @response   = ActionController::TestResponse.new
+      # set up our mock Contact instance
+      @contact = mock
+      # stub Contact.new to return our mock
+      Contacts.expects(:new).with('params').returns(@contact)
+    end
+  
+    def test_create_should_redisplay_edit_if_contact_invalid
+      # make our Contact mock act like an invalid Contact, as per its API
+      @contact.expects(:save!).raises(ActiveRecord::RecordNotFound)
+      post :create, :contact => 'params'
+      assert_response :success
+      assert_template :new
+    end
+  
+    def test_create_should_redirect_after_creating_contact
+      # make our Contact mock act like a valid Contact, as per its API
+      @contact.expects(:save!).returns(nil)
+      post :create, :contact => 'params'
+      assert_response :redirect
+    end
+  end
+  </code></pre>
+  
+  Our controller test doesn't care what creates a valid @Contact@, it just cares that the controller does the right thing depending on whether the @Contact@ reports itself as valid or invalid.
+  
+  The above code isn't that useful because you'll need to mock a whole bunch more methods to make the views happy. I can't seem to find a simple way to mock AR objects in standard Rails functional tests due to this coupling with the view, so I'll move on to demonstrating how mocking is used when using RSpec to specify a controller's behaviour.
+  
+  RSpec uses it's own mocking and stubbing framework which is different to mocha. You can find out more info in the "Spec::Mocks documentation":http://rspec.rubyforge.org/documentation/mocks/index.html.
+  
+  <pre><code class="ruby">
+  context "The ContactsController" do
+    controller_name 'contacts'
+    setup do
+      @contact = mock
+      Contact.stub!(:new).and_return(@contact)
+    end
+    specify "should initialise a Contact with the contact parameters on create" do
+      specify Contact.should_receive(:new).with(:params).and_return(@contact)
+      post :create, :contact => :params
+    end 
+    specify "should render edit if contact is invalid on POST to create" do
+      @contact.should_receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+      post :create
+      response.should_render_template :edit
+    end
+    specify "should assign contact if contact is invalid on POST to create" do
+      @contact.should_receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+      post :create
+      assigns("contact").should == @contact
+    end
+    specify "should redirect if contact is valid on POST to create" do
+      @contact.should_receive(:save!).and_return(nil)
+      post :create
+      response.should_redirect_to(:action => "index")
+    end
+  end
+  </code></pre>
+  
+  If there's one reason to check out RSpec it is to understand how to test a Rails application's parts in isolation. The "Example Controller Specs" section in the "Spec::Rails - Controller":http://rspec.rubyforge.org/documentation/rails/writing/controllers.html documentation is a good place to start looking too.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_540
+      %p.author
+        nicholas a. evans
+      .body
+        :textile
+          Good post on mocks and testing... I could never quite get into the groove with mock objects when I was in the .Net/C# realm.  But I've also been sold on the RSpec way of doing things, and it just make sense and feels right.  It helps that the Rails MVC architecture so easily lends itself to mocks and stubs for testing controllers or views.
+          
+          But I understand what you mean by wanting the incidental testing of your view syntax by using @integrate_views@.  This really shouldn't be a problem if you also use rSpec to spec out your views as well (separately from the controller specs).
+          
+          But... I've also been toying around with another idea on how to get a quick syntax check:
+          
+          <pre>
+          <code>
+          find app/views/ -name "*.rhtml" -print0 | xargs -0 ruby -rerb -e 'puts ERB.new(ARGF.read, nil, "-").src' | ruby -c
+          </code>
+          </pre>
+          
+          If all is well, when you run that from  bash command line, it should return "Syntax OK".  Or, to check each file individually (and get the appropriate filename, line number with the error):
+          
+          <pre>
+          <code>
+          for file in `find app/views/ -name "*.rhtml" -print0 | xargs -0`; do echo -n "$file: "; ruby -rerb -e 'puts ERB.new(ARGF.read, nil, "-").src' $file | ruby -c; done
+          </code>
+          </pre>
+          
+          I've only tested it with the GNU/Linux versions of find and xargs, so I can't guarantee that it will work on a Mac without some tweaking.  And it's a bit ugly too.  But it shouldn't be too difficult to turn this bash one-liner into a rake task or even an rspec assertion, right?
+          
+          Of course, this only tells you if the ruby syntax is okay.  It doesn't mean that the helpers you are trying to use are accessible or any number of other issues.  Creating the proper view specs would ultimately be the right answer.
+    %li#comment_541
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          I could imagine that the clean and simple separation of MVC makes using mocks and stubs a whole lot simpler when testing a Rails app than when testing a typical .NET/C# app.
+          
+          Good tip on running the views through ERB! Not sure if I'd use that though, as testing it in the spec via @integrate_views@ with the real models and fixture data has the added benefit of making sure the view doesn't raise a @NoMethodError@ etc.
+    %li#comment_544
+      %p.author
+        nicholas a. evans
+      .body
+        :textile
+          True.  You won't catch non-syntactic errors (like @NoMethodError@) with my erb hack.  But you *will* catch them when you write view specs.  ;-)  And then your controller specs can stay nice and simple and focused and clean, too.
+    %li#comment_564
+      %p.author
+        %a{:href => 'http://wiki.m001.net'} Gregory Bluvshteyn
+      .body
+        :textile
+          Hey thanks a lot man, I've learned so much.

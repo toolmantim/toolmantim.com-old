@@ -1,0 +1,66 @@
+-# title: Integration testing with RSpec and Doogie
+-# published: 2007-06-05
+
+:textile
+  So you've got a fresh new Rails app that contains a bunch of super-sexy specifications, but now you've got to test some user stories, like Doogie Howser trying to book a "Web Directions South 2007":http://webdirections.org/ ticket for his mate Vinnie:
+  
+  !(thumb)http://www.toolmantim.com/images/blog/doogie-howser-md.jpg(Doogie Howser and Vinnie)!
+  
+  bq. Doogie Howser fills out the billing details without a required field, and sees a validation error. Being the cunning child-prodigy that he is, Doogie tries to advance to the next stage by hacking the URL, but is sadly disappointed when he's redirected back to the billing step. After cursing the screen with his fist, he fills out his billing details and is forwarded to the the ticketing step. Doogie fills out a conference ticket for his little mate Vinnie, because that's just the kind of great guy he is. After hitting continue, Doogie is forwarded to the confirmation page. He confirms the booking (what a guy!) and is shown his invoice with payment options. Doogie recieves an email with payment details, and his little mate Vinnie excitedly receives his conference attendance details.
+  
+  If you're feeling particularly gun-slingin you could use the funky "spec_ui gem":http://gemtacular.com/gems/spec_ui, but I find the standard Rails Integration tests suit the purpose just foine.
+  
+  Firstly, we make sure Rails unit testing stuff knows where to find our RSpec fixtures, so we add the following to @test/test_helper.rb@:
+  
+  <pre><code class="ruby">
+  ActionController::IntegrationTest.fixture_path = "\#{RAILS_ROOT}/spec/fixtures"
+  </code></pre>
+  
+  and that's it. Generate your integration test:
+  
+  <pre><code>script/generate integration registration</code></pre>
+  
+  and test away:
+  
+  <pre><code class="ruby">require "\#{File.dirname(__FILE__)}/../test_helper"
+  
+  class RegistrationTest < ActionController::IntegrationTest
+    fixtures :all
+  
+    def test_doogie_cunningly_completes_a_booking_for_vinnie
+      get '/wds07/'
+      assert_redirected_to '/wds07/register/billing'
+      
+      follow_redirect!
+      assert_response :success
+      # ...
+    end
+  end
+  </code></pre>
+  
+  Bonus points if you can get @RSpec::Matchers@ working within the integration test.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_624
+      %p.author
+        %a{:href => 'http://www.webdirections.org/'} Maxine Sherrin
+      .body
+        :textile
+          Did crafting this humourous piece count in the billable hours?
+    %li#comment_626
+      %p.author
+        %a{:href => 'http://drnicwilliams.com'} Dr Nic
+      .body
+        :textile
+          I feel a screencast would be useful. Perhaps even during billable hours.
+    %li#comment_628
+      %p.author
+        Dylan
+      .body
+        :textile
+          "but I find the standard Rails Integration tests suit the purpose just foine"
+          
+          And I think it'll remain this way for a while yet.

@@ -1,7 +1,5 @@
 - @page_title = "Tim Lucas - toolmantim.com"
+- @body_class = "home"
+- @hide_fat_footer = true
 
-- last_article = @articles.last
-
-Recent article:
-%a{:href => article_path(last_article)}= last_article.title
-%em= last_article.published
+= partial :meta

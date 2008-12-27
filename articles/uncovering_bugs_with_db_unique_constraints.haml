@@ -1,0 +1,26 @@
+-# title: Uncovering bugs with DB unique constraints
+-# published: 2006-09-23
+
+:textile
+  The only recurring bug in "Web Connections":http://connections.webdirections.org that I hadn't really tracked down yet was this baby:
+  
+  <code>
+  A ActiveRecord::StatementInvalid occurred in taggings#create:
+  
+    Mysql::Error: Duplicate entry '119-Person-289' for key 2: INSERT INTO taggings (`tagger_person_id`, `updated_at`, `tag_id`, `taggable_type`, `taggable_id`, `created_at`) VALUES(119, '2006-09-22 22:46:18', 289, 'Person', 119, '2006-09-22 22:46:18')
+    [RAILS_ROOT]/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract_adapter.rb:122:in `log'
+  </code>
+  
+  This started to crop up not long after I added a whole bunch of indexes to the DB tables, most specifically the following:
+  
+  @add_index :taggings, [:taggable_id, :taggable_type, :tag_id], :unique => :true, :name => 'by_taggable_and_tag'@
+  
+  Basically I'm creating a unique index that says a given "Taggable" and Tag can only be related once.
+  
+  So why was my code breaking this constraint?
+  
+  The exception email showed somebody trying to add the tags "mobile xml bluetooth mobile social networking wikipedia hyperpeople vrml." Notice mobile was included twice? I mustn't have been excluding duplicate values. doh!
+  
+  ...and in the end a simple @tag_names.uniq!@ did the trick.
+  
+  None of this is particularly interesting, I just wanted to share how I found the unique DB constraints useful for both DB optimisation and keeping my data consistent in the face of code bugs.

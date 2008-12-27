@@ -1,0 +1,92 @@
+-# title: Sharing git repositories via <span class="caps">OS X</span>&#8217;s built-in web sharing
+-# published: 2007-12-05
+
+:textile
+  <a href="http://www.flickr.com/photos/toolmantim/2079685562/" title="Lacho hacking on JoustingSticks by toolmantim, on Flickr"><img src="http://farm3.static.flickr.com/2312/2079685562_ea3d2dcd66_m.jpg" width="240" height="160" alt="Lacho hacking on JoustingSticks" /></a>
+  
+  In a truly collaborative development environment in the same physical space (such as "railscamp":http://flickr.com/photos/toolmantim/sets/72157603347852310/, "rubyconf":http://rubyconf.org/, etc) wouldn't it be cool to just push and pull changesets between laptops, without the need for any central server or network?
+  
+  This was the exact setup I waned to shoot for for railscamp, but geting it set up on people's machines was too much--a central SVN seemed to work much better. It did however demonstrate it working, pushing, pulling and merging between four repositories on four laptops.
+  
+  If you are going offline it may also be worth perusing fellow railscamper <a href="http://flickr.com/photos/toolmantim/2078884703/in/set-72157603347852310/">Dr Nic</a>'s article showing us "how to mirror an SVN repo in git":http://drnicwilliams.com/2007/11/22/going-offline-without-your-favourite-subversion-repository/.
+  
+  h3. Enable web sharing (i.e. Apache 2)
+  
+  Firstly make sure web sharing is enabled (System Preferences > Sharing). 
+   
+  By default it uses @~/Sites@ to serve your files to http://localhost/~yourusername/
+  
+  In my case I wanted to use @~/www@ instead of @~/Sites@ (all my source files live is @~/Sites@), so I created a @~/www@ directory and changed @/etc/apache2/users/tlucas.conf@ accordingly:
+  
+  <pre><code class="shell">$ mkdir ~/www
+  $ mate /etc/apache2/users/tlucas.conf</code></pre>
+  
+  <pre><code><Directory "/Users/tlucas/www/">
+    Options Indexes MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory></code></pre>
+  
+  Restart apache2, put in a test file and see what happens:
+  
+  <pre><code class="shell">$ sudo apachectl restart
+  $ echo "Test" > ~/www/index.html
+  $ curl http://localhost/~tlucas/
+  Test</code></pre>
+  
+  There's little point progressing unless you get this working.
+  
+  h3. Create the public repository
+  
+  Initialising the public repository is exactly the same as "setting up a new remote repository":http://toolmantim.com/article/2007/12/5/setting_up_a_new_remote_git_repository with the addition of a simple step.
+  
+  Remote repositories can not only be remote servers, but can be other repositories on the same filesystem. Git's definition "remote" is "a different git repository".
+  
+  We set up a new bare git repository like "you've seen before":http://toolmantim.com/article/2007/12/5/setting_up_a_new_remote_git_repository:
+  
+  <pre><code class="shell">$ cd ~/www
+  $ mkdir -p git/myapp.git
+  $ cd git/myapp.git
+  $ git --bare init</code></pre>
+  
+  Add then add it as a remote repository and push to it:
+  
+  <pre><code class="shell">$ cd ~/Sites/myapp
+  $ git remote add public /Users/tlucas/www/git/myapp.git
+  $ git push public master</code></pre>
+  
+  h3. Enable sharing via HTTP
+  
+  "Deep within the git user manual":http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#exporting-via-http  are the two operations you'll need to do to your public repository so that other people are able to access it via HTTP:
+  
+  <pre><code class="shell">$ cd ~/www/git/myapp.git
+  $ git --bare update-server-info
+  $ chmod a+x hooks/post-update</code></pre>
+  
+  h3. Test the public repository from another machine
+  
+  Jump onto another machine and have a stab at cloning the repository via HTTP.
+  
+  <pre><code class="shell">$ git clone http://tim.local/~tlucas/git/myapp.git</code></pre>
+  
+  If all is well you should now have a local clone of the repository. Fire up @gitk@ to browse through all the revision history.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1402
+      %p.author
+        %a{:href => 'http://peepcode.com'} topfunky
+      .body
+        :textile
+          Too easy! Thanks for the clear instructions.
+          
+          I banged my head against this until I realized that the "--bare init" or "--bare clone" is really necessary. You can't just cp an existing repository and expect to serve it up.
+    %li#comment_1403
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yeah I got sick of just fumbling around and decided to figure out what the deal was once and for all. So confusing at first the whole bare thing.

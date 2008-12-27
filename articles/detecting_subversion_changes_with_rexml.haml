@@ -1,0 +1,12 @@
+-# title: Detecting subversion changes with rexml
+-# published: 2007-03-11
+
+:textile
+  Until I have my tumblr tumblog themed and they add some nice code posting facilities, here's a nice snippet for you all.
+  
+  Detect whether any files on the SVN server have been changed in a more recent revision (i.e. something like "CC.rb":http://cruisecontrolrb.thoughtworks.com/ should rebuild your project):
+  
+  <pre><code class="ruby">
+  require 'rexml/document'
+  REXML::Document.new(`svn status -u --xml`).elements.to_a("//entry//repos-status").any?
+  </code></pre>

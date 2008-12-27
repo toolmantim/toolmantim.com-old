@@ -1,0 +1,261 @@
+-# title: <span class="caps">RORO</span> July Meetup
+-# published: 2007-07-19
+-# updated: 2007-10-30
+
+:textile
+  Last night saw another great Ruby on Rails Oceania Sydney July meetup (say _that_ ten times quickly). We were lucky to have "Brad":http://faces.rubyonrails.com.au/users/37 at "Job Futures":http://jobfutures.com.au pitch in with supplying the venue yet again, as well as us scoring 4 great presenters and plenty of drinks:
+  
+   * <a href="#matt-allen">Matt Allen - Rails on the Fairway</a>
+   * <a href="#lachlan-hardy">Lachlan Hardy - Beautiful Maintainable CSS</a>
+   * <a href="#patrick-crowley">Patrick Crowley - Styler & Headliner</a>
+   * <a href="#hoan-ton-that">Hoan Ton-That - facebook-rails</a>
+  
+  For those who weren't there we managed to record the video via VNC and screen cap, and the audio thanks to a last-minute purchase by "Jason Crane":http://faces.rubyonrails.com.au/users/2. Though Lachlan's preso had problems with bandwith (note to self: VNC over wifi not good) it worked seamlessly, and I've sent the videos to Lachie via Auspostnet for further processing. The start of a podcast maybe? Who knows...
+  
+  "Marcus":http://faces.rubyonrails.com.au/users/40 managed to pop his Melbourne head in for a few mintues over ichat but we couldn't keep it up unfortunately. Have to think more about the whole webcasting thang eh.
+  
+  h3(#matt-allen). Matt Allen - Rails on the Fairway
+  
+  "Matt Allen":http://faces.rubyonrails.com.au/users/4 gave an intro to <a href="http://iseekgolf.com/">iseekgolf.com</a>'s history and scaling issues, giving a bit of a history behind how it went from a large PHP app with a phpBB forum with just under 300k posts, to a Rails application and Beast. It was interesting to see all the caching on the site is done with fragment caches on the file system, using observers and cron-jobs to have everything ticking over automatically.
+  
+  iseekgolf handles 200k req/s during peak on 4 mongrels for the Rails app and 4 mongrels for the beast forum, with a separate DB server.
+  
+  <strong class="update">Update:</strong> My very poor choice of wording below ("feature hungry whiners") in describing Matt's small aside about the change of forum software seems to have upset a lot of people. These were my words, not his. See my comments below for my take. 
+  
+  Matt also mentioned changing from phpBB to Beast weeded out all the feature-hungry whiners from the community who split off and created their own forum, leaving only the people with an interest in golf and helping the community in the iseekgolf forums. Possible community management stategy?
+  
+  h3(#lachlan-hardy). Lachlan Hardy - Beautiful Maintainable CSS
+  
+  "Lachlan":http://faces.rubyonrails.com.au/users/13 receives the prize for the sexiest presentation of the evening. Though Lachlan is a front-end coder by day he comes with an appreciation for the Ruby aesthetic and design, showing us how to create logical, maintainable CSS just like we do with Ruby. He explained using CSS shorthand is like using <code>select</code> and <code>reject</code>
+  to work with collections instead of an <code>each</code> loop with an <code>if</code> statement. Sure it requires you understand the syntax, but it's always better to master the language to create more concise and descriptive code.
+  
+  Some of his general tips:
+  
+  * A system or framework always trumps adhoc coding, so...
+  * If you don't order your CSS property statements, then use the system of ordering them alphabetically.
+  * Nesting can infer hierarchy. Use this to your advantage.
+  * Large files need tables of content, just like large files of Ruby need structured navigation (though usually from the code itself).
+  * Write semantic HTML (CSS was designed for it which will help write elegant code)
+  
+  h3(#patrick-crowley). Patrick Crowley - Styler & Headliner
+  
+  We're lucky enough to have "Patrick Crowley":http://faces.rubyonrails.com.au/users/53 in town from the "San Diego Ruby Brigade":http://sdruby.com/, the master of Ruby Brigade video podcasts, who is staying in Sydney the two months the rest of Sydney is running to far-north Queensland to escape the cold. 
+  
+  Patrick demo'd two plugins which solve problems that he's come across in almost every Rails app he's developed; managing and organising your CSS files, and doing page titles.
+  
+  The first plugin he demo'd, Styler, automagically causes a request for @/articles/1/edit@ to turn:
+  
+  <pre><code><%= stylesheets %></code></pre>
+  
+  into:
+  
+  <pre><code><%= stylesheet_include_tag 'application' %>
+  <%= stylesheet_include_tag 'articles' %>
+  <%= stylesheet_include_tag 'articles_edit' %>
+  <%= stylesheet_include_tag 'articles/edit' %>
+  </code></pre>
+  
+  if the files exist in the @public/stylesheets@.
+  
+  I have in the past found this approach really handy when working by myself or on a small team.
+  
+  The second plugin was "Headliner":http://the.railsi.st/2007/5/3/headliner-dry-up-your-page-titles, which handles the common problem of managing page titles in your views in an elegant way.
+  
+  Headliner lets define your page title to use in the @<title>@ tag in your view, whilst also outputting it. For example:
+  
+  <pre><code><h2><%= t "About me" %></h2></code></pre>
+  
+  Would output both:
+  
+  <pre><code><h2>About me</h2></code></pre>
+  
+  as well as setting things up so in your layout file you can output that title like so:
+  
+  <pre><code><%= title :site => "toolmantim.com" %></code></pre>
+  
+  which would output, with no extra work:
+  
+  <pre><code><title>toolmantim.com: About me</title></code></pre>
+  
+  Big ups to Patrick for giving a talk whilst he's in town and staying til the taps ran dry at the pub. Unfortunately I've no incriminating photos were captured (yet), unlike "previous international super-star RORO guests":http://flickr.com/photos/toolmantim/298325141/.
+  
+  h3(#hoan-ton-that). Hoan Ton-That - Facebook on Rails
+  
+  "Hoan":http://www.ton-that.org/ finished up the night with a demonstration of the <a href="http://code.google.com/p/facebook-rails">facebook-rails</a> plugin he's written and using to power the "Writeslab":http://apps.facebook.com/writeslab/ facebook application.
+  
+  I'd previously spoken to Hoan at "Railscamp":http://toolmantim.com/article/2007/7/17/rails_camp_07_rundown about it, but was particularly keen to see a demo and hear more as I'm working on a facebook app myself.
+  
+  Hoan showed some very Rails-esque facebook integration using his facebook-rails plugin, which builds upon RFacebook code to make the Rails code just damn sexy.
+  
+  For example, the code to implement getting user details goes from this with RFacebook:
+  
+  <pre><code class="ruby">xml = fbsession.users_getInfo(:uids => [fbsession.session_user_id], :fields => ["first_name", "last_name"])
+  firstName = xml.at("first_name").inner_html
+  lastName = xml.at("last_name").inner_html
+  </code></pre>
+  
+  to, when using facebook-rails, something much sexier:
+  
+  <pre><code class="ruby">u = User.find(fbsession.session_user_id)
+  u.first_name
+  u.last_name
+  </code></pre>
+  
+  Want to send a notification to the user's friends that they've puked on them? Of course you do.
+  
+  <pre><code class="ruby">class PukeNotificationPublisher < Facebook::NotificationPublisher
+    def puke(friends)
+      @to_ids = friends.map(&:uid) # bug in redcloth, should read &:uid
+      @text   = "just puked on you"
+    end
+  end
+  </code></pre>
+  
+  Not to mention @redirect_to@ now works as you'd expect, the urls are mapped all nicely for you and support @url_for@, and lots of other little goodies. Awesome work Hoan!
+  
+  After the presentation's wrapped up we headed to PJ O'Briens for some bevvies and food.
+  
+  Two things I forgot to mention on the night though were those who haven't got them should've picked up their "railscamp tees":http://flickr.com/photos/tags/yieldshirt (yeah I know, not real good now) and "Dr Nic":http://faces.rubyonrails.com.au/users/10 is running a "Beginner Ruby on Rails Workshop":http://drnicwilliams.com/2007/07/09/web-directions-south-workshop/ alongside the "Web Directions conference":http://www.webdirections.org/ on September 25.
+  
+  To keep up-to-date with the Sydney Rails events check out the "the Rubyholic.com page":http://rubyholic.com/groups/show/63 along with the ical feed subscription that's available from there.
+  
+  Keep an eye out for some exciting but as-yet-unannounced Rails events coming up in Sydney over the next 3 months, and don't worry... the recordings of last night's presentations should be up early next week.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_719
+      %p.author
+        %a{:href => 'http://dmitry.baranovskiy.com/'} Dmitry Baranovskiy
+      .body
+        :textile
+          It was great event, Tim. Hope to attend more.
+    %li#comment_1099
+      %p.author
+        Feature Hungy Whiner
+      .body
+        :textile
+          If ISG is proud of burning its longest-serving, knowledgeable and intelligent members then matters at ISG HQ are more dire than anyone could have imagined.
+          
+          You only need to peruse the quality of the content on ISG compared to the offshoot forum to see that is a cold, hard fact.
+    %li#comment_1100
+      %p.author
+        %a{:href => 'http://www.thegolfforum.com.au'} Judge Smails
+      .body
+        :textile
+          I must be a feature hungry whiner ISG is talking about how ever I didn't leave the site because of those reasons, I left because they stuffed the forums up and refuse to admit they make a cock up of the whole thing.  I have supported ISG in the past and thought it was a great site until they treated people who made the forums a success like crap.  This is merely the icing on the top pf the Crap Cake.
+          thegolfforum has everything ISG used to have but no longer does.... including a soul.
+    %li#comment_1102
+      %p.author
+        Stig
+      .body
+        :textile
+          If you call being able to view the last unread post in a thread a "Feature Hungry Whiner" that must be me. How basic a feature of any forum is that. Oh, and PM's as well, rubbish is as rubbish does.
+    %li#comment_1104
+      %p.author
+        Publish
+      .body
+        :textile
+          I think iseekgolf's re-write has been an extremely disappointing exercise in treating posters as an irritant rather than a valuable resource. What is been seen by a programmer as a "functional technical positive" is seen by users as a "feature negative" -- with no personal contact, more difficult use, impossible searching and a hard-to-reference posting history. 
+          
+          I'm just astounded Matt thinks the community has been "weeded out" for the better. If anything it's the opposite -- some of the best and most information rich posters that made the site interesting to log in to have just deserted the ship. Where is the logic in abandoning your customers, some of whom have made thousands of useful posts, because you refuse to make the site more functional and easier-to-use for them?
+          
+          I was a "moderate" iseekgolf user who made a point of considerate, rational posts (I could tolerate a bit of bogan or boys-will-be-boys humour!). But to me iseekgolf is now dead. It receives a fraction of the posts it used to and some boards have nothing for hours or days. Guess that makes it easier to manage, or a "community management strategy". Other companies would call it losing customers.
+    %li#comment_1105
+      %p.author
+        %a{:href => 'http://www.cashmore.com.au'} James Cashmore
+      .body
+        :textile
+          Those smart arse golf architecture blokes ruined my dad's reputation. Of course they were only telling the truth but that's not the point!
+    %li#comment_1106
+      %p.author
+        Colonel
+      .body
+        :textile
+          I miss the old iseekgolf.com forums, and especially that hot babe forum member called Scorpiochick. That image of her from Henrys avatar has helped me get through many a cold night here in Adelaide I can assure you. And where did the PM's go?
+          
+    %li#comment_1107
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          I've obviously managed to spark up some emotion from those involved.
+          
+          The words "feature-hungry whiners" were definitely something that I made up and I don't believe Matt used any such lingo. He was talking more in generalities about the pros and cons of moving from phpBB to Beast. It really was just an aside from Matt and there was never any overarching plan to upset people and have them leave. I just thought it was an interesting side effect.
+          
+          Sorry if I've offended anybody or misrepresented ISG or Matt.
+          
+          Any specific feedback about ISG/TGF's features etc is probably best in the ISG/TGF forums.
+    %li#comment_1108
+      %p.author
+        botomfeeder
+      .body
+        :textile
+          Tim, regardless of whether there was an "overarching plan to upset people and have them leave", that is exactly what happened.
+          
+          Anyone who thinks that the new forum is an improvement must be on drugs.  The people who left aren't feature-hungry whiners, rather they were frustrated that features they'd come to rely upon (such as PM's) were no longer available.  When they pointed this out, they were treated with derision.
+    %li#comment_1109
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          botomfeeder: I understand your frustration at ISG over the stripping down of the forum, and I also understand that ISG had to make a compromise which has streamlined their operations and improved other areas of the business. Maybe there is/was a win-win option. You'll have to work with them on that one.
+    %li#comment_1110
+      %p.author
+        %a{:href => 'http://www.thegolfforum.com'} fyirippu
+      .body
+        :textile
+          We tried to work with them and gave them every chance. The problem was that they were far too thin-skinned and continued to try to fob off the forum populace with complete garbage. Every time they were "busted" they cracked the sads and modded/deleted every post that they didn't like regardless of its validity or otherwise. Virtually every bit of feedback was treated with derision and forum members were treated as halfwits. This despite the fact that a number of long-term forum members were very experienced in both upgrades and code-cutting. 
+    %li#comment_1111
+      %p.author
+        Mr D
+      .body
+        :textile
+          Have to agree with the Judge.
+          
+          It went from an informative forum site with social banter of all levels to now just a pure golf only site. 
+          
+          The posters who added the social side where the ones who built the soul of the place and made me want to come back and read more
+          
+          That social side was driven by PM's, people having a thick skin, etc
+          
+          All gone to TGF now. 
+          
+          To be honest, I believe both sites are not even close to how ISG used to be.
+    %li#comment_1113
+      %p.author
+        %a{:href => 'http://the.railsi.st'} Patrick Crowley
+      .body
+        :textile
+          This seems like a great discussion to have <a href="http://www.thegolfforum.com/">somewhere else</a>. :)
+    %li#comment_1114
+      %p.author
+        %a{:href => 'http://www.jesushatesgolf.com'} Jesus Christ
+      .body
+        :textile
+          That link didn't work for me.
+    %li#comment_1334
+      %p.author
+        Jim
+      .body
+        :textile
+          Hi Tim, appreciate your comments.  Does Rails allow for private messaging and a search function when used for forum software?  Would you agree it isn't unreasonable to expect these sort of functions from a modern day forum?  Cheers, Jim.
+    %li#comment_1336
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Jim:</em> Rails is a generic web application framework which you can build anything with. Beast is a forum software package written with Rails. Adding PM to Beast requires modifying or extending it, which brings trade-offs around upgrade cycles, stability and maintenance. Whether or not these trade-offs stack up for ISG and its users I can't say.
+    %li#comment_1362
+      %p.author
+        Dr. Alister MacKenzie
+      .body
+        :textile
+          I'm too old to know much about fancy computer speak, but one thing's for certain - ISG was an infinitely better site in it's old form. It's decline in post quality following an alleged 'upgrade' should serve as a case study for the forum software industry - don't 'fix' what isn't broken.
+    %li#comment_1363
+      %p.author
+        Saddam from Tikrit
+      .body
+        :textile
+          I read with much interest this community management strategy. I tried it, and it not work as good as it did for you iseekgolf.

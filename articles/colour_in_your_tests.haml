@@ -1,0 +1,53 @@
+-# title: Colour-in your tests
+-# published: 2006-12-22
+
+:textile
+  [via "Anthony Eden":http://anthonyeden.com/2006/12/20/gems-you-might-not-know-about-but-should]
+  
+  Make your test output sexy with "MonkeyTest":http://monkeytest.rubyforge.org/. Do it.
+  
+  !http://www.toolmantim.com/images/blog/monkeytest.png(MonkeyTest screenshot)!
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_421
+      %p.author
+        Jacob Atzen
+      .body
+        :textile
+          I like turn which gives me a pass/fail on each and every test method instead of only on the class. Couple it with facets for nice coloring.
+    %li#comment_422
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Interesting... will check out turn, though seeing each passing test isnt particularly useful.
+          
+          Monkeytest shows individual failures too:
+          <pre><code>
+          +------------------------------------------+-------+------------+--------+
+          | Test Class                               | Tests | Assertions | Status |
+          +------------------------------------------+-------+------------+--------+
+          | MessageTest                              |    10 |         22 |   FAIL |
+          | ResultsControllerTest                    |     1 |          1 |   PASS |
+          | MessagesControllerTest                   |     2 |          2 |   PASS |
+          | ContestantTest                           |     1 |          1 |   PASS |
+          | VoteTest                                 |     1 |          1 |   PASS |
+          +------------------------------------------+-------+------------+--------+
+          | Total                                    |    15 |         27 |        |
+          +------------------------------------------+-------+------------+--------+
+          Finished in 0.287826 seconds
+          
+          
+          Errors & Failures:
+          MessageTest::test_dummy_assertion (message_test.rb:55)         FAIL
+          <false> is not true.
+          </code></pre>
+    %li#comment_486
+      %p.author
+        PJ Kelly
+      .body
+        :textile
+          Have you ever had any problems with MonkeyTest?  I've got a unit test that passes when I run it via the normal Rake task, but fails when run by MonkeyTest.  Any ideas?

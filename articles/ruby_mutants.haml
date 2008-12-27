@@ -1,0 +1,15 @@
+-# title: Ruby Mutants
+-# published: 2006-12-20
+
+:textile
+  The over-active "seattle ruby brigade":http://seattlerb.rubyforge.org/ released an interesting tidbit a while ago, which has only recently been thoroughly explained: "Heckle":http://glu.ttono.us/articles/2006/12/19/tormenting-your-tests-with-heckle.
+  
+  Think of it as Dr Ruby Frankenstein.
+  
+  "!http://static.flickr.com/16/21352567_f0bf4c6278_m.jpg(Frankenstein's Monster Experiment II, stitches and coloring, by DerrickT)!":http://flickr.com/photos/derricksphotos/21352567/in/set-519501/
+  
+  Heckle's aim is to mutate your Ruby code and cause your unit tests to fail. If your unit tests _don't_ fail on the mutated code, then you're not testing everything, and you should go directly to jail.
+  
+  <blockquote><p>Heckle works by using the ParseTree and RubyToRuby libraries to grab the abstract syntax tree of methods, modify them, and evaluate the redefined method before running your tests. It can do all of this atomically, so each change can be seen individually.</p></blockquote>
+  
+  Cwazy!

@@ -1,0 +1,31 @@
+-# title: First FB app: Which Artist Are You?
+-# published: 2007-08-27
+
+:textile
+  "!(Which Artist Are You?)http://toolmantim.com/images/blog/waay.jpg!":http://apps.facebook.com/artistquiz
+  
+  The facebook app I worked on with aussie startup "RedBubble":http://redbubble.com has gone live: "Which Artist Are You?":http://apps.facebook.com/artistquiz
+  
+  I used fellow RORO Hoan's "facebook-rails plugin":http://code.google.com/p/facebook-rails/ which was really nice to use, but it's been discontinued by him and doesn't support any style of TDD/BDD. Though I'm continuing some level of support and patch integration for those who need it, from now on it's "rfacebook":http://rfacebook.rubyforge.org/ all ze way.
+  
+  The facebook app development process can be much more painful than the usual, because:
+  
+  # You have to grok the user interaction process (installed, not-installed, etc), and
+  # All your testing needs to be through facebook so it can render the FBML etc
+  # There's no user interface guidelines, and every app does their own thing instead of using the standard FBML tags
+  # Their documentation is patchy to say the least (though they're getting better)
+  
+  The application itself really is dead simple though, most time is spent tweaking the FBML tags and visuals.
+  
+  "Give it a burl":http://apps.facebook.com/artistquiz and post your feedback on "the discussion board":http://www.facebook.com/board.php?uid=5823311636.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_838
+      %p.author
+        %a{:href => 'http://grantbissett.com'} Grant Bissett
+      .body
+        :textile
+          BEST FACEBOOK APP EVER.

@@ -1,0 +1,56 @@
+-# title: To Fork or Branch
+-# published: 2008-04-17
+
+:textile
+  bq. Just because you can doesn't mean you should.
+  
+  Once you get your mittens on a tool that can ease distributed development it's very tempting to distribufy<sup><a href="#243-fn1">1</a></sup> everything but sometimes all you need is to intelligently use branching.
+  
+  h3. The classic use case for multiple repositories
+  
+  One good example of the multiple repository setup is "Pratik's Rails Documentation repository":http://github.com/lifo/doc-rails/tree/master, a fork of the Rails repository used to improve the documentation. Pratik can entrust people to contribute patches directly, as well as picking and choosing from people's own repositories. As Pratik is part of Rails core he can merge patches back into the main repository at his own discretion. This setup helps the doc team rally around a single repository, lowers the perceived barrier to partipation ("woot he accepted my patch!") and provides a network of trust.
+  
+  Another example would be a project with a large development team consisting of several sub-teams.
+  
+  The whole project has a grandaddy repository that is the beautiful, stable, deliverable code. Only the sub-team lead's get commit access to the golden repository.
+  
+  Each ninja-sub-team has their own repository with their own shared branches and their own copy of the golden repository's master branch. They can see the activity of their team, set up systems around their own branches and there's a definitive source for the sub-team's work.
+  
+  Every week each sub-team's lead (aka "poor bastard") would be responsible for pulling in all the changes from the golden master and integrating it with that week's changes. Once everything is AOK and, assuming the team's code passed QA, the lead pushes their changes up to the golden master. This distributed setup helps control the integration bottlenecks and enforces a network of trust and quality control.
+  
+  Another good use case for creating separate repositories/forks is when you simply want to disconnect yourself from the team and go do your own thing, and simply working on a branch on the central repository won't suit. You may end up rallying a team around whatever you're doing, or you might not want others prying on your weirdo experiments.
+  
+  h3. The two person team
+  
+  Take for example: the two person team working on a single repository. Hopefully you both trust one another and are in somewhat constant communication. You need tools which help you work independently whilst still integrating each other's work efficiently.
+  
+  One distriburific<sup><a href="#243-fn2">2</a></sup> way of setting it up would be each person has their own remote repositories accessible to the other person. On Github this would be the equivalent of forking a project, with two separate forks being developed and merged into on another.
+  
+  This is setup is simple if you're only trying to maintain a master branch, but when you start introducing stable/beta/experimental branches that you're both contributing to and keeping in sync between repositories the overheads of managing and merging the repositories starts to outweigh any benefits of having them separate.
+  
+  If your project needs a definitive source, and definitive "stable" and "beta" branches, so you can point to for deployments etc then chances are you want a centralised repository. This would be a different and slightly less distriburific setup, having a single remote repository which the two developers have access to commit to (on Github this would be the equivalent of adding collaborators to a repository), but it's a lot less overhead to manage.
+  
+  The single remote repository acts as the definitive source and can have the definitive stable/beta/experimental branches that you both need to collaborate on. There's also the advantage that it's much easier to keep track of development activity and what branches the other developer is working on.
+  
+  Why you'd work around a single repository is for the same reasons a sub-team within a big project might work around a single repository: it eases collaboration between the team members and creates a definitive source.
+  
+  h3. You want to be developing, not managing the development process
+  
+  Whilst it might seem fun for everybody to be forking and running their own repositories sometimes all you need are branches and a central repository. For trusted teams simply adding collaborators to your project brings less management overhead than having to manage merging their changes yourself. For larger teams, or wanting to split up sub-projects, or simply wanting to disconnect yourself from the team and do your own thing, sometimes separate repositories makes more sense.
+  
+  It's very tempting to distribufy<sup><a href="#243-fn1">1</a></sup> everything but sometimes all you need is to intelligently use branching.
+  
+  <p id="243-fn1"><sup>1</sup> dis&#183;trib&#183;u&#183;fy -- the act of separating red and green M&Ms.</p>
+  
+  <p id="243-fn2"><sup>2</sup> dis&#183;trib&#183;u&#183;ri&#183;fic -- fantastically distributed in the most distributed way possible.</p>
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1480
+      %p.author
+        Jeremy Pinnix
+      .body
+        :textile
+          Thanks Tim. This is a timely post as my small team just started using Git/Github today. The initial reaction was to fork our project, but we quickly found out that adding collaborators made more sense.

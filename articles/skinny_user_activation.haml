@@ -1,0 +1,288 @@
+-# title: Skinny user activation
+-# published: 2007-01-31
+-# updated: 2007-04-10
+
+:textile
+  <strong class="update">Update:</strong> "Nicolas":http://ud8.net/ pointed out the <code class="ruby">User.find_and_activate!</code> method had a serious bug where the user could pass a @nil@ @activation_code@ param and it would find the first user with a nil activation code and activate them. I've updated the model method to raise an @ArgumentError@ if a nil activation code is passed in. Thanks Nic!
+  
+  "Jamis Buck":http://weblog.jamisbuck.org/ has been blogging like a bat out of hell coming out of christmas, totalling 26 posts in all. If you're a Rails dev and haven't checked out his articles you should do so right away. I just wish I lived in his vincinity so I could pick his brains at Rails meetups.
+  
+  Jamis recently blogged about "skinny controllers and fat models":http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model, which I had also been thinking about and agree it feels like a great way to go. As an aside though, I don't like the idea of "doing all your HTTP parameter parsing in the model":http://weblog.jamisbuck.org/2007/1/11/moving-associated-creations-to-the-model, but maybe that's ok in your model until you feel the need to refactor it.
+  
+  Getting out of the controller making business decisions mindset is tough. Most of the books written, and most of the apps written until now, have made controllers the starting point for determining application behaviour and they treat ActiveRecord models as simple data stores with a few extra methods and overrides. For example, here's some of my code that handles user activation:
+  
+  <pre><code class="ruby">
+  class UsersController < ActionController::Base
+    def activate
+      unless user = User.find_by_activation_code(params[:activation_code])
+        flash[:notice] = 'Activation code not found.'
+        redirect_to must_activate_path and return
+      end
+  
+      if user.activated?
+        flash[:notice] = 'Your account has already been activated. You can log in below.'
+        redirect_to login_path and return
+      end
+  
+      user.activate
+      self.current_user = user # log in user
+      flash[:notice] = "Your account has been activated!"
+      redirect_back_or_default('/')
+    end
+  end
+  </code></pre>
+  
+  and the corresponding @User@ model method:
+  
+  <pre><code class="ruby">
+  class User < ActiveRecord::Base
+    def activate
+      @activated = true
+      self.attributes = {:activated_at => Time.now.utc, :activation_code => nil}
+      save(false)
+    end
+  end
+  </code></pre>
+  
+  So what's wrong with the above? Firstly, the controller's main purpose isn't really obvious, it begins 12 lines down at @user.activate@.
+  
+  The @UsersController#activate@ specification, if it had one, would read:
+  
+  <blockquote>
+  <p>Activate the user with the corresponding activation code, log them in and redirect them to the home page.</p><p>If the activation code is invalid, display some error message.</p><p>If the account is already activated, display some error message.</p>
+  </blockquote>
+  
+  Does the implementation read similarly to the spec? Nope.
+  
+  So if we forget for the moment about handling wrong activation codes and reactivations, we could refactor the controller to read more like the spec:
+  
+  <pre><code class="ruby">
+  class UsersController < ActionController::Base
+    def activate
+      self.current_user = User.find_and_activate!(params[:activation_code])
+      flash[:notice] = "Your account has been activated!"
+      redirect_back_or_default('/')
+    end
+  end
+  </code></pre>
+  
+  Much simpler, and we even removed a temporary variable. So how about handling those two edge cases?
+  
+  We could use <code>if</code> statements and have the controller check the model and make decisions in a similar fashion to our first implementation, but that'd ruin the way our action reads, and its making the controller more intelligent about the activation process than it needs to be.
+  
+  Every if statement makes a method's behaviour less obvious. Refactoring away nasty nested ifs is a great past time of mine. 
+  
+  Instead of explicitly handling the edge cases with ifs we'll just make the meat of the method assume things went well, and then handle exceptions (aha!) after the fact.
+  
+  <pre><code class="ruby">
+  class UsersController < ActionController::Base
+    def activate
+      self.current_user = User.find_and_activate!(params[:activation_code])
+      flash[:notice] = "Your account has been activated!"
+      redirect_back_or_default('/')
+    rescue User::ActivationCodeNotFound
+      flash[:notice] = 'Activation code not found.'
+      redirect_to must_activate_path
+    rescue User::AlreadyActivated
+      flash[:notice] = 'Your account has already been activated. You can log in below.'
+      redirect_to login_path
+    end
+  end
+  </code></pre>
+  
+  Compare that to the first implementation of the @activate@ action.
+  
+  <pre><code class="ruby">
+  # The old UsersController#activate implementation
+  class UsersController < ActionController::Base
+    def activate
+      unless user = User.find_by_activation_code(params[:activation_code])
+        flash[:notice] = 'Activation code not found.'
+        redirect_to must_activate_path and return
+      end
+  
+      if user.activated?
+        flash[:notice] = 'Your account has already been activated. You can log in below.'
+        redirect_to login_path and return
+      end
+  
+      user.activate
+      self.current_user = user # log in user
+      flash[:notice] = "Your account has been activated!"
+      redirect_back_or_default('/')
+    end
+  end
+  </code></pre>
+  
+  What does the model implementation look like now?
+  
+  <pre><code class="ruby">
+  class User < ActiveRecord::Base
+  
+    class ActivationCodeNotFound < StandardError; end
+    class AlreadyActivated < StandardError
+      attr_reader :user, :message;
+      def initialize(user, message=nil)
+        @message, @user = message, user
+      end
+    end
+  
+    # Finds the user with the corresponding activation code, activates their account and returns the user.
+    # 
+    # Raises:
+    #  +User::ActivationCodeNotFound+ if there is no user with the corresponding activation code
+    #  +User::AlreadyActivated+ if the user with the corresponding activation code has already activated their account
+    def self.find_and_activate!(activation_code)
+      raise ArgumentError if activation_code.nil?
+      user = find_by_activation_code(activation_code)
+      raise ActivationCodeNotFound if !user
+      raise AlreadyActivated.new(user) if user.activated?
+      user.send(:activate!)
+      user
+    end
+  
+    private
+      def activate!
+        @activated = true
+        self.update_attribute(:activated_at, Time.now.utc)
+      end
+  end
+  </code></pre>
+  
+  There's a few neat things worth noting in the above snippet; nested classes for neatly tucking away the Exceptions, making @User.find_and_activate@ the only public way to activate a user, and a custom intialiser for the @AlreadyActivated@ exception in case the controller wants to know which user we're talking about when we raise the error.
+  
+  We've ended up with a much cleaner and intelligent model, we formalised the edge cases as actual Exceptions (which means the edge cases can be nicely documented via RDoc) and cleaned up the controller.
+  
+  I think it simply comes down to:
+  
+  bq. Models want to be smart about everything business specific. 
+  
+  bq. ActionControllers want to be smart about HTTP and request control-flow.
+  
+  Now for the fun part: refactoring all your old apps for all these new techniques. Doesn't it seem like we're needing to do this every 6 months? I think this is great though because:
+  # We're still learning.
+  # The community actually care about this stuff (one of the things I love most about this community).
+  # Rails is flexible enough in its opinions that we can still change the way we're approaching problems.
+  # The community (and Jamis in particular) is open to admitting they don't know all the answers and are sharing knowledge instead of getting on high horses or climbing ivory towers.
+  
+  Time for the ActionController weight-watchers plan.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_459
+      %p.author
+        %a{:href => 'http://topfunky.com'} topfunky
+      .body
+        :textile
+          Well written.
+          
+          I started a new app in December and wrote most of it in this fashion. It also makes the code much more reusable since models are available everywhere but controller methods are only available in one place.
+    %li#comment_460
+      %p.author
+        Andi
+      .body
+        :textile
+          Nice article. Basically you're using "Exceptions" to propagate Domain errors. If this is a good thing or not is up to the programmer. In Java it's not considered very good style. Then again, Ruby isn't Java ;)
+    %li#comment_461
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @topfunky: thanks. Yeah, I can imagine it'd be handy when adding APIs and in other scripts.
+          
+          @Andi: The ruby/java distinction shouldn't really make any difference. I understand the sentiment, but how should this code then be written, whilst making sure the model is enforcing consistency?
+    %li#comment_462
+      %p.author
+        %a{:href => 'http://www.seoonrails.com/'} Eadz
+      .body
+        :textile
+          I haven't written my user activation code yet, but it's next on the list so perfect timing with this great post Tim :)
+    %li#comment_463
+      %p.author
+        Shane
+      .body
+        :textile
+          A quick question.  Why did you decided to use user.send(:activate!) instead of user.activate!
+          
+          Thanks
+    %li#comment_464
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @shane: <code>User#activate!</code> is a private method, and as <code>User.find_and_activate!</code> is a class method it can't directly call it. I don't mind this slight hack as it's contained within the same class. It does proabably deserve a comment in the code though.
+    %li#comment_467
+      %p.author
+        Max
+      .body
+        :textile
+          @Andi: on the contrary, that's how checked Exceptions in Java *should* be used. Forcing developers to catch TheDataBaseIsOnFireSoWhatchaGoingToDoAboutItExceptions is poor design. On the other hand, any error condition that the application *can* do something about is almost certainly part of the business domain.
+    %li#comment_468
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Max's point makes more sense to me than "[you shouldn't use] Exceptions to propagate Domain errors"
+    %li#comment_547
+      %p.author
+        %a{:href => 'http://ud8.net'} nicolas
+      .body
+        :textile
+          but you still have the problem pointed out  by Barry Hess in http://technoweenie.stikipad.com/plugins/show/User+Activation
+          (about the need to check for empty params[:activation_code] due to the danger of getting reconfirmed and logged in as an other unreconfirmed user). but beside this.. thank you for this eye-opener (can i use this phrase in english? ;-) )
+    %li#comment_548
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks nicolas. I've updated the article above to handle this, though I think nil argument should still be handled correctly within @User.find_and_activate@ level rather than the controller. 
+    %li#comment_609
+      %p.author
+        %a{:href => 'http://www.webapart.be'} Geoffroy
+      .body
+        :textile
+          This is just brilliant! I am java developer for a living and a Rails developer as part time occupation and this is the way I work in java but couldn't figure out how to adapt this to Ruby. Thanks for the pointers.
+    %li#comment_754
+      %p.author
+        steve
+      .body
+        :textile
+          Great post!  I am wondering why find_and_activate! and activate! has to be separate?  The code in the latter could easily be inserted into the end of the former.
+    %li#comment_780
+      %p.author
+        %a{:href => 'http://the.railsi.st'} Patrick Crowley
+      .body
+        :textile
+          I, too, am digging this code.
+          
+          It would be nice to see a followup post, with a complete, working code example. Activation affects login and signup, but I don't see that fully documented here.
+          
+          The <a href="http://technoweenie.stikipad.com/plugins/show/User+Activation">acts_as_authenticated docs on activation</a> are kind of half-assed, so I'm sure a more complete activation example would be very welcome.
+    %li#comment_781
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Alright Patrick... and I've been meaning to post some mods to AAA with some other fixes too. I'll keep you posted.
+    %li#comment_822
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Doesn't the activate! method need to set the activation_code to nil as well as setting activated_at, otherwise activated? will never return true.
+    %li#comment_823
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Apologies for the double post. Is there any reason why the activate! method can't be public (avoiding the send hack)?
+    %li#comment_835
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Jamie: ahh I left out the implemention of the @User#activated?@ method in the final example. An implementation of @def activated?; activated_at? end@ should work.
+          
+          No reason to keep it private except for that your making it public. For my intent and purpose it was to be only called from the class method.

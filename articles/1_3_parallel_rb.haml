@@ -1,0 +1,29 @@
+-# title: 1 &lt;3 parallel.rb
+-# published: 2007-09-13
+
+:textile
+  using all 121 lines of parallel.rb from <a href="http://moonbase.rydia.net/">MenTaLguY</a>'s <a href="http://rubyforge.org/projects/concurrent/">concurrent</a> lib...
+  
+  Before:
+  
+  <pre><code class="ruby">iwotw_photos.map do |photo|
+    [photo, photo.to_person_attributes]
+  end</code></pre>
+  
+  <pre>$ time ./flickr_poller.sh
+  real    0m18.643s
+  user    0m2.060s
+  sys     0m0.190s</pre>
+  
+  After:
+  
+  <pre><code class="ruby">iwotw_photos.parallel_map(10) do |photo|
+    [photo, photo.to_person_attributes]
+  end</code></pre>
+  
+  <pre>$ time ./flickr_poller.sh
+  real    0m4.733s
+  user    0m2.430s
+  sys     0m0.180s</pre>
+  
+  ...though I'm not sure if flickr likes 10 calls at a time to the API :\

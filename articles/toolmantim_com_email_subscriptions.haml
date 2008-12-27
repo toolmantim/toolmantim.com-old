@@ -1,0 +1,30 @@
+-# title: toolmantim.com Email Subscriptions
+-# published: 2006-05-16
+
+:textile
+  So you're too cool for RSS but afraid you'll miss the "famous celebrities":http://toolmantim.com/article/2006/5/16/back_into_the_swing_of_things#comment-167 hanging out at toolmantim.com?
+  
+  Well it's your lucky day, chump. I've just added email subscriptions to the "subscribe page":http://toolmantim.com/subscribe.
+  
+  For the geekier amongst us, it uses a modified version of standard feedburner form to allow you to choose between different feeds. If you're a feedburner user and want to do the same it's just a matter of replacing the <code>url</code> hidden input they give you:
+  
+  <pre><code>
+  <input type="hidden"
+         name="url"
+         value="http://feeds.feedburner.com/~e?ffid=238149"/>
+  </code></pre>
+  
+  with a <code>select</code> element:
+  
+  <pre><code>
+  <select name="url">
+    <option value="http://feeds.feedburner.com/~e?ffid=238149">
+      All articles
+    </option>
+    <option value="http://feeds.feedburner.com/~e?ffid=238154">
+      All comments
+    </option>
+  </select>
+  </code></pre>
+  
+  And until next time, peace out.

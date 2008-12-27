@@ -1,8 +1,4 @@
-require 'third_base'
-
 class Article
-  include ThirdBase
-  
   def self.path=(path)
     @path = path
   end
@@ -23,7 +19,7 @@ class Article
     text[/\-\s*#\s*#{name}:\s*(.+)/, 1]
   end
   def self.parse_date(date_string)
-    date_string && Date.new(*date_string.split('-').map{|s|s.to_i}) rescue nil
+    date_string && Date.civil(*date_string.split('-').map{|s|s.to_i})
   end
   
   attr_reader :path, :template
@@ -52,7 +48,10 @@ class Article
     self.class.template_variable(self.template, name)
   end
   def <=>(other)
-    other.published <=> self.published
+    [other.published.year, other.published.month, other.published.day] <=> [self.published.year, self.published.month, self.published.day]
+  end
+  def ==(other)
+    other.respond_to?(:slug) && self.slug == other.slug
   end
   def path_without_extension
     self.path.sub(".haml", "")

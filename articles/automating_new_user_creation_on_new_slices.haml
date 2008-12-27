@@ -1,0 +1,163 @@
+-# title: Automating new user creation on new slices
+-# published: 2007-01-21
+-# updated: 2007-01-21
+
+:textile
+  When setting up your "Slicehost":http://slicehost.com VPS for "deprec":http://deprec.rubyforge.org love there's two initial steps that are a bit of a pain in the butt:
+  # Creating the new deployment user with sudo
+  # Disabling SSH access for the root account
+  
+  <strong class="update">Update:</strong> The original code I posted below didn't work (doing the interactive PTY password setting was tricky). The updated code now works, and uses <code class="ruby">String#crypt</code> to encode the password for @/etc/shadow@.
+  
+  <strong class="update">Another update:</strong> You don't even need this first one... just use the deprec cap task @setup_admin_account@.
+  
+  For problem #1, creating a new deployment user with sudo, create the following @slicehost.rake@ in @lib/tasks@:
+  <pre><code class="ruby">
+  require 'rubygems'
+  require 'capistrano/cli'
+  
+  task :setup_deployment_user do
+    print 'Slice host: '
+    host = STDIN.gets.chomp
+    
+    password = Capistrano::CLI.password_prompt "Password for root@\#{host}: "
+  
+    begin
+      Net::SSH.start(host, 'root', password) do |session|
+        print "New sudo account login: "
+        new_login = STDIN.gets.chomp
+        
+        new_password = Capistrano::CLI.password_prompt "New password for \#{new_login}: "
+  
+        shell = session.shell.sync
+  
+        out = shell.useradd "--create-home --home /home/\#{new_login} --shell /bin/bash --group nogroup --password \#{new_password.crypt('hi')} \#{new_login}"
+        puts "Created account \#{new_login}."
+        
+        out = shell.echo %("\#{new_login}  ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers)
+        puts "Added \#{new_login} to /etc/sudoers."
+        
+        shell.exit
+      end
+    rescue Net::SSH::AuthenticationFailed
+      STDERR.puts "Authentication for root@\#{host} failed"
+    end
+  end
+  </code></pre>
+  
+  <strong class="update">Update #2:</strong> I forgot that Ruby might not be installed at this point. I've changed it to use @sed@ instead.
+  
+  For problem #2, disabling root access, here's a cap task to chuck in your deploy.rb:
+  
+  <pre><code class="ruby">
+  desc "Changes the sshd config to disable root access via SSH and reloads sshd"
+  task :disable_root_access_via_ssh do
+    sudo "sed -i -e 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config"
+    sudo "/etc/init.d/sshd reload"
+  end
+  </code></pre>
+  
+  I've now got a working slicehost running nginx, postgresql, rails and mongrel cluster, with the following commands:
+  <pre>
+  rake setup_deployment_user
+  cap disable_root_access_via_ssh
+  cap setup_ssh_keys
+  
+  cap install_rails_stack
+  cap install_nginx
+  cap install_postgresql
+  cap setup_smtp_server
+  cap setup_servers
+  cap setup_app
+  
+  cap setup
+  cap setup_cached_repository
+  cap deploy_with_migrations
+  </pre>
+  
+  I'll get hold of "Mike":http://codemode.blogspot.com/ and we should be able to work this into "deprec":http://deprec.rubyforge.org in the next week or so.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_455
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com/'} Dan Kubb
+      .body
+        :textile
+          Very nice, I can't wait to see these commands integrated into deprec.
+          
+          As a side note, do you have any cap recipes to setup and configure iptables?
+    %li#comment_456
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Dan: no iptables config yet. Haven't locked my slice down too well yet, and deprec's standard setup is far from secure. What I hope to help make happen is something like the following, for an app named "toolman":
+          # Apache runs as "toolman-web"
+          # Mongrel runs as "toolman-rails"
+          # toolman-web and toolman-rails are both in group toolman
+          # @/var/www/appname@ is chown'd toolman-rails:toolman
+          # @/var/www/appname@ is chmod with only @ug+r@, with public having @u+w@ for rails caching, uploads, etc
+          
+          The deploy user would use sudo to write to the app dirs, and fix perms on code update.
+          
+          Each app in ther server would run under different perms so neither could comprimise one another.
+    %li#comment_457
+      %p.author
+        Mike Bailey
+      .body
+        :textile
+          Nice site Tim. I' finish with my current employer this week so will have a bit more time for deprec.
+          
+          Here's the instructions I sent to Matt at Slicehost. You'll want to use the '_as_root' version of setup_admin_user.
+          
+          - Mike
+          
+          # Install rails app on Slicehost.com server with deprec
+          
+          $ sudo gem install deprec --include-dependencies
+          
+          $ export HOSTS=63.99.9.165
+          
+          $ cap setup_admin_account_as_root
+          Enter userid for new user: mbailey
+          Password: xxxxxx
+          Enter new UNIX password: : xxxxx
+          Retype new UNIX password: : xxxxx
+          
+          $ cap setup_ssh_keys
+          Password: xxxxx
+          
+          
+          # You can now log into your slicehost using your new account (with sudo)
+          # This alone saves a lot of manual work setting your login. (But wait, there's more!)
+          
+          $ ssh 63.99.9.165
+          Linux deprec 2.6.16.29-xen #3 SMP Sun Oct 15 13:15:34 BST 2006 x86_64 GNU/Linux
+          
+          $ sudo echo "sudo working new account!"
+          sudo working for new account!
+          
+          $ logout
+          Connection to 63.99.9.165 closed.
+          
+          
+          # You can now use the standard deprec commands to install your rails app
+          
+          $ cap install_rails_stack
+          $ cd /path/to/railsapp
+          $ deprec --apply-to . --name projectname --domain www.projectname.com
+          # edit config/deploy.rb to put in details of your subversion repository
+          $ cap deprec_setup
+          $ cap deploy_with_migrations
+          $ cap restart_apache
+          
+          # Your application should now be running on your slicehost server!
+    %li#comment_458
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Mike.

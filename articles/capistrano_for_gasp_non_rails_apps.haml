@@ -1,0 +1,53 @@
+-# title: Capistrano for (gasp) non-rails apps
+-# published: 2007-03-25
+
+:textile
+  !http://farm1.static.flickr.com/131/335935829_8ecd1182e8_m.jpg(The Bells of San Juan Capistrano by DBCondit)!:http://flickr.com/photos/dbradfordc/335935829/
+  
+  "Jon Maddox":http://jonsthoughtsoneverything.com/ has previously published on how to do "automated PHP deployment with capistrano":http://www.simplisticcomplexity.com/2006/8/16/automated-php-deployment-with-capistrano, but I thought an all-ruby solution that handles all the rollbacky goodness of standard "Cap":http://rubyforge.org/projects/capistrano/ was in order.
+  
+  The trick is to create your standard <code>config/deploy.rb</code> lookin deployment recipe (like "this one":http://svn.aviditybytes.com/rails/libs/segpub_capistrano_recipe/deploy.rb), and in it you have to redefine the <code>deploy</code> and <code>update_code</code> tasks to read:
+  
+  <pre><code class="ruby">
+  # Override deploy to prevent restarting
+  task :deploy do
+    update # task from standard cap recipe
+  end
+  
+  # Override update_code to remove Rails directories
+  task :update_code, :except => { :no_release => true } do
+    on_rollback { delete release_path, :recursive => true }
+    source.checkout(self)
+    set_permissions
+    @releases = nil
+  end
+  </code></pre>
+  
+  There's nothing else that's special; just add your normal @set@ statements up the top, sprinkling @after_@ and @before_@ task callbacks as required. Now go ahead and deploy the sucker:
+  
+  <code>cap setup && cap deploy</code>
+  
+  If you're wondering where you'd start looking to discover this sort of thing, all of Capistrano's magic exists in its standard recipe in the capistrano gem's lib directory. If you're using Capistrano 1.4.0 and "macports":http://www.macports.org/ that path would be:
+  
+  @/opt/local/lib/ruby/gems/1.8/gems/capistrano-1.4.0/lib/capistrano/recipes/standard.rb@
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_535
+      %p.author
+        %a{:href => 'http://yeahnah.org'} Ryan Allen
+      .body
+        :textile
+          Cap is teh awesome! Another Aussie wrote the Deprec gem which is used to set up baremetal ubuntu boxes w/ Ruby/Rails/Etc.
+          
+          http://deprec.rubyforge.org/
+          
+          !
+    %li#comment_536
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yep, not to mention it's an awesome piece of code to steal and plunder from if you want to learn more about capistrano.

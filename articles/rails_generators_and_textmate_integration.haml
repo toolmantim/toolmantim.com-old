@@ -1,0 +1,36 @@
+-# title: Rails generators and TextMate integration
+-# published: 2006-11-14
+
+:textile
+  What would make the "Rails":http://www.rubyonrails.org/ + "TextMate":http://macromates.com/ combo even sweeter would be a TextMate integration Rails plugin.
+  
+  If I did something like:
+  
+  <pre><code>
+  $ ./script/generate migration add_description_to_sms_logs
+        exists  db/migrate
+        create  db/migrate/023_add_description_to_sms_logs.rb
+  </code></pre>
+  
+  ... it could open the TextMate project window, select and open the new migration file and put the cursor smack bang in @self.up@, ready for you to type @mcol@ and hit tab.
+  
+  I'd find that useful, even if it only did migrations... the products from the other types of generators (models, controllers, mailers) are often easy to find because those folders are often already open in TextMate.
+  
+  The TextMate-Rails integration has always begun at the TextMate end via commands in the Rails bundle, but I lub my terminal. With "RubyOSA":http://rubyosa.rubyforge.org/ and friends I'm sure it'd be possible to do it from inside the generator instead.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_465
+      %p.author
+        Beate
+      .body
+        :textile
+          If you do the migration over the "Call generate script" in the Rails-Bundle, the migration file will be openend afterwards :)  
+    %li#comment_466
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Sweet! Dunno if this existed back in the day, but I'll give the bundle's integration a go... still stuck on using my terminal.

@@ -1,0 +1,60 @@
+-# title: Comment spam and my OpenPublish presentation
+-# published: 2006-07-31
+
+:textile
+  There's been a bit of comment spam on here lately. Previously I was checking for certain keywords and how many URLs were specified in the body, but I've just replaced that with "Akismet":http://akismet.com/ integration, thanks to <a href=":http://www.gavcooney.com/">Gav</a>'s whinging that my comments feed has been spamalicious as of late. 
+  
+  Registering for and integrating Akismet, giving it a quick test and redeploying toolmantim.com took a whole 31 minutes. How's that for RAD(Rapid Application Development)! I stole the Akismet Ruby API from "typo's version of David Czarnecki's @Akismet@ class":http://www.typosphere.org/trac/browser/trunk/vendor/akismet/akismet.rb. Thanks Tobi and David!
+  
+  Last Thursday I gave a talk at "OpenPublish":http://openpublish.com.au/, "Putting content in user's hands," where I tried to ask what ideas, techniques and tools from the Web 2.0 community can we look at repurposing for non-web apps (i.e. large content-driven sites). If you want to check it out I've added the PDF to the "aviditybytes resources page":http://aviditybytes.com/resources.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_282
+      %p.author
+        %a{:href => 'http://www.gavcooney.com'} Gav
+      .body
+        :textile
+          I'm such a whinger! Nice work tho... 31 minutes is not bad going.
+    %li#comment_290
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Just testing out this comment spam thing for myself...
+    %li#comment_291
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Only time will tell.
+    %li#comment_292
+      %p.author
+        Anonymous
+      .body
+        :textile
+          This site is one of the best I have ever seen, wish I had one like this.
+    %li#comment_293
+      %p.author
+        Moo
+      .body
+        :textile
+          My shitty little blog site got spammed recently. I found the spam quite positive and most of the time the only comment i got. Bring it on I say
+    %li#comment_294
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Why thank you sincere Anonymous ;)
+          
+          More spam for moo. So why don't you put your shitty little blog site in the website field when leaving a comment? At least then maybe we can get some more shitty blog spam over this way.
+          
+          Turns out Akismet isn't good enough to catch em all... i've added a bit of my own secret sauce to the recipe. Be careful spammers, I'm reporting any I catch to akismet too!
+    %li#comment_302
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Just testing...

@@ -1,0 +1,60 @@
+-# title: Merb &#8594; Mongrel, not Mongrel &#8594; Merb
+-# published: 2008-05-30
+
+:textile
+  It might have been blazingly obvious to others but I only just got my head around what a production setup of "Merb":http://www.merbivore.com/ involves. After wrecking my head dreaming up custom rackup files to run vendor'd edge Merb I finally realised I was thinkin old-skool.
+  
+  Your typical Rails stack goes <em>balancer &#8594; mongrel &#8594; Rails</em>.
+  
+  I naively went upon setting up something similar for a production Merb app: <em>balancer to thin to Merb</em>. This actually works just fine thanks to thin's baked-in support for Merb... but it's not really what you want. You'll also find it hard to use frozen Merb.
+  
+  Thanks to geniuses that are <a href="http://github.com/ezmobius/">ezra</a> and <a href="http://github.com/wycats/">yehuda</a>, to run merb in production is actually the same as development&mdash;you use <code>merb</code>!
+  
+  Merb itself hooks up to which ever adapter you want it to speak to the web through... whether it be mongrel, thin, ebb or mycoolnewrackhandler.
+  
+  so... what you really want to do is: <em>balancer &#8594; Merb &#8594; thin</em>.
+  
+  A nice Merb deployment recipe that's ticking along for me nicely at the moment:
+  
+  * "nginx":http://nginx.net/ for vhosting, asset serving and proxying to the merb instances
+  * merb booted using "merb-manage":http://github.com/eldiablo/merb-manage/
+  * the "thin":http://code.macournoyer.com/thin/ merb adapter
+  
+  Soon I'll chuck in "haproxy":http://haproxy.1wt.eu/ for load balancing across merb instances.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1497
+      %p.author
+        %a{:href => 'http://drnicwilliams.com'} Dr Nic
+      .body
+        :textile
+          Bahumbug. Nothing related to deployment is "blazingly obvious" :) All articles on the topic are justified.
+    %li#comment_1498
+      %p.author
+        %a{:href => 'http://hughevans.net'} Hugh
+      .body
+        :textile
+          Would thin's support for unix socket connections still work in this setup do you think?
+    %li#comment_1499
+      %p.author
+        %a{:href => 'http://macournoyer.com'} marcournoyer
+      .body
+        :textile
+          @hugh you can use unix socket w/ thin form the merb script by specifying a path to a socket file for the -h option:
+          
+          merb -a thin -h /tmp/thin.sock
+    %li#comment_1500
+      %p.author
+        %a{:href => 'http://hughevans.net'} Hugh
+      .body
+        :textile
+          @marcournoyer awesome, thin rocks. Thanks :)
+    %li#comment_1504
+      %p.author
+        %a{:href => 'http://bubbal.co.uk'} Sam Nardoni
+      .body
+        :textile
+          I know this comment is side tracking a little, but passenger (mod_rails) now supports rack. Have you thought about using that?

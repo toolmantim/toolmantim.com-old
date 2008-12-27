@@ -1,0 +1,65 @@
+-# title: Super-simple mocking
+-# published: 2007-01-10
+
+:textile
+  Sometimes you want to modify a model's behaviour for different environments.
+  
+  For example, you may have a <code>Comment#is_spam?</code> method which goes off to "Akismet":http://akismet.com/ and checks whether it's spam. In development you might want the method to always <code class="ruby">return true</code>, preventing it from calling Akismet. In other words we want to "mock" the <code>Comment#is_spam?</code> method whilst in development.
+  
+  The stock-standard "Pickaxe":http://www.pragmaticprogrammer.com/titles/ruby/ way of doing this might be to "reopen" your model class and add the method:
+  
+  <pre><code class="ruby">
+  class Comment
+    def is_spam?(permalink); false end
+  end
+  </code></pre>
+  
+  There's nothing exactly wrong with this method, but you have to remember that Rails lazily loads everything. If you want to alias a method, or do some other manipulation on the class, you can't because it doesn't yet exist.
+  
+  You've probably used the above method just fine on one of Ruby's core classes, such as <code>Time</code>. Ruby has already <code>require</code>&#8217;d the <code>Time</code> class before your code executes so you don't need to worry about whether it exists or not.
+  
+  One possible fix for the lazy loading is to reference the <code>Comment</code> class before you manipulate it:
+  
+  <pre><code class="ruby">
+  Comment # Rails will find and require your model class
+  class Comment
+    # Now you can do your mocking
+  end
+  </code></pre>
+  
+  A sexier and cleaner way to do this is to use <code>Module#class_eval</code>:
+  
+  <pre><code class="ruby">
+  Comment.class_eval do
+    def is_spam?(permalink); false end
+  end
+  </code></pre>
+  
+  In the code above we're calling a method on the <code>Comment</code> class and, as the <code>Comment</code> constant does not yet exist in Ruby's <code>ObjectSpace</code> (Ruby throws a <code>NameError</code>), Rails will go and search the load path and <code>require</code> your <code>Comment</code> model for you. 
+  
+  So how to hook this into your config files? Why, <code> config.after_initialize</code> of course!
+  
+  (if you haven't heard about <code>after_initialize</code> I highly recommend you read "my last article on the Rails initialisation process":http://toolmantim.com/article/2006/12/27/environments_and_the_rails_initialisation_process)
+  
+  In my case, I just added the following to <code>config/environments/development.rb</code>:
+  
+  <pre><code class="ruby">
+  config.after_initialize do
+    Comment.class_eval do
+      def is_spam?(permalink); false end
+    end
+  end
+  </code></pre>
+  
+  So there you go: super-simple mocking, using nothing but standard Ruby.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_825
+      %p.author
+        %a{:href => 'http://rubyclub.com.ua/'} Voloshin Ruslan
+      .body
+        :textile
+          thank you for the simple example

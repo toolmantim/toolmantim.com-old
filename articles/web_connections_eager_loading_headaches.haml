@@ -1,0 +1,83 @@
+-# title: How to use ActiveRecord eager loading to raise your blood pressure
+-# published: 2006-09-29
+-# updated: 2006-09-30
+
+:textile
+  "Cameron":http://themaninblue.com and I's little baby "Web Connections":http://connections.webdirections.org had major problems the past few days. Heart wrenching for Cam, as he was responsible for the design and front-end, and I was responsible for the back end, and it all fell down on the day of the conference.
+  
+  Originally I thought it was a server problem... the rails server process was growing to many gigabytes in a matter of minutes, and the server had gone down the night before.
+  
+  It turned out not only was it my app's problem, but my app probably took down the entire shared server the night before as well.
+  
+  For some reason I took waaay too long to track it down, but finally, and with help from Jeremy at "SegPub":http://segpub.net, I found it was in fact Cam's profile page that was killing it.
+  
+  Why was Cam's profile killing it? Well, let's have a look at the PeopleController#show action:
+  
+  <pre><code>
+    def show
+      @person = Person.find(params[:id], :include => [:photo, { :taggings => [:tag, :tagger] }, {:outgoing_relationships => :related_person}, {:incoming_relationships => :person}])
+      respond_to do |format|
+        format.html {
+          if logged_in?
+            @relationship_to = current_person.outgoing_relationships.to(@person)
+          end
+        }
+        format.xml {
+          render_xml @person.to_xml(:include => [:tags,
+                                                 :outgoing_relationships,
+                                                 :incoming_relationships,
+                                                 :photo])
+        }
+        format.js {
+          render_json @person.to_json
+        }
+      end
+    end
+  </code></pre>
+  
+  Now I thought I was being super-tricky with that massive :include statement, making the profile page only perform one SQL statement to fetch all the required data.
+  
+  It turns out that it was being a little too-tricky... the SQL statement ended up so large that it freaked out the database connection and the Rails app just blew up, taking the whole server with it.
+  
+  Lesson learnt? Multiple SQL statements are OK. Check your eager loading in ActiveRecord and think about how it'll scale.
+  
+  Changing the code to a simple:
+  
+  <code>@person = Person.find(params[:id])</code>
+  
+  fixed everything, and it's now ticking along smoothly again.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_332
+      %p.author
+        %a{:href => 'http://leftjustified.net/'} Andrew Krespanis
+      .body
+        :textile
+          Ha! Cam's fault, Cam's fault, nah nah nee nah nah. ;)
+    %li#comment_865
+      %p.author
+        %a{:href => 'http://www.akitaonrails.com'} AkitaOnRails
+      .body
+        :textile
+          Well, A lot of outer joins can really freak out a query, but on the other hand I don't know how much data you have.
+          
+          Did you certify that your tables are all correctly indexed in the first place? Mainly in the foreign key columns? This should speed up things considerably.
+    %li#comment_866
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Akita: Yep the tables are indexed correctly, it's just that the query that the eager includes was generating SQL larger than MySQL's query buffer
+    %li#comment_1449
+      %p.author
+        %a{:href => 'http://www.samsaffron.com'} Sam Saffron
+      .body
+        :textile
+          FWIW, 
+          
+          I added my 2 cents on this at my "blog":http://www.samsaffron.com/archive/2008/03/15/You+should+be+very+careful+when+using+ActiveRecord+eager+loading
+          
+          The way ActiveRecord implements eager loading is wrong. 

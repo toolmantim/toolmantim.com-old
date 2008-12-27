@@ -1,0 +1,63 @@
+-# title: Old-skool Ajax zoop Box
+-# published: 2007-10-14
+
+:textile
+  After seeing a demo of <a href="http://www.fluxiom.com/">Fluxiom</a>'s user permission system in January 2006 I set out to recreate the effect. A few months ago I stumbled upon the code and screencapped what I'd done. I think it looks pretty neat.
+  
+  It's your stock-standard ActiveRecord based model with backend validation and saving to the DB with ajaxy zoopy goodness--Rails 0.14.3.
+  
+  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="437" height="370" id="viddler"><param name="movie" value="http://www.viddler.com/player/1706787d/" /><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="true" /><embed src="http://www.viddler.com/player/1706787d/" width="437" height="370" type="application/x-shockwave-flash" allowScriptAccess="always" allowFullScreen="true" name="viddler" ></embed></object>
+  
+  "Original QT movie":http://www.viddler.com/show_movie!orgFile.action?movieToken=1706787d
+  
+  Completely unsupported source code:
+  * "Zoopy effect":http://pastie.caboo.se/107018
+  * "Validation tooltips":http://pastie.caboo.se/107019
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_871
+      %p.author
+        %a{:href => 'http://davidbolton.net'} Dave B
+      .body
+        :textile
+          that's neat alright!  good stuff
+    %li#comment_874
+      %p.author
+        %a{:href => 'http://www.eadz.co.nz/blog/'} Eadz
+      .body
+        :textile
+          Awesome. That is seriously spiffy. 
+    %li#comment_879
+      %p.author
+        %a{:href => 'http://www.eadz.co.nz/blog/'} Eadz
+      .body
+        :textile
+          Hey, what kind of css are you using?
+          
+          Is the form loaded at the same time as the show view and hidden with display: hidden
+          
+          Or is it on a different z-index, 
+          
+          Or is loaded remotely with rjs.. 
+          
+          Or am I on the wrong track completely?
+          
+          I'm just a bit confused :/
+    %li#comment_881
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Eadz: the zoop effect just requires you've got two divs positioned over one another, the hidden one as display:none. In reality I just had one as display:none and using RJS to trigger content replacement, the zoop effect and the validation tooltips... but you could do it in a much cleaner way.
+    %li#comment_1354
+      %p.author
+        %a{:href => 'http://leonardofaria@gmail.com'} Leonardo Faria
+      .body
+        :textile
+          hi tim,
+          
+          i'm trying your snippet but i dont done. are there any download of this?
+          thanks and congratulations.

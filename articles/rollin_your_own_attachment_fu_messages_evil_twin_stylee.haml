@@ -1,0 +1,193 @@
+-# title: Rollin your own attachment_fu messages evil twin stylee
+-# published: 2007-12-03
+
+:textile
+  On the back of Patrick Crowley's "Roll your own attachment_fu validations":http://the.railsi.st/2007/11/27/roll-your-own-attachment_fu-validations I got off my butt and made a whole bunch of validations sexier... the result is this snippet/plugin/snippet, "evil twin stylee":http://errtheblog.com/post/19679, to give friendlier attachment validations.
+  
+  Use it like so:
+  
+  <pre><code class="ruby">
+  class Photo < ActiveRecord::Base
+    has_attachment :content_type => :image,
+                   :max_size => 10.megabytes,
+  
+    validates_attachment :content_type => "The file you uploaded was not a JPEG, PNG or GIF",
+                         :size         => "The image you uploaded was larger than the maximum size of 10MB"
+  end
+  </code></pre>
+  
+  Just chuck this into <code>vendor/plugins/attachment_fu_validates_attachment/init.rb</code>:
+  
+  <pre><code class="ruby">Technoweenie::AttachmentFu::InstanceMethods.module_eval do
+    protected
+      def attachment_valid?
+        if self.filename.nil?
+          errors.add_to_base attachment_validation_options[:empty]
+          return
+        end
+        [:content_type, :size].each do |option|
+          if attachment_validation_options[option] && attachment_options[option] && !attachment_options[option].include?(self.send(option))
+            errors.add_to_base attachment_validation_options[option]
+          end
+        end
+      end
+  end
+  
+  Technoweenie::AttachmentFu::ClassMethods.module_eval do
+    # Options: 
+    # *  <tt>:empty</tt> - Base error message when no file is uploaded. Default is "No file uploaded"
+    # *  <tt>:content_type</tt> - Base error message when the uploaded file is not a valid content type.
+    # *  <tt>:size</tt> - Base error message when the uploaded file is not a valid size.
+    #
+    # Example:
+    #   validates_attachment :content_type => "The file you uploaded was not a JPEG, PNG or GIF",
+    #                        :size         => "The image you uploaded was larger than the maximum size of 10MB"
+    def validates_attachment(options={})
+      options[:empty] ||= "No file uploaded"
+      class_inheritable_accessor :attachment_validation_options
+      self.attachment_validation_options = options
+      validate :attachment_valid?
+    end
+  end</code></pre>
+  
+  and say goodbye to errors messages like:
+  
+  * Content type can't be blank
+  * Content type is not included in the list
+  * Size can't be blank
+  * Size is not included in the list
+  * Filename can't be blank
+  
+  and say hello to:
+  
+  * No file uploaded
+  
+  and:
+  
+  * The file you uploaded was not a JPEG, PNG or GIF
+  * The image you uploaded was larger than the maximum size of 10MB
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1370
+      %p.author
+        %a{:href => 'http://iamstillalive.net'} Dylan
+      .body
+        :textile
+          Thanks, Tim. I worked this into an app I am building this afternoon.
+          
+          Also, if you haven't heard; it looks like a_fu is getting a little update love these days.
+          
+          http://railsontherun.com/2007/11/28/attachment_fu-updated
+    %li#comment_1372
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yep don't worry, <a href="http://groups.google.com/group/attachment_fu/browse_thread/thread/ebd1e1c947005cae">I'm on it</a> :)
+    %li#comment_1374
+      %p.author
+        %a{:href => 'http://the.railsi.st'} Patrick Crowley
+      .body
+        :textile
+          Yeah, Matt's been going crazy on a_fu lately.
+          
+          Nice work, Tim!
+    %li#comment_1417
+      %p.author
+        %a{:href => 'http://www.gotnull.com'} Fulvio
+      .body
+        :textile
+          Howdy,
+          
+          Thanks for this! I'm using this on my new site at the moment. I'm noticing some random/weird behavior when uploading a photo though.
+          
+          It always gives me the following validation message:
+          
+          The image you uploaded was larger than the maximum size of 3 megabytes.
+          
+          I'm using the following code in my photo.rb model. The weird thing is is that when I try the same image and title over and over again it eventually uploads it...
+          
+          <pre>
+          [code]
+            validates_attachment  :content_type => "The file you uploaded was not a JPEG, PNG or GIF",
+                                  :size         => "The image you uploaded was larger than the maximum size of 3 megabytes"
+          [/code]
+          </pre>
+    %li#comment_1443
+      %p.author
+        %a{:href => 'http://tinypla.net'} Simon Tokumine
+      .body
+        :textile
+          For those of you wondering why you always get the content_type and size errors even when no file has been uploaded, replace self.filename.nil? with self.filename.blank? in the following section of code:
+          
+          <code>
+          if self.filename.nil?
+                  errors.add_to_base attachment_validation_options[:empty]
+                  return
+                end
+          </code>
+          
+    %li#comment_1450
+      %p.author
+        %a{:href => 'http://tomash.jogger.pl'} Tomash
+      .body
+        :textile
+          Hi!
+          Great idea, thanks. We're using it with success together with Gloc for some localized messages.
+          
+          One error, though: the :empty option gets saved differently than the remaining ones, with empty message being the key in error array (and not the value, as it should be / as the rest are). When someone is rolling their own error_messages_for to get rid of english model names, this one can be a bit of an issue.
+          Quick fix:
+          replace
+          <pre>
+          if self.filename.nil?
+            errors.add attachment_validation_options[:empty]
+            eturn
+          end
+          </pre>
+          <pre>
+          if self.filename.nil?
+            errors.add :empty, attachment_validation_options[:empty]
+            eturn
+          end
+          </pre>
+          
+    %li#comment_1451
+      %p.author
+        %a{:href => 'http://tomash.jogger.pl'} Tomash
+      .body
+        :textile
+          replace "block" WITH "block" of course. And I ate "r" in return accidentally.
+    %li#comment_1524
+      %p.author
+        Steven Holloway
+      .body
+        :textile
+          I found during a rails 2.1 and rspec 1.1.4 upgrade
+          of a large well spec'd app
+          that validations using the above method were failing. The error messages were being added 
+          by error.add_to_base
+          <pre>
+          <code>
+          errors => {"base" => "error message"}
+          </code>
+          </pre>
+          our spec is looking for
+          <pre>
+          <code>
+          errors => {"size" => "error message"}
+          </code>
+          </pre>
+          Thus the fix was similar to what Tomash has done with :empty.
+          <pre>
+          <code>
+          errors.add option, attachment_validation_options[option]
+          </code>
+          </pre>
+          
+          
+          
+          
+           

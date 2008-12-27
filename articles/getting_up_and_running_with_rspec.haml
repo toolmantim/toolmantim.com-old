@@ -1,0 +1,90 @@
+-# title: Getting up-and-running with RSpec
+-# published: 2007-02-07
+
+:textile
+  After all the talk about "RSpec":http://rspec.rubyforge.org/ at the "Rails Aus meetups":http://rubyonrails.com.au/, tonight I finally got around to having a play with it.
+  
+  I don't have a _great_ track record with high test coverage, but RSpec is considerably more enjoyable, and no doubt 1000x more readable, than the equivalent Test::Unit, which can only serve help my cause.
+  
+  It's pretty easy to add RSpec to a new _or_ existing project too. Your spec's happily live alongside your unit tests in the filesystem, but don't expect any integration. If you've got a lot of legacy Test::Unit integration then you might also want to check out "test/spec":http://chneukirchen.org/blog/archive/2007/01/announcing-test-spec-0-3-a-bdd-interface-for-test-unit.html.
+  
+  Here's how I installed RSpec, and then I'll show how to create a simple model spec and run it. Check out "the official RSpec install guide":http://rspec.rubyforge.org/documentation/rails/install.html for update-to-date install information. The trick is just to make sure the rails plugin matches the version of your installed gem.
+  
+  # @sudo gem install rspec -y@
+  # @cd my_rails_app@
+  # @piston import svn://rubyforge.org/var/svn/rspec/tags/REL_0_7_5_1/rspec_on_rails/vendor/plugins/rspec_on_rails vendor/plugins/rspec_on_rails@
+  # @./script/generate rspec@
+  # @mkdir -p spec/models@ (there's also "other dirs":http://rspec.rubyforge.org/documentation/rails/writing/index.html you might want to create)
+  # Create your first spec, @spec/models/user_spec.rb@
+  
+  <pre><code class="ruby">
+  require File.dirname(__FILE__) + '/../spec_helper'
+  
+  context "User" do
+    specify "should check universal stability"
+      42.should == 42
+    end
+  end
+  </code></pre>
+  
+  You can now run @rake spec@ and hopefully your spec ran and passed!
+  
+  <pre><code>
+  $ rake spec
+  .
+  
+  Finished in 0.009566 seconds
+  
+  1 specification, 0 failures
+  </code></pre>
+  
+  Next step is to add fixtures to @spec/fixtures@ and flesh out your model specification some more.
+  
+  Now you can go add "BDD" on to the bottom of that Web2.0 developer skills list ;)
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_480
+      %p.author
+        %a{:href => 'http://topfunky.com'} topfunky
+      .body
+        :textile
+          I've been reluctant to commit to RSpec for projects since it still appears to be under heavy development, and things change often. 
+          
+          Do you feel that it's stable enough to use 100% for a project, or is it still for the early adopters?
+    %li#comment_481
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          I'm not really sure... I'm not involved in the RSpec community enough to say. The feeling I've got though is that the basics are nailed down enough to use w/o worrying about things changing. I guess it's the same call as "do I use Rails v1.2 or edge?"
+    %li#comment_482
+      %p.author
+        Lachie
+      .body
+        :textile
+          The RSpec folks have at long last committed to a 1.0 API http://rubyforge.org/pipermail/rspec-users/2007-February/000642.html
+    %li#comment_483
+      %p.author
+        %a{:href => 'http://evang.eli.st/blog/'} Pat Maddox
+      .body
+        :textile
+          I've been using RSpec since 0.6.x, and I've always used edge.  There's been a bit of pain, but over all it's been worth it to me.
+          
+          It's at a point now where you can safely use it though.  I'm using it for all my Ruby coding at work, anyway.
+    %li#comment_484
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          thanks Lachie, I knew you'd know. I like custom matchers.
+          
+          Thanks Pat. As this is a new project and if 0.8 wasn't coming out in a few weeks I'd probably move to edge...
+    %li#comment_485
+      %p.author
+        %a{:href => 'http://spicycode.com/'} Chad Humphries
+      .body
+        :textile
+          Over at The Edge Case we have used RSpec exclusively for the last several releases (since rubyconf).   We have had a few ups and downs but things are great all in all.

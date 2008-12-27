@@ -1,0 +1,557 @@
+-# title: Setting up a new Rails app with Git
+-# published: 2007-12-05
+
+:textile
+  <a href="http://www.flickr.com/photos/toolmantim/2086014976/" title="Pizza Glow by toolmantim, on Flickr"><img src="http://farm3.static.flickr.com/2005/2086014976_da3c4a2468_m.jpg" width="240" height="160" alt="Pizza Glow" /></a>
+  
+  Want to be a dark-knight git-wielding Rails coder? Here's a quick run-through of how you might want to set up git with a new Rails app.
+  
+  I'm assuming you've managed to compile and install the 5TB of dependencies required to install git (@sudo port install git-core@). You'll also want to set your name and email in the global config (@git config --global user.name "Your Name"; git config --global user.email "your@email.com"@).
+  
+  h3. For the impatient
+  
+  Create a top, project-level @.gitignore@ file containing:
+  
+  <pre><code>log/*.log
+  tmp/**/*
+  .DS_Store
+  doc/api
+  doc/app</code></pre>
+  
+  Create some @.gitignore@ files so the empty directories get tracked:
+  
+  <pre><code class="shell">$ touch log/.gitignore
+  $ touch tmp/.gitignore</code></pre>
+  
+  and commit:
+  
+  <pre><code class="shell">$ git add .
+  $ git commit -m "Added initial Rails app"</code></pre>
+  
+  Read on if you want a step-by-step guide as to what's going on.
+  
+  h3. Creating a new edge rails app
+  
+  Firstly, let's create a brand-spanking-new Rails 2.0 app called YeOldGitYou from rails trunk.
+  
+  <pre><code class="shell">$ svn up ~/Sites/rails/trunk/
+  At revision 8276.
+  $ ruby ~/Sites/rails/trunk/railties/bin/rails YeOldGitYou
+        create  
+        create  app/controllers
+        create  app/helpers
+        create  app/models
+        create  app/views/layouts
+        create  config/environments
+        create  config/initializers
+        create  db
+        create  doc
+        create  lib
+        create  lib/tasks
+        create  log
+        create  public/images
+        create  public/javascripts
+        create  public/stylesheets
+        create  script/performance
+        create  script/process
+        create  test/fixtures
+        create  test/functional
+        create  test/integration
+        create  test/mocks/development
+        create  test/mocks/test
+        create  test/unit
+        create  vendor
+        create  vendor/plugins
+        create  tmp/sessions
+        create  tmp/sockets
+        create  tmp/cache
+        create  tmp/pids
+        create  Rakefile
+        create  README
+        create  app/controllers/application.rb
+        create  app/helpers/application_helper.rb
+        create  test/test_helper.rb
+        create  config/database.yml
+        create  config/routes.rb
+        create  public/.htaccess
+        create  config/initializers/inflections.rb
+        create  config/initializers/mime_types.rb
+        create  config/boot.rb
+        create  config/environment.rb
+        create  config/environments/production.rb
+        create  config/environments/development.rb
+        create  config/environments/test.rb
+        create  script/about
+        create  script/console
+        create  script/destroy
+        create  script/generate
+        create  script/performance/benchmarker
+        create  script/performance/profiler
+        create  script/performance/request
+        create  script/process/reaper
+        create  script/process/spawner
+        create  script/process/inspector
+        create  script/runner
+        create  script/server
+        create  script/plugin
+        create  public/dispatch.rb
+        create  public/dispatch.cgi
+        create  public/dispatch.fcgi
+        create  public/404.html
+        create  public/422.html
+        create  public/500.html
+        create  public/index.html
+        create  public/favicon.ico
+        create  public/robots.txt
+        create  public/images/rails.png
+        create  public/javascripts/prototype.js
+        create  public/javascripts/effects.js
+        create  public/javascripts/dragdrop.js
+        create  public/javascripts/controls.js
+        create  public/javascripts/application.js
+        create  doc/README_FOR_APP
+        create  log/server.log
+        create  log/production.log
+        create  log/development.log
+        create  log/test.log</code></pre>
+  
+  h3. Creating a new git repository
+  
+  Git repository's are a-dime-a-dozen. There's no such thing as a working copy, everything's just a git repository containing copies of other git repositories. When you develop locally you're committing to a local git repository, stored in the @.git@ directory of your project.
+  
+  Let's init a new git repository in the directory of the rails app:
+  
+  <pre><code class="shell">$ cd YeOldGitYou/
+  $ git init
+  Initialized empty Git repository in .git/</code></pre>
+  
+  A @git status@ shows a bunch of new untracked files:
+  
+  <pre><code class="shell">$ git status
+  # On branch master
+  #
+  # Initial commit
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #	README
+  #	Rakefile
+  #	app/
+  #	config/
+  #	doc/
+  #	log/
+  #	public/
+  #	script/
+  #	test/
+  nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+  
+  h3. Ignoring log files
+  
+  Firstly let's ignore all log files. Create a @.gitignore@ file:
+  
+  <pre><code class="shell">$ mate .gitignore</code></pre>
+  
+  Containing the one line:
+  
+  <pre><code>log/*.log</code></pre>
+  
+  Now let's run @git status@ again:
+  
+  <pre><code class="shell">$ git status
+  # On branch master
+  #
+  # Initial commit
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #	.gitignore
+  #	README
+  #	Rakefile
+  #	app/
+  #	config/
+  #	doc/
+  #	public/
+  #	script/
+  #	test/
+  nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+  
+  Notice anything different? Well, there's our newly created .gitignore file. You'll also notice the log directory is completely gone. This is bad as the Rails logger will throw a big error when it tries to create your @development.log@ when you boot up the server. So why has the log directory disappeared?
+  
+  <strong>Git doesn't track empty directories</strong> and because of our ignore statement git can't see anything of interest in @/log@.
+  
+  Even though it's a bit of a PITA there are supposedly "good reasons":http://kerneltrap.org/mailarchive/git/2007/7/17/251902 for this.
+  
+  The work-around is to create a @.gitignore@ file in the empty directory.
+  
+  <pre><code class="shell">$ touch log/.gitignore</code></pre>
+  
+  Let's run @git status@ again to see what's changed:
+  
+  <pre><code class="shell">$ git status
+  # On branch master
+  #
+  # Initial commit
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #	.gitignore
+  #	README
+  #	Rakefile
+  #	app/
+  #	config/
+  #	doc/
+  #	log/
+  #	public/
+  #	script/
+  #	test/
+  nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+  
+  Woohoo! There's our log directory.
+  
+  If your @log@ directory still isn't showing up maybe you're trying to ignore @log/*@. In this case git will also ignore the @.gitignore@ file and you'll need to use the more specific ignore pattern of @log/[^.]*@ as per "Clifford Heath's hot tip":http://groups.google.com/group/rails-oceania/browse_thread/thread/2c8611dc93917952/e175f72310823547?#e175f72310823547.
+  
+  h3. Ignoring the other un-fu files
+  
+  So what's left to do? Ignore any files in any of the @tmp@ subdirectories (I don't even want to track the tmp directories themselves)
+  
+  <pre><code class="shell">$ touch tmp/.gitignore</code></pre>
+  
+  and update our main @.gitignore@ file. Whilst we're there we'll add a few other entries that may be needed at some point:
+  
+  <pre><code>
+  log/*.log
+  tmp/**/*
+  
+  # Other useful tidbits
+  .DS_Store
+  doc/api
+  doc/app
+  </code></pre>
+  
+  h3. Committing everything
+  
+  Before doing a commit in git you need to add files to the "index". The index represents "my current changeset" and is what will be committed when you type @git commit@. We've been looking at the status of the index using @git status@. Unlike Subversion modified files won't be committed unless you @git add@ them first. 
+  
+  To commit everything we'll @git add@ all the project files:
+  
+  <pre><code class="shell">$ git add .
+  $ git status
+  # On branch master
+  #
+  # Initial commit
+  #
+  # Changes to be committed:
+  #   (use "git rm --cached <file>..." to unstage)
+  #
+  #	new file: .gitignore
+  #	new file: README
+  #	new file: Rakefile
+  #	new file: app/controllers/application.rb
+  #	new file: app/helpers/application_helper.rb
+  #	new file: config/boot.rb
+  #	new file: config/database.yml
+  #	new file: config/environment.rb
+  #	new file: config/environments/development.rb
+  #	new file: config/environments/production.rb
+  #	new file: config/environments/test.rb
+  #	new file: config/initializers/inflections.rb
+  #	new file: config/initializers/mime_types.rb
+  #	new file: config/routes.rb
+  #	new file: doc/README_FOR_APP
+  #	new file: log/.gitignore
+  #	new file: public/.htaccess
+  #	new file: public/404.html
+  #	new file: public/422.html
+  #	new file: public/500.html
+  #	new file: public/dispatch.cgi
+  #	new file: public/dispatch.fcgi
+  #	new file: public/dispatch.rb
+  #	new file: public/favicon.ico
+  #	new file: public/images/rails.png
+  #	new file: public/index.html
+  #	new file: public/javascripts/application.js
+  #	new file: public/javascripts/controls.js
+  #	new file: public/javascripts/dragdrop.js
+  #	new file: public/javascripts/effects.js
+  #	new file: public/javascripts/prototype.js
+  #	new file: public/robots.txt
+  #	new file: script/about
+  #	new file: script/console
+  #	new file: script/destroy
+  #	new file: script/generate
+  #	new file: script/performance/benchmarker
+  #	new file: script/performance/profiler
+  #	new file: script/performance/request
+  #	new file: script/plugin
+  #	new file: script/process/inspector
+  #	new file: script/process/reaper
+  #	new file: script/process/spawner
+  #	new file: script/runner
+  #	new file: script/server
+  #	new file: test/test_helper.rb
+  #	new file: tmp/.gitignore
+  #
+  </code></pre>
+  
+  Woohoo! So close. Now let's commit this baby.
+  
+  <pre><code class="shell">$ git commit -m "Created the YeOldGitYou rails app (from rails trunk rev. 8276)"
+  Created initial commit 64ff1f6: Created the YeOldGitYou rails app (from rails trunk rev. 8276)
+   45 files changed, 8360 insertions(+), 0 deletions(-)
+   create mode 100644 .gitignore
+   create mode 100644 README
+   create mode 100644 Rakefile
+   create mode 100644 app/controllers/application.rb
+   create mode 100644 app/helpers/application_helper.rb
+   create mode 100644 config/boot.rb
+   create mode 100644 config/database.yml
+   create mode 100644 config/environment.rb
+   create mode 100644 config/environments/development.rb
+   create mode 100644 config/environments/production.rb
+   create mode 100644 config/environments/test.rb
+   create mode 100644 config/initializers/inflections.rb
+   create mode 100644 config/initializers/mime_types.rb
+   create mode 100644 config/routes.rb
+   create mode 100644 doc/README_FOR_APP
+   create mode 100644 log/.gitignore
+   create mode 100644 public/.htaccess
+   create mode 100644 public/404.html
+   create mode 100644 public/422.html
+   create mode 100644 public/500.html
+   create mode 100755 public/dispatch.cgi
+   create mode 100755 public/dispatch.fcgi
+   create mode 100755 public/dispatch.rb
+   create mode 100644 public/favicon.ico
+   create mode 100644 public/images/rails.png
+   create mode 100644 public/index.html
+   create mode 100644 public/javascripts/application.js
+   create mode 100644 public/javascripts/controls.js
+   create mode 100644 public/javascripts/dragdrop.js
+   create mode 100644 public/javascripts/effects.js
+   create mode 100644 public/javascripts/prototype.js
+   create mode 100644 public/robots.txt
+   create mode 100755 script/about
+   create mode 100755 script/console
+   create mode 100755 script/destroy
+   create mode 100755 script/generate
+   create mode 100755 script/performance/benchmarker
+   create mode 100755 script/performance/profiler
+   create mode 100755 script/performance/request
+   create mode 100755 script/plugin
+   create mode 100755 script/process/inspector
+   create mode 100755 script/process/reaper
+   create mode 100755 script/process/spawner
+   create mode 100755 script/runner
+   create mode 100755 script/server
+   create mode 100644 test/test_helper.rb
+   create mode 100644 tmp/.gitignore
+  </code></pre>
+  
+  Aww yeah. Let's see the status again.
+  
+  <pre><code class="shell">$ git status
+  # On branch master
+  nothing to commit (working directory clean)</code></pre>
+  
+  h3. Freezing rails into vendor
+  
+  Last thing to do is freeze rails into vendor. I'll @svn export@ from the rails trunk copy I used to create the app in the first place:
+  
+  <pre><code class="shell">$ svn export ~/Sites/rails/trunk vendor/rails
+  Export complete.
+  </code></pre>
+  
+  and commit it to the git repository:
+  
+  <pre><code class="shell">$ git add vendor/rails
+  $ git commit -m "Vendor'd rails trunk rev. 8276"
+  </code></pre>
+  
+  h3. Celebratory drinks
+  
+  That's it. Now you can push your local git repo to some remote location and start collaborating all distributed-like.
+  
+  The final top-level @.gitignore@ file ended up being:
+  
+  <pre><code>log/*.log
+  tmp/**/*
+  .DS_Store
+  doc/api
+  doc/app</code></pre>
+  
+  A few other git resources you'll find probably find handy:
+  
+  * "Geoff's git peepcode screencast":http://peepcode.com/products/git for a pretty intense hands-on rundown of configuring, cloning, committing and branching with git
+  * "Sourcemage's git guide":http://wiki.sourcemage.org/Git_Guide for useful everyday  commands you might need in git-land
+  * "Git users's manual":http://www.kernel.org/pub/software/scm/git/docs/user-manual.html for help with specific problems (like setting up remote repositories)
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1380
+      %p.author
+        %a{:href => 'http://www.gelens.org'} Jeffrey Gelens
+      .body
+        :textile
+          You also might wanna take a look at <a href="http://www.selenic.com/mercurial">Mercurial</a>
+          It's similar to Git, but is superior imo.
+    %li#comment_1381
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Sure Jeffrey, but that'd be a post in itself ;)
+    %li#comment_1382
+      %p.author
+        %a{:href => 'http://m.onkey.org'} Pratik
+      .body
+        :textile
+          Sweet. I'm interested in knowing how do you manage edge rails along with your git repo. Currently I'm living with a symlink.
+    %li#comment_1383
+      %p.author
+        Michael Koukoullis
+      .body
+        :textile
+          Nice one Tim.  Need to to exactly this for the new project I am working on.  Git it on ;)
+    %li#comment_1385
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Pratik</em>: I simply nuke the vendor/rails directory, re-export the latest checkout and let git figure it out. I haven't yet done that though. If I were managing edge Rails with patches applied then it might not be so easy.
+    %li#comment_1386
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Pratik</em>: How do you do it? Would love to hear some strategies.
+    %li#comment_1391
+      %p.author
+        Adam Salter
+      .body
+        :textile
+          Funny, everybody who mentions git gets a post about how Mercurial is better. This is my experience too.
+          Mercurial makes version tracking so easy it seems almost too easy. I.e. Version tracking _can't_ be this easy can it?
+          I think it's for this reason many people are looking into Git instead, which is a pity as I, personally, don't want the extra hassles.
+    %li#comment_1392
+      %p.author
+        %a{:href => 'http://peepcode.com'} topfunky
+      .body
+        :textile
+          @pratik: I use Tim's method...just delete the vendor/rails directory and re-export it from a new revision of trunk.
+          
+          Or, see Cristi Balan's giston tool, which can manage this for you:
+          
+          http://evil.che.lu/2007/11/27/ann-giston-piston-lookalike-for-git
+    %li#comment_1393
+      %p.author
+        %a{:href => 'http://peepcode.com'} topfunky
+      .body
+        :textile
+          Oh, and I also add db/schema.rb to the ignore list.
+          
+          Thanks for the practical articles, Tim.
+    %li#comment_1395
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @topfunky: giston? nice! I stopped using piston a while ago, but will definitely feel a need.
+          
+          @topfunky: I don't like to ignore schema.rb, only because I like to keep a copy of the current schema along with the code for new setups of the app. You using migrations for that?
+    %li#comment_1396
+      %p.author
+        %a{:href => 'http://anilwadghule.com/blog'} Anil Wadghule
+      .body
+        :textile
+          Awesome, I was searching for this kind of article for last some days and this post comes very timely. I hope I will switch fully to git for my weekend projects in coming days. Also I have downloaded git peepcode screencast too, I hope it will also help. 
+    %li#comment_1397
+      %p.author
+        %a{:href => 'http://mega.blaix.com/'} Justin Blake
+      .body
+        :textile
+          @topfunky: Thanks for the giston link! As I was reading the post and the first few comments I was thinking how much it would suck to use git without something like piston.
+          
+          Also, regarding schema.rb: 
+          http://dev.rubyonrails.org/changeset/8124
+    %li#comment_1398
+      %p.author
+        Dan Kbub
+      .body
+        :textile
+          I too prefer to keep my db/schema.rb around to recreate the DB.  I use migrations mostly to keep track of future changes that I plan to apply to my production DB.  Once they are applied, and everything looks good I could technically remove them from the repo without any negative side-effects.  I read somewhere recently that the original intention with migrations is that they be transient.
+    %li#comment_1404
+      %p.author
+        %a{:href => 'http://www.midlandswebdesign.com'} Nick Poulden
+      .body
+        :textile
+          Here's a snippet for touching a .gitignore file into all the empty subdirectories except the .git directory itself:
+          
+          find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;
+    %li#comment_1406
+      %p.author
+        %a{:href => 'http://www.samgranieri.com'} Sam Granieri
+      .body
+        :textile
+          Thanks for the tip about putting the .gitignore files in tmp and log.. I had to deploy a couple of websites using git over the weekend and I then had to ssh into my boxes and create them manually.. Ugh.. a pain. 
+          
+          I actually havent gotten around to using Edge Rails with git yet. I kind of wish the rails core team would use Git instead of Subversion (but that's a discussion for the rails core list), and that Git would incorporate svn:externals. 
+          
+          For now, you can use the git mirror of the rails repo provided at 
+          git://git.sanityinc.com/rails.git
+    %li#comment_1427
+      %p.author
+        jpb
+      .body
+        :textile
+          So if you switch to git, is there an easy way to call it from script/generate like script/generate --svn automatically adds the new files to svn?
+    %li#comment_1483
+      %p.author
+        jbb
+      .body
+        :textile
+          With rails not at github you can do this to keep edge rails up-to-date:
+          
+          <pre>
+          git submodule add git://github.com/rails/rails.git vendor/rails
+          
+          git submodule init
+          
+          git submodule update
+          </pre>
+    %li#comment_1484
+      %p.author
+        jbb
+      .body
+        :textile
+          P.S.
+          
+          You have to have run
+          
+          <pre>
+          git init
+          </pre>
+          
+          in the project root beforehand for this to work.
+    %li#comment_1502
+      %p.author
+        %a{:href => 'http://benatkin.com/'} Ben Atkin
+      .body
+        :textile
+          Thanks for this. It's very informative and easy to understand.
+    %li#comment_1543
+      %p.author
+        %a{:href => 'http://www.coreguardian.org'} Henry Case
+      .body
+        :textile
+          @Adam Salter (who probably made the comment so long ago that he's forgotten it), when the Linux Kernel switches to Mercurial so will I
+    %li#comment_1552
+      %p.author
+        %a{:href => 'http://crazyrails.com'} Marty McGee
+      .body
+        :textile
+          Great post!  Precise and accurate.  Thanks for writing this up.

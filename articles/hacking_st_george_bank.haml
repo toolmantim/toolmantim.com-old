@@ -1,0 +1,107 @@
+-# title: Hacking St George Bank
+-# published: 2006-05-29
+-# updated: 2006-05-31
+
+:textile
+  According to the "St George Bank's Compatibility Matrix":https://www.stgeorge.com.au/int_bank/about/system_information/requirements.asp (at least they have one!) Mac support is limited to IE5 and Netscape 7, and unfortunately doesn't include support for what has been Apple's primary browser for some time now: Safari.
+  
+  The ignorance towards Safari has only recently started to piss me off (though I have emailed their tech support about it previously) because the system-wide Java 5 update on the Mac has caused their applet to have serious display issues in Firefox (even after forcing Java 1.4).
+  
+  What's bizarre about the problem though is it only happens intermittently. For the past 3 months I'd just figured it was a dodgy QA process on St George's side, but I decided to have a bit more of a peek.
+  
+  This is the great screen their customers are being faced with:
+  
+  !http://www.toolmantim.com/images/blog/hacking-stgeorge.gif(What St George Mac customers are faced with)!
+  
+  Any guess at to what the tech support phone conversation be if you phoned them up?
+  
+  Being the geek that I am, I checked out Safari's javascript console and found "TypeError - undefined value" on the following line of code:
+  
+  <pre><code>
+  ibankWin = window.open("index.asp?redire...");
+  </code></pre>
+  
+  I was a tad confused. @window.open@ was undefined? This is the page source, in full:
+  
+  <pre><code>
+  <script language=javascript>
+  
+  
+  //Vaibhav [28-Mar-2005] Start
+  //Resize the window to the same size as set by user for pervious IBank login instances.
+  //This is to be done only when the cookie valu is set for Width or height. If these values are not set
+  //open the window in default size.
+  
+  
+  		window.resizeTo(816 + 8 ,611 + 53)
+  	
+  	window.moveTo(0,0)
+  
+  
+  //Vaibhav [28-Mar-2005] End
+  
+    //IE 4 enhancement - Joe Wong at 22 Oct 2002
+  
+  		  //Vaibhav	[28-Mar-2005] Window name changed
+            ibankWin = window.open("index.asp?redirected=True&JavaVendor=SUN&ClientPlatform=MacOSX&JVMVersion=&document=/xml/bank.xml&browser=Safari&ApplType=MacNS&cookies=True&size=&demo=&route=IBS&Version=1&IDMError=&card=","New","'menubar=no,location=no,menus=no,resizable=1,scrollbars,status,left=0,top=0,height=" + "611" + ",width=" + "816" + "'");
+  	        if (ibankWin.opener == null)
+  	        {
+  	          ibankWin.opener = window;
+  		        ibankWin.opener.name = "contentFrame";
+  	        }
+  
+  
+  if(!window.opener)
+  {
+  	window.opener='x'; 
+  	window.close();
+  }
+  
+  
+  </script>
+  </code></pre>
+  
+  Ignoring the complete lack of html and body tags (lazy!), I believe the problem is cropping up intermittently because in some cases the javascript is being evaluated before the @window.open@ function exists. If I'm right, then all they'd need to do is wrap the whole thing in a @window.onload@ and they'd be home scot free:
+  
+  <pre><code>
+  window.onload = function() {
+    // Original JS code
+  }
+  </code></pre>
+  
+  Now supporting Safari wasn't that hard was it?
+  
+  So what can we do in the mean time? We could all change banks. Another option is to place the following link in your bookmarks. It'll bypass that page and go straight to the login: <a href="javascript:window.open(&quot;https://ibank.stgeorge.com.au/html/index.asp?redirected=True&amp;JavaVendor=SUN&amp;ClientPlatform=MacOSX&amp;JVMVersion=&amp;document=/xml/bank.xml&amp;browser=Safari&amp;ApplType=MacNS&amp;cookies=True&amp;size=&amp;demo=&amp;route=IBS&amp;Version=1&amp;IDMError=&amp;card=&quot;,&quot;New&quot;,&quot;&apos;menubar=no,location=no,menus=no,resizable=1,scrollbars,status,left=0,top=0,height=625,width=824&apos;&quot;);">St George Online Banking</a> (feel free to forward your next monthly bank fee to me instead of the dragon).
+  
+  ...and if you're reading this St George, feel free to leave a comment and say g'day! :)
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_200
+      %p.author
+        Skeeve Stevens
+      .body
+        :textile
+          Nice.
+    %li#comment_206
+      %p.author
+        %a{:href => 'http://interfacelounge.net/'} Hunter
+      .body
+        :textile
+          I have to say St George is painful on the Mac. I actually just jumped over to ANZ due to the online banking and high fees I was being hit with. While online banking at ANZ is works it is not brilliant (At least I can now view my transaction history).
+          
+          Why are bank's online services so horrible. Having used St George, ANZ and Westpac here and a few overseas they are generally terrible. No standards and bad UI. About time the good bits of this Web2.0 revolution rubbed off on the banks.
+    %li#comment_1341
+      %p.author
+        Brendan
+      .body
+        :textile
+          its probably because Safari is rubbish. and painful to use
+    %li#comment_1399
+      %p.author
+        Nick Pilbrow
+      .body
+        :textile
+          St.George are fucking slowpokes

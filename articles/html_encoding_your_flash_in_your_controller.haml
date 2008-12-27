@@ -1,0 +1,20 @@
+-# title: <span class="caps">HTML</span> encoding your flash in your controller
+-# published: 2007-02-06
+
+:textile
+  I'm often placing user generated content into @flash[:notice]@ messages and then needing to output that safely in my layout. I also sometimes need to output a small snippet of HTML, such as an entity, in the @flash[:notice]@, and for this reason I can't just HTML escape it in the view.
+  
+  @ERB::Util@ defines the handy @h@ (@html_escape@) and @u@ (@url_encode@) methods you've most probably used in your views. To use them in your controllers too, just include the @ERB::Util@ module (thankfully it's lightweight and only defines these two methods).
+  
+  <pre><code class="ruby">
+  class ApplicationController < ActionController::Base
+    protected
+      include ERB::Util
+  end
+  </code></pre>
+  
+  You can now flash your users' bits to your heart's content:
+  
+  <pre><code class="ruby">
+  flash[:notice] = "Welcome back \#{h current_user.to_s(:informal)}!"
+  </code></pre>

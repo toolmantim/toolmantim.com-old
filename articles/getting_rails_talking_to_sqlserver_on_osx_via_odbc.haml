@@ -1,0 +1,330 @@
+-# title: Getting Rails talking to SQLServer on <span class="caps">OSX</span> via <span class="caps">ODBC</span>
+-# published: 2007-05-07
+-# updated: 2007-05-18
+
+:textile
+  Getting your Mac to talk to SQLServer via ActiveRecord is akin to watching Gretel give commentary on who's-picking-who's-nose on the latest episode of Big Brother.
+  
+  Though there's a few nuggets of information floating around on the web&#8212;"New Auburns's article":http://www.napcsweb.com/blog/2007/03/08/15/, the "Rails wiki":http://wiki.rubyonrails.com/rails/pages/HowtoConnectToMicrosoftSQLServerFromRailsOnOSX, and <a href="http://www.imarichardson.com/2006/09/26/rubyonrails-using-mssql-server-and-freetds/">iamrichardson.com's 2 part series</a>&#8212;I wanted something that integrated with my preferred macports setup and didn't involve recompiling ruby-dbi.
+  
+  <strong class="update">Update</strong>: Thanks to Maun Suang Boey from macports we've been able to "update the rb-dbi port":http://trac.macports.org/projects/macports/changeset/25233 to include support for odbc, making this process a whole lot simpler.
+  
+  So here's the steps we need to take for a macports friendly SQLServer via Ruby-DBI via ODBC:
+  # Install Ruby-DBI with ODBC
+  # Install FreeTDS
+  # Test FreeTDS
+  # Configure FreeTDS
+  # Add the FreeTDS ODBC driver
+  # Create an ODBC datasource
+  # Test the ODBC connection
+  # Configure Rails
+  
+  Notice no need for @unix-odbc@? OSX ships with ODBC and an ODBC admin tool to make our lives just that little bit easier.
+  
+  h3. Install Ruby-DBI with FreeTDS
+  
+  Make sure you've synced with the latest macports tree:
+  
+  @sudo port sync@
+  
+  and install away:
+  
+  @sudo port install rb-dbi +dbd_odbc@
+  
+  If you you've already got the @rb-dbi@ or the old @rb-dbd-mysql@ and @rb-dbd-postgresql@ ports installed you'll probably need to remove them first.
+  
+  You could also add @+dbd_mysql@ and @+dbd_pg@ if you like.
+  
+  h3. Install FreeTDS
+  
+  @$ sudo port install freetds@
+  
+  easy peasy.
+  
+  h3. Test FreeTDS
+  
+  We need to test that we can connect to the SQL server using FreeTDS's diagnostic tool, @tsql@ tool. We must make sure this works before proceeding with modifying configs and setting up ODBC.
+  
+  <pre><code>$ man tsql
+  NAME
+         tsql - utility to test FreeTDS connections and queries
+  
+  SYNOPSIS
+         tsql   {-S servername [-I inside] | -H hostname -p port}
+                -U username [-P password]
+  ...
+  </code></pre>
+  
+  Plug in the values to your SQL server as below, specifying your own values for SQL_SERVER_ADDR, USER and PASSWORD:
+  
+  <pre><code>$ tsql -H SQL_SERVER_ADDR -p 1433 -U USER -P PASSWORD
+  locale is "C/en_US.UTF-8/C/C/C/C"
+  locale charset is "UTF-8"
+  1>
+  </code></pre>
+  
+  We've got the @1>@ prompt, which means we're succesfully connected. Let's run a DB query just to see things are working, not forgetting the all-important 'go':
+  
+  <pre><code>1> use jobfutures;
+  2> select top 1 memberId from tblMembers;
+  3> go
+  memberId
+  263
+  </code></pre>
+  
+  Woohoo! Now we're talkin.
+  
+  h3. Configure FreeTDS
+  
+  Now we've connected to SQL server using @tsql@ we add a server entry to the FreeTDS config file, which can be found at @/opt/local/etc/freetds/freetds.conf@
+  
+  <pre><code>[somesqlserver]
+    host = HOST_ADDRESS
+    port = 1433
+    tds version = 8.0 # for SQL2000
+  </code></pre>
+  
+  Throw out the host and password parameters we needed before, we can now just refer to it using the server name @somesqlserver@:
+  
+  <pre><code>
+  $ tsql -S somesqlserver -U sa -P SA_USER_PASSWORD
+  locale is "C/en_US.UTF-8/C/C/C/C"
+  locale charset is "UTF-8"
+  1> 
+  </code></pre>
+  
+  h3. Add the FreeTDS ODBC driver
+  
+  OS X ships with a small but handy tool ODBC Administrator, found in /Applications/Utilities, which you can use to manage your ODBC settings. Fire it up and go to the Drivers tab. Add the TDS driver with the following settings:
+  
+  <pre>
+  Description: TDS
+  Driver file: /opt/local/lib/libtdsodbc.so
+  Setup file:  /opt/local/lib/libtdsodbc.so
+  Define as:   System
+  </pre>
+  
+  h3. Create an ODBC datasource
+  
+  Add a new User DSN In ODBC Administrator  with a name of somesqlserver (our Rails config will refer to this DSN) and the following Key/Values:
+  
+  <pre>ServerName: somesqlserver (the name used in the FreeTDS config file)
+  Database: jobfutures (change to suit)</pre>
+  
+  h3. Test the ODBC connection
+  
+  Firstly we test using the @iodbctest@ tool:
+  
+  <pre><code>
+  $ iodbctest "dsn=somesqlserver;uid=USERNAME;pwd=PASSWORD"
+  iODBC Demonstration program
+  This program shows an interactive SQL processor
+  Driver Manager: 03.52.0001.0928
+  Driver: 0.64 (libtdsodbc.so)
+  
+  SQL>use jobfutures;
+  1: SQLExec = [FreeTDS][SQL Server]Changed database context to 'jobfutures'. (5701) SQLSTATE=01000
+  Statement executed. 0 rows affected.
+  </code></pre>
+  
+  woohoo!
+  
+  And now in the colourful world of Ruby using @irb@:
+  
+  <pre><code class="ruby">
+  require 'rubygems'
+  #=> true
+  require 'dbi'
+  #=> true
+  DBI.connect('DBI:ODBC:somesqlserver', 'USERNAME', 'PASSWORD')
+  #=> #<DBI::DatabaseHandle:0x106cf74 @trace_output=#<IO:0x2b890>, @trace_mode=2, @handle=#<DBI::DBD::ODBC::Database:0x106ced4 @handle=#<ODBC::Database:0x106cefc>, @attr={}>>
+  </code></pre>
+  
+  Woohoo! Only one tiny step between us and world SQLServer domination.
+  
+  h3. Configure Rails
+  
+  All that's left is to modify our @database.yml@ to refer to our shiny new ODBC DSN:
+  
+  <pre><code>
+  development:
+    adapter: sqlserver
+    mode: odbc
+    dsn: someservername
+    username: USERNAME
+    password: PASSWORD
+  </code></pre>
+  
+  Load up @script/console@ and give it a whirl.
+  
+  phew! If you made it this far you deserve a break, a beer and a few days off work (file a claim for "MS torture leave"). 
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_579
+      %p.author
+        %a{:href => 'http://smartic.us'} bryanl
+      .body
+        :textile
+          Hopefully more publicity will hurry up the effort to get the sqladapter fixed.  Thanks for the great article.
+    %li#comment_584
+      %p.author
+        %a{:href => 'http://crafterm.net/blog/'} Marcus Crafter
+      .body
+        :textile
+          Top writeup. When I tried to get FreeTDS working with sql server, even after jumping all these hoops I still had problems with 'text' fields failing to be read properly.
+          
+          In the end I gave in and purchased the commercial Mac ODBC driver from Actual which worked fine, and was able to get back to Rails coding again :)
+          
+          M!
+    %li#comment_585
+      %p.author
+        %a{:href => 'http://www.napcs.com'} Brian Hogan
+      .body
+        :textile
+          That's very nice. The article on my site was mostly to help me remember how I did it and to share it with others. I like your way better too. 
+    %li#comment_588
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yeah this was the third time a guy at work (me) had to do this w/o documentation, so it was more out of frustration than anything :)
+          
+          Marcus: yeah I can understand just buying the Actual driver... it's really really frustrating, especially if you thought you'd solved it. Haven't had any probs with the text fields (yet, touch wood).
+          
+          Brian: Thanks for posting your article! Would have been screwed w/o it.
+    %li#comment_694
+      %p.author
+        Mark
+      .body
+        :textile
+          Cheers! I am going to give this a go tonight. I am happily using a Mac in an office full of MS. I will be laughing with a simple activerecord/web/crud thingy for the sql server.
+    %li#comment_815
+      %p.author
+        %a{:href => 'http://reinh.com'} Rein Henrichs
+      .body
+        :textile
+          Thanks, Tim. We've been using this at work as well. Saved much hair pulling.
+    %li#comment_828
+      %p.author
+        %a{:href => 'http://www.timperrett.com'} Tim Perrett
+      .body
+        :textile
+          Hey Tim, 
+          
+          Thanks for the article, it makes for interesting reading. I was wondering however what the performance was like using an ODBC connection? Is it comparable performance wise to any other databasae we might us that's native to OSX?
+          
+          Cheers
+          
+          Tim
+    %li#comment_1452
+      %p.author
+        Patrick
+      .body
+        :textile
+          Tim,
+          every step was working great until i tried to run 'iodbctest' and was met with the following error:
+          1: SQLDriverConnect = [iODBC][Driver Manager]Data source name not found and no default driver specified. Driver could not be loaded (0) SQLSTATE=IM002
+          1: ODBC_Connect = [iODBC][Driver Manager]Data source name not found and no default driver specified. Driver could not be loaded (0) SQLSTATE=IM002
+          
+          As I said everything prior worked great. Spent the last day beatin' my head on the monitor. Was hoping that you might have some pointers!!
+          Running OS X 10.4.11
+          Thanks
+          Patrick
+    %li#comment_1453
+      %p.author
+        Patrick
+      .body
+        :textile
+          Tim,
+          ignore my previous comment. Got it working.
+          Thanks for a great article!
+          Patrick
+    %li#comment_1472
+      %p.author
+        %a{:href => 'http://blog.tvg.ca/'} Tys von Gaza
+      .body
+        :textile
+          You can get around the whole ini file configuration mess by using a DSN-less string.  Ie:
+          
+          navision:
+              adapter: sqlserver
+              mode: odbc
+              dsn: DRIVER=/opt/local/lib/libtdsodbc.so;TDS_Version=8.0;SERVER=sqlserver.com;DATABASE=DBNAME;Port=14330;uid=dbusername;pwd=dbpassword;
+    %li#comment_1473
+      %p.author
+        %a{:href => 'http://blog.tvg.ca/'} Tys von Gaza
+      .body
+        :textile
+          Ops, lets try it again
+          <pre>
+          navision:
+              adapter: sqlserver
+              mode: odbc
+              dsn: DRIVER=/opt/local/lib/libtdsodbc.so;TDS_Version=8.0;SERVER=sqlserver.com;DATABASE=DBNAME;Port=14330;uid=dbusername;pwd=dbpassword;
+          </pre>
+    %li#comment_1475
+      %p.author
+        Matt Newell
+      .body
+        :textile
+          I got FreeTDS and the ODBC working fine but got confused on where the irb comes in. Where do I add the DBI.connect('DBI:ODBC:sqlConnect', 'user', 'pass')
+    %li#comment_1493
+      %p.author
+        %a{:href => 'http://www.sanityinc.com/'} Steve Purcell
+      .body
+        :textile
+          Thanks for this - very helpful.
+          
+          Spotted one minor mistake; "Throw out the host and password parameters" should read "Throw out the host and *port* parameters".
+    %li#comment_1506
+      %p.author
+        adam
+      .body
+        :textile
+          Hi,
+          
+          Thanks for the excellent info. We have been running this setup for over 6 months now but the database admin guy is saying that we have 105 connections to SQL Server! Not bad for 5 mongrels that are mostly idle.
+          Do you know any way of checking / monitoring this?
+          
+          thanks in advance
+          
+          Adam.
+    %li#comment_1507
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Sorry Adam, no idea. Surely the mongrel's wouldn't still be hanging onto the connections? Maybe you can drop them on the SQL server end?
+    %li#comment_1518
+      %p.author
+        Tom
+      .body
+        :textile
+          You mention Maun Suang Boey's update, but I'm not sure your instructions have been updated?
+          
+          This is one of the clearest posts I've found on the Net for connecting a Rails App to a Microsoft SQL Server on OSX.  I just want to make sure it is up to date!
+    %li#comment_1519
+      %p.author
+        Tom
+      .body
+        :textile
+          Alright I am pulling my hair out.  I was able to get everything working except configuring the keyword/value pair in Leopard's ODBC Administrator.  It will NOT let me double click on the Key and Value to rename them!  ARGGGH!
+          
+          I don't know if it matters, but I also had to use /opt/local/lib/libtdsodbc.0.0.0.so because there was no libtdsodbc.so file in that folder.  Does that matter?
+    %li#comment_1520
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Tom: no idea on Leopard I'm afraid. Report back if you find out!
+    %li#comment_1523
+      %p.author
+        Ben Mishkin
+      .body
+        :textile
+          Tim - 
+          
+          just use the tab key to move to the ey / value boxes. No idea why clicking isn't working, but tabbing to the boxes does.

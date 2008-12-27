@@ -1,0 +1,82 @@
+-# title: Per-hamster ActionMailer template paths
+-# published: 2007-09-06
+
+:textile
+  If you need per-request (per-site, per-event, per-hamster, etc.) emails templates and you don't need users modifying the templates you can quite easily break out of the standard ActionMailer directory structure and pull the templates from a subdirectory of your choosing.
+  
+  Instead of storing mailer templates in @\#{RAILS_ROOT}/app/views/event_mailer/@ I wanted them in @\#{RAILS_ROOT}/app/views/event_mailer/\#{event.slug}/@.
+  
+  Luckily, it's simply a matter of overriding @ActionMailer::Base#template_path@:
+  
+  <pre><code class="ruby">class EventMailer < ActionMailer::Base
+  
+    def purchase_receipt(purchase)
+      @event = purchase.event
+      # ...
+    end
+  
+    protected
+      def template_path
+        if @event
+          "\#{template_root}/\#{mailer_name}/\#{@event.slug}"
+        else
+          super
+        end
+      end
+  end
+  </code></pre>
+  
+  The typical alternative to this approach is to pull user-editable "Liquid templates":http://www.liquidmarkup.org/ from the DB, but the @template_path@ approach is much simpler for my needs and means I don't need to code an editing interface and bunch of liquid drops. Use whichever approach makes most sense for your application.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_1476
+      %p.author
+        Arno Nyhm
+      .body
+        :textile
+          i used your patch for template_path:
+          
+          <pre><code>def template_path
+              "\#{template_root}/\#{mailer_name}/\#{@lang}" 
+            end
+          </code></pre>
+          
+          but the renderer ( in render(opts) ) ignore it and set the file path here to a mailer/actionname.html.haml file and ignore my settings for template_path with  [fullpath]/mailer/de for a language selection.
+          
+          if i overwrite the render method then i get my result but i think this is not a good solution....
+          
+          <pre><code>      def render(opts)
+                  body = opts.delete(:body)
+                  if opts[:file] && opts[:file] !~ /\//
+                    opts[:file] = "\#{mailer_name}/\#{@lang}/\#{opts[:file]}"
+                  end
+                  initialize_template_class(body).render(opts)
+                end</code></pre>
+    %li#comment_1477
+      %p.author
+        Arno Nyhm
+      .body
+        :textile
+          one solution for me i found to only overwrite the method "mailer_name" with this:
+          
+          <pre><code>  
+            def mailer_name
+              @mailer_name + "/\#{@lang}"
+            end
+          </code></pre>
+          
+          so i can store the templates in folders:
+          
+          <pre><code>
+          views/
+            mailer/
+              de/
+                registration.text.html.haml
+                registration.text.plain.haml
+              en/
+                registration.text.html.haml
+                registration.text.plain.haml
+          </code></pre>

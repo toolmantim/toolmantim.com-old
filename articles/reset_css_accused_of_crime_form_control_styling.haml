@@ -1,0 +1,30 @@
+-# title: Reset <span class="caps">CSS</span> accused of crime: Form control styling
+-# published: 2006-06-05
+
+:textile
+  The 1 thing I dislike about "YUI's reset.css":http://developer.yahoo.com/yui/reset/ is the fact that they change the styling of form controls.
+  
+  Reset CSS changes both the font and the padding on text fields and selects, and it just looks _wrong_ (it's most noticeable in Safari).
+  
+  I saw in passing, but hadn't read until now, Roger Johansson's "Don't customise the look and feel of form fields":http://www.456bereastreet.com/archive/200605/dont_customise_the_look_and_feel_of_form_fields/, and I totally agree. Stay away from my form controls!
+  
+  Of course, now's the time you chime in to point out my hypocrisy in having a 130% font size in name field of the _add comment_ form, but this I consider somewhat more acceptable.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_209
+      %p.author
+        Hunter
+      .body
+        :textile
+          yeah, there are a few quirks with the YUI CSS libraries. I guess we need to put together an unreset to fix all those things that are a little strange.
+    %li#comment_210
+      %p.author
+        %a{:href => 'http://www.themaninblue.com'} Cameron Adams
+      .body
+        :textile
+          I don't get it, why do I need Yahoo to give me a complicated file when I've already got my own CSS library that works well and I fully understand?
+          
+          Who the hell doesn't have their own library lying around?

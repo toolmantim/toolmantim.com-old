@@ -11,13 +11,20 @@ body, html {
   padding: 0;
 }
 .content {
-  width: 90%;
+  width: 600px;
   margin: 0 auto;
-  position: relative;
   padding-bottom: 2em;
 }
+.home .content {
+  width: 600px;
+  margin: 100px auto 0 auto;
+}
+
 a img {
   border: none;
+}
+.header h1 {
+  margin-top: 50px;
 }
 h1 {
   font-size: 250%;
@@ -62,24 +69,8 @@ h1 {
 h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover {
   text-decoration: none;
 }
-
-div.previously {
-  margin-bottom: 20px;
-}
-.previously h4 {
-  margin: 0.3em 0;
-}
-.previously h4 .date, .previously h4 .comments {
-  text-transform: none;
-  font-family: Georgia; 
-  color: #888;
-  font-weight: normal;
-  font-size: 90%;
-  margin-right: 0.3em;
-}
-
-.previously h4 .comments {
-  color: #999;
+p {
+  line-height: 1.4em;
 }
 
 .article h3 {
@@ -119,107 +110,11 @@ div.previously {
 .article .body blockquote p {
   margin: 0.3em;
 }
-
-.comments h3 {
-  clear: left;
-  margin-top: 2em;
+.article pre {
+  padding: 5px 8px;
+  overflow: auto;
+  width: 100%;
 }
-.comment .author {
-  color: #999;
-  margin: 0.5em 0 0 0;
-  font-size: 140%;
-}
-.comment .body p {
-  margin-top: 0.5em;
-}
-#comment-submission-message {
-  padding: 1em; /* To pad it when used as an anchor */
-  background-color: #444;
-}
-
-p.none {
-  margin-left: 0.5em;
-  margin-top: 0.5em;
-  color: #888;
-  font-size: 150%;
-}
-#newcomment {
-  margin-top: 1em;
-  float: left;
-  width: 40em;
-  padding-bottom: 2em;
-}
-#newcomment label,
-#newcomment input,
-#newcomment textarea {
-  display: block;
-  float: left;
-}
-#newcomment textarea {
-  font-size: 95%;
-  width: 25em;
-  height: 10em;
-}
-#newcomment input.text-field {
-  width: 15em;
-  font-size: 130%;
-}
-#newcomment label {
-  width: 5em;
-  text-align: right;
-  clear: left;
-  margin-top: 5px;
-  margin-right: 3px;
-}
-#newcomment .submit {
-  clear: left;
-  padding-top: 1em;
-  margin-left: 5em;
-}
-#newcomment .help {
-  float: left;
-  display: block;
-  color: #999;
-}
-#comment_url_label .optional {
-  position: relative;
-  top: -1em;
-  left: 25em;
-}
-#newcomment h2 {
-  margin-top: 0;
-}
-#comment-token {
-  display: none;
-}
-
-.footer {
-  clear: both;
-  margin-top: 2.5em;
- background-image: url(../images/footer-bg.gif);
-  background-repeat: repeat-x;
-  background-position: top left;
-  border-top: 1px solid #333;
-}
-.footer .feeds a {
-  margin-right: 1em;
-}
-
-
-.footer .quip {
-  margin-top: 1em;
-  float: right;
-  color: #333;
-}
-
-p.notice {
-  padding: 10px;
-  border: #f89838 1px dashed;
-}
-p.notice .date {
-  color: #f89838;
-}
-
 .article a.thumb, .article a.thumb2, .article img.thumb, .article img.thumb2 {
   border: 1px solid #f89838;
   margin-bottom: 8px;
@@ -237,99 +132,119 @@ p.notice .date {
   border: none;
   margin: 0;
 }
-
 .article strong.update {
   color: #f89838;
   font-style: italic;
 }
 
-.column {
-  float: left;
+.article .comments ol, .article .comments ol li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.article .comments ol li {
   margin-bottom: 1.5em;
 }
-.column h2 {
-  margin-bottom: 0em;
-}
-.column h3 {
-  margin-top: 0.5em;
-}
-.column p.links {
-  margin-top: -0.5em;
-}
-.column p.published {
-  margin-top: -0.3em;
-}
-#column-life {
-  padding: 0 3%;
-  width: 45%;
-}
-#column-tech {
-  padding: 0 3%;
-  width: 41%;
+.article .comments ol li p.author {
+  margin-bottom: 0;
 }
 
-.workshopad {
-  float: left;
-  width: 41%;
-  padding: 0 3%;
+ol.timeline {
+  margin-top: 2em;
+  margin-left: 3.5em;
+}
+ol.timeline, ol.timeline li, ol.timeline li ol {
+  list-style: none;
+  position: relative;
 }
 
-dl.gigs {
-  clear: left;
-}
-dl.gigs dt {
-  margin-top: 0.7em;
-  margin-bottom: 0.2em;
-}
-dl.gigs dd {
-  margin-left: 0;
-  padding-left: 30px;
-}
-dl.gigs dd img {
-  vertical-align: middle;
-}
-
-ul.navigation {
+ol.timeline li h1 {
   position: absolute;
-  top: 30px;
-  left: 225px;
-  text-transform: uppercase;
-}
-ul.navigation li {
-  display: inline;
-  margin: 0 0.4em;
-  padding: 0;
-  border-bottom: 3px solid #333;
-}
-ul.navigation a {
-  color: #ddd;
-}
-
-table.gigs-legend {
-  border-collapse: collapse;
-  color: #ddd;
-  font-style: italic;
-}
-table.gigs-legend caption {
-  margin-left: 20px;
-  padding-left: 0;
-}
-table.gigs-legend th, table.gigs-legend td {
-  border: 1px solid #666;
-  padding: 3px 3px;
-}
-table.gigs-legend td {
-  background-color: #444;
-  padding: 3px 9px 3px 5px;
-}
-
-dl.translations dt {
-  margin: 0.5em 0 0 0;
-  font-style: italic;
-}
-
-dl.translations dd {
+  top: 0;
+  left: -3em;
   margin: 0;
+  font-size: 2em;
+  line-height: 1em;
+}
+ol.timeline li h2 {
+  position: absolute;
+  top: 0;
+  left: -4.4em;
+  width: 6em;
+  text-align: right;
+  margin: 0;
+  font-size: 1em;
+}
+ol.timeline li a, ol.timeline li h2 {
+  line-height: 1.5em;
+}
+ol.timeline li h3 {
+  font-size: 1.0em;
+  text-transform: none;
+  font-family: Georgia;
+  font-weight: bold;
+}
+ol.timeline p {
+  margin: 0 0 0.5em 0;
+}
+
+ol.archive > li > ol > li {
+  margin-bottom: 1em;
+}
+ol.projects > li > ol > li > ol > li {
+  margin-bottom: 1em;
+}
+
+
+.fat-footer {
+  margin: 30px 0 2px 0; /* 2px above footer */
+  font-size: 0.8em;
+  line-height: 2.0em;
+  padding: 12px 15px;
+  background-color: #333;
+  color: #bbb;
+  float: left;
+}
+.fat-footer .about {
+  float: left;
+  width: 49%;
+}
+.fat-footer .articles {
+  float: right;
+  width: 49%;
+}
+.fat-footer .about p {
+  display: inline;
+}
+.fat-footer .articles p {
+  display: inline;
+}
+.fat-footer .articles p.contact, .fat-footer .articles p.browse {
+  display: block;
+}
+.fat-footer .nav {
+  color: #666;
+}
+
+.footer {
+  clear: both;
+  margin-top: 30px;
+  border-top: 1px solid #333;
+  height: 2em;
+}
+.footer .quip {
+  margin-top: 0.5em;
+  float: right;
+  color: #444;
+  font-size: 0.9em;
+}
+
+.home h1 {
+  float: left;
+  margin: 0;
+}
+.home .meta {
+  margin-left: 280px;
 }
 
 /*
@@ -337,70 +252,26 @@ dl.translations dd {
     VibrantInk colours from Justin Palmer @ http://encytemedia.com
 */
 
- pre {
-   padding: 5px 8px;
-   overflow: auto;
-   width: 100%;
- }
- pre, code {
-   background-color: #222;
- }
+pre, code { background-color: #222; }
 
  /** RUBY / JAVASCRIPT **/
- code span.comment {
- 	color: #BD48B3;
- }
+code span.comment { color: #BD48B3; }
+code span.string { color: #99FF00; }
+code span.brackets { }
+code span.symbol { color: #6BCFF7; }
+code span.keywords { color: #FF8400; }
 
- code span.string {
- 	color: #99FF00;
- }
-
- code span.brackets {
-
- }
-
- code span.symbol {
- 	color: #6BCFF7;
- }
-
- code span.keywords {
- 	color: #FF8400;
- }
-
- /** HTML **/
- code.html span.tag {
- 	color: #fff;
- }
-
- code.html span.attribute {
- 	color: #FFD500;
- }
-
- code.html span.string {
- 	color: #99FF00;
- }
-
- code.html span.comment {
- 	color: #999;
- }
-
- code.html span.doctype {
- 	color: #D7FF80;
- }
+/** HTML **/
+code.html span.tag { color: #fff; }
+code.html span.attribute { color: #FFD500; }
+code.html span.string { color: #99FF00; }
+code.html span.comment { color: #999; }
+code.html span.doctype { color: #D7FF80; }
 
 /** CSS **/
-code.css .selectors {
-  color: #f60;
-}
-
-code.css .properties {
-  color: #995;
-}
+code.css .selectors { color: #f60; }
+code.css .properties { color: #995; }
 
 /** SHELL **/
-code.shell {
-  color: #999;
-}
-code.shell span.keywords {
- 	color: #fff;
-}
+code.shell { color: #999; }
+code.shell span.keywords { color: #fff; }

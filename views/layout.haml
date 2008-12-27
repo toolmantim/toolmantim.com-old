@@ -13,20 +13,20 @@
     %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
     %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
 
-    %script{:src => "/javascripts/codehighlighter/code_highlighter.js", :type => "text/javascript"}
+    
 
-  %body
+  %body{:class => @body_class}
     .content
-      %h1
-        %a{ :href => "/" }
-          %img{ :src => "/images/logo.png?1166739391", :height => "60", :alt => "toolmantim", :width => "228" }/
-
-      %ul.navigation
-        %li
-          %a{ :href => "/articles" } Articles
-        %li
-          %a{ :href => "http://tumble.toolmantim.com" } blog-a-log
-        %li
-          %a{ :href => "http://flickr.com/photos/toolmantim" } photos
-  
+      .header
+        %h1
+          %a{ :href => "/" }
+            %img{ :src => "/images/logo.png", :height => "60", :alt => "toolmantim", :width => "228" }/
       = yield
+      - unless @hide_fat_footer
+        .fat-footer
+          = partial :meta
+      .footer
+        .quip== Powered by #{Quip.random}
+
+    - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
+      %script{:src => "/javascripts/#{js}.js", :type => "text/javascript"}

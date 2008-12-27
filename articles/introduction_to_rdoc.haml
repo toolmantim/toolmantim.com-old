@@ -1,0 +1,153 @@
+-# title: Introduction to RDoc
+-# published: 2007-04-19
+-# updated: 2007-04-19
+
+:textile
+  In preparation for my RDoc preso at "the May Rails Oceania Sydney meetup":http://rubyonrails.com.au/past/2007/4/16/sydney_may_2007_meetup/ I'll be a doing a series of articles on RDoc and how to document Ruby, and Rails, code. This article is the first in the series.
+  
+  I'm still trying to come to terms with the best way to share the information in my Rails presentations to a wider audience; and rather than look like a blue wiggle, or have some downloadable version of the preso; I thought I'd just document things with some proper, well-written articles on the topic.
+  
+  I'd also like to think that those who see the articles before seeing the presentation will get a lot more out of the experience.
+  
+  So here we go...
+  
+  h3. What's RDoc?
+  
+  !http://www.toolmantim.com/images/blog/rdoc.gif(The most awesome RDoc logo)!
+  
+  You know the "Rails documention":http://api.rubyonrails.org/, the "ruby-doc.org API docs":http://ruby-doc.org/#api, that crazy "caboo.se edge rails docs thang":http://caboo.se/doc.html and "why's crazy lookin Camping docs":http://camping.rubyforge.org/files/README.html? They're all the result of RDoc: the defacto Ruby documentation generation tool.
+  
+  As a truely pragmatic programmer should, <a href="http://en.wikipedia.org/wiki/Dave_Thomas_(programmer)">Dave Thomas</a> (yes, that "Pickaxe":http://www.pragmaticprogrammer.com/titles/ruby/ guy) crafted RDoc back in 2001 when Andrew and he were beginning to teach and publish Ruby learning material, and the community were in need of a Ruby documentation tool. According to "wikipedia's RDoc page":http://en.wikipedia.org/wiki/RDoc:
+  
+  <blockquote>
+  <p>[RDoc] is the embedded documentation generator for the Ruby programming language. It analyzes the Ruby source code, generating a structured collection of pages for Ruby objects and methods. Code comments can be added in a natural style.</p>
+  <p>RDoc is included as part of the Ruby core distribution.</p>
+  <p>RDoc is useful even if the target source code does not contain explicit comments. RDoc will still parse the classes, modules, and methods, and list them in the generated API files.</p>
+  <p>RDoc also provides the engine for creating Ruby ri data files. ri is (more or less) Ruby's version of man pages, serving up API information from the command line.</p>
+  </blockquote>
+  
+  h3. RDoc's grouse features
+  
+  "!http://farm1.static.flickr.com/2/1943212_5f9f059a42_m.jpg(Red Grouse by Roger B.)!":http://flickr.com/photos/roger/1943212/
+  
+  * The command-line documentation generation tool, @rdoc@
+  * The command-line documentation search tool, @ri@
+  * "A nicely documented Ruby library":http://www.ruby-doc.org/stdlib/libdoc/rdoc/rdoc/index.html for programatically invoking doc generation, or playing with bits to get access to all the same info used to generate docs
+  * "RDoc::usage":http://www.ruby-doc.org/core/files/lib/rdoc/usage_rb.html, for command-line tools needing to output usage information
+  * Code diagrams via Graphviz integration
+  * Nice layered design with sensible abstractions, allowing "simple customisation of page output":http://www.ruby-doc.org/core/classes/RDoc/Page.html and other fun bits.
+  
+  h3. Our first documented Ruby class
+  
+  Installing RDoc is simple: you don't have to. RDoc is packaged with Ruby so you can start using it today.
+  
+  Let's make our first documented Ruby class. Save the following into @my_first_documented_class.rb@:
+  
+  <pre><code class="ruby">
+  # An example class
+  class MyFirstDocumentedClass
+    # A public method
+    def a_public_method
+    end
+  end
+  </code></pre>
+  
+  You'll then want to run @rdoc@ on it:
+  
+  <pre><code>
+  $ rdoc my_first_documented_class.rb 
+  
+         my_first_documented_class.rb: c.
+  Generating HTML...
+  
+  Files:   1
+  Classes: 1
+  Modules: 0
+  Methods: 1
+  Elapsed: 0.045s
+  </code></pre>
+  
+  Congratulations! You've generated your first Ruby documentation by hand.
+  
+  You'll notice a @doc@ directory has been generated, with an @index.html@ file inside containing your faux-western-buddhist, life-changing code comments.
+  
+  h3. Start playing
+  
+  <a href="http://www.flickr.com/photos/toolmantim/72379419/"><img src="http://farm1.static.flickr.com/34/72379419_850e9039a5_m.jpg" width="171" height="240" alt="Mah sandpit" /></a>
+  
+  All Rails apps contain some pre-baked RDoc integration in the form of a @doc@ directory, a @doc/README_FOR_APP@ "main" doc file and some Rake tasks, which you can see below:
+  
+  <pre><code>
+  $ rake -T doc
+  rake doc:app              # Build the app HTML Files
+  rake doc:clobber_app      # Remove rdoc products
+  rake doc:clobber_plugins  # Remove plugin documentation
+  rake doc:clobber_rails    # Remove rdoc products
+  rake doc:plugins          # Generate documation for all installed plugins
+  rake doc:rails            # Build the rails HTML Files
+  rake doc:reapp            # Force a rebuild of the RDOC files
+  rake doc:rerails          # Force a rebuild of the RDOC files
+  </code></pre>
+  
+  To generate documentation for your Rails application, simply execute @rake doc:app@, open @doc/app/index.html@ and bask in your freshly baked, and most probably barren, documentation.
+  
+  h3. Where from here?
+  
+  Look out for a more thorough intro into the conventions of documenting your classes, methods and modules; the various types of formatting you can use in your documentation; and, creating your own funky templates.
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_556
+      %p.author
+        rluv
+      .body
+        :textile
+          the allison template is also worth noting 
+          
+          http://blog.evanweaver.com/pages/allison-rdoc-template 
+    %li#comment_557
+      %p.author
+        Scott H.
+      .body
+        :textile
+          Nice work Timbo, who knows, after reading this series of articles and seeing the talk I may be motivated enough to actually document something.
+    %li#comment_558
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          rluv: thanks! I was planning on giving that a plug in the next article or two. Evan's done a great job with it.
+          
+          scott: go on, I dare you to do it beforehand... now even!
+    %li#comment_559
+      %p.author
+        %a{:href => 'http://teamaskins.net'} Ben Askins
+      .body
+        :textile
+          Nice intro Tim.  Looking forward to your talk.  I'd like to see some discussion on creating/using Rdoc templates to pretty up the Rdoc output a little.  Do you think you could cover that?
+    %li#comment_560
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Bed: Does "creating your own funky templates" fit the bill?
+    %li#comment_561
+      %p.author
+        %a{:href => 'http://teamaskins.net'} Ben Askins
+      .body
+        :textile
+          heh, yeah - that's learn me not to read the closing lines
+    %li#comment_563
+      %p.author
+        %a{:href => 'http://www.themaninblue.com/'} Cameron Adams
+      .body
+        :textile
+          That RDoc logo is rockin' my world :D
+    %li#comment_1415
+      %p.author
+        James Turnbull
+      .body
+        :textile
+          Be great if RDoc outputted Rdoc::usage as nroff.  That make it perfect.

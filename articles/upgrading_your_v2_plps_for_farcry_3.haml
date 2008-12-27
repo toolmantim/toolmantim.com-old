@@ -1,0 +1,33 @@
+-# title: Upgrading your v2 PLPs for Farcry 3
+-# published: 2006-02-11
+
+:textile
+  bq. "I'm not writing shitty code; I'm creating refactoring opportunities." "[conaldtrah]":http://blog.lavalamp.ca/articles/2006/02/10/always-the-optimist
+  
+  !>http://static.flickr.com/24/62581645_6bd4ca4167_m.jpg!
+  
+  On the farcry-dev mailing list M Wheeler "recently asked":http://www.nabble.com/Funny-CSS-happenings-when-upgrade-to-Farcy-3-t1088533c621.html  how to get his custom admins looking nice in farcry 3 and, as Gav and I are currently converting the Board of Studies' "largest farcry site":http://arc.boardofstudies.nsw.edu.au/ over to "farcry 3":http://farcry.daemon.com.au/go/downloads/release-notes/farcry-3-0,  I thought I'd document the process we used for future hackers like Mr Wheeler.
+  
+  Firstly I must say; there's no simple answer on how to do this, so I'm just going to run through what I did.
+  
+  To begin the process of moving to the v3 look and feel I took a deep breath, checked my flickr contacts one last time, and started with the following:
+  # Looked at the new core type edit.cfm files
+  # Made our edit.cfm files look like theirs by manual compare and merge
+  # Refactored all the garbage in edit.cfm after @<cfif isDefined("bComplete") and bComplete>@ into common includes
+  
+  I then started editing the PLP steps themselves to use the new @widget@ custom tags.
+  
+  Here was when I smelt the pungent aroma of redundant code -- we'd rarely modified the core plp steps (such as body.cfm) and had just made a copy of the core file in our custom types' _plpEdit directory. *Bad bad us!*
+  
+  !http://static.flickr.com/18/69184054_ebc44e195c_m.jpg!
+  
+  So I took out my 12 gauge, loaded one in each barrel and went on a code massacre, and ended up with most custom types having nothing more than their own edit.cfm files. No _plpEdit directories. No copied core files. This was a beer worthy moment.
+  
+  If some of your plp steps are straight copies of the core code then just delete them and instead of referring to your local copy:
+  <pre><code><widget:plpstep name="body" template="body.cfm"></code></pre>
+  refer to the core copy using the stepDir attribute:
+  <pre><code><widget:plpstep name="body" template="body.cfm" stepDir="/farcry/farcry_core/packages/types/_dmhtml/plpEdit"></code></pre>
+  
+  The rest of the process is just a matter of getting your hands dirty, so I'll leave you here on this somewhat relevant quote:
+  
+  bq. Programming is looking at a feature request in the morning, thinking "I can do that in one line of code", and then six hours later having refactored the rest of the codebase sufficiently that you can implement the feature... in one line of code. "[the fishbowl]":http://fishbowl.pastiche.org/2005/09/27/programming_is

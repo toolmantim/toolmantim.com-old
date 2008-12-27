@@ -1,0 +1,60 @@
+-# title: Full-blown APIs with respond_to?
+-# published: 2007-02-26
+
+:textile
+  From "my last comment on the attributes=nil post":http://toolmantim.com/article/2007/2/14/ar_base_attributes_nil#comment_493:
+  <blockquote><p>Whilst I love repond_to, does anybody out there actually provide their public API by just pointing the world at their controllers?</p><p>Can you provide useful, robust and human error handling just using this, and is there a perfect 1:1 mapping between browser request params or do you end up having to mung params and litter if @request.api?@ around various actions?</p>
+  </blockquote>
+  
+  Not to mention a few others; API versioning, reflection, and differences in caching.
+  
+  Don't get me wrong, I love @respond_to@, but it _is_ most useful when you're assuming the controller part acts exactly the same regardless of how the request arrived.
+  
+  Those who've implemented a complete, documented and supported API for their Rails app: did you route through your existing controllers and use @respond_to@, or did you have separate controllers and make sure your model was sexy enough that the controllers were trivial anyways?
+
+#comments.comments
+  %h3 Comments
+  <p class='old-comments'>New comments are no longer being accepted.</p>
+  %ol
+    %li#comment_497
+      %p.author
+        %a{:href => 'http://www.fngtps.com'} Thijs van der Vossen
+      .body
+        :textile
+          Existing controllers and respond_to, no separate controllers for https://score.boomtestuitgevers.nl/api.html
+    %li#comment_498
+      %p.author
+        %a{:href => 'http://scottraymond.net/'} Scott Raymond
+      .body
+        :textile
+          At Blinksale we do it that way -- controllers simply represent resources, and respond_to differentiates between representations. (http://www.blinksale.com/api)
+    %li#comment_499
+      %p.author
+        %a{:href => 'http://labnotes.org'} Assaf
+      .body
+        :textile
+          Existing controllers and actions.
+          
+          (The project is not publicly available, so I can't point to it)
+    %li#comment_500
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          thanks guys. Very interesting to hear feedback from real apps, and that Blinksale ruby client is sweet. Don't believe I hadn't seen it until now.
+          
+          I'm assuming the @respond_to@ it's worked well for the three of you?
+          
+          Secondly, to generate the XML responses did you find the standard @to_xml@ useful enough (with @:only@ and @:include@) or did you have to override @to_xml@ / use your own builders?
+    %li#comment_503
+      %p.author
+        %a{:href => 'http://www.fngtps.com'} Thijs van der Vossen
+      .body
+        :textile
+          In this application 2 out of 18 models override to_xml.
+    %li#comment_504
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Cheers Thijs! v. interesting...

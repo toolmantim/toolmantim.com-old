@@ -1,0 +1,27 @@
+-# title: Resource feeder rocks
+-# published: 2006-09-18
+
+:textile
+  The new "resource feeder plugin":http://dev.rubyonrails.org/svn/rails/plugins/resource_feeder/ works a treat:
+  
+  <pre><code>
+    def index
+      feed_options = {
+        :feed => {
+          :title       => "Comments on '\#{@tag}'",
+          :description => "Comments made by Web Connections users on the tag '\#{@tag}'",
+          :link        => tag_url(@tag),
+          :language    => 'en-au'
+        },
+        :item => {
+          :title => :feed_title,
+          :description => :body_html,
+          :link => lambda { |r| tag_url(:id => @tag, :anchor => "comment-\#{r.id}") }
+        }
+      }
+      respond_to do |format|
+        format.rss  { render_rss_feed_for @tag.messages, feed_options }
+        format.atom { render_atom_feed_for @tag.messages, feed_options }
+      end
+    end
+  </code></pre>

@@ -1,0 +1,20 @@
+-# title: S5 on Rails: A simple presentation application
+-# published: 2006-04-21
+
+:textile
+  !http://static.flickr.com/52/132346074_56dc6f509f_o.png(Screenshot of the presentation and code)!
+  
+  I was recently asked by "Jan Brasna":http://www.janbrasna.com/ if I had a copy of the Ajax preso I gave at Web Essentials last year.
+  
+  Embarrassingly the online version, which existed at we05-ajax-preso.aviditybytes.com, has been MIA(Missing in Action) since I moved all our sites over to wonderful guys at "segpub":http://segpub.net.
+  
+  It was designed to be viewed only on Safari at certain resolutions, so I've decided not to get the live demo up and instead to update the code in our SVN(Subversion). The code is free to "steal and plunder":http://svn.aviditybytes.com/presentations/we05_ajax_presentation/LICENSE_CODE and the presentation content is "Creative Commons":http://svn.aviditybytes.com/presentations/we05_ajax_presentation/LICENSE_SLIDES.
+  
+  If you've Ruby installed (1.8.2+, and no you don't need Rails) and "an SVN client":http://subversion.tigris.org/links.html#clients you can checkout the presentation from:
+  http://svn.aviditybytes.com/presentations/we05_ajax_presentation/
+  
+  The S5 page generation is powered by "a simple YAML file":http://svn.aviditybytes.com/presentations/we05_ajax_presentation/presentation.yml and the slides themselves are just "Rails views":http://svn.aviditybytes.com/presentations/we05_ajax_presentation/app/views/slides/ (well, partials actually).
+  
+  Though powered by an aged and slightly modified Rails (0.13.1, modified to work with Ruby 1.8.4+) it's still useful for anybody looking to see an example of a dead-simple, database-less Rails application.
+  
+  To run the application fire up your terminal/prompt, type @ruby script/server@ in the application's directory and point your favourite browser (Safari's most pretty) to http://127.0.0.1:3000/
