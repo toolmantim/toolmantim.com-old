@@ -1,0 +1,4 @@
+%ol
+  - for article in @articles.sort
+    %li
+      %a{:href => "/articles/#{article.slug}"}= article.title
