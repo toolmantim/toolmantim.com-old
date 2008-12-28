@@ -6,7 +6,7 @@
   
   After getting a chance to play with the new user interface I must say I'm totally unimpressed. It seems a lot of the initial subtle design decisions by Ryan Singer and Jason Fried have been lost, forgotten or simply compromised in favour of a super-simple back-end implementation.
   
-  h3. Creating a new list
+  h2. Creating a new list
   
   Take for example the task of creating a new list and adding a few items:
   
@@ -30,7 +30,7 @@
   
   I'll ignore point 3 as a simple bug, though a pretty glaring one considering it eliminates keyboard-only input and would be an oft-used and highly repetitive action.
   
-  h3. Nonjax: AKA Synchronous Ajax
+  h2. Nonjax: AKA Synchronous Ajax
   
   Why force the user to wait for a server roundtrip to create a new list? Why force the user to wait when adding a new list item? And no, I won't accept the answer: "but we saved 500 lines of code by making everything powered by RJS" -- that is a simple engineering problem.
   
@@ -60,7 +60,7 @@
   
   Each time you have to confirm the popup and then waiting for a HTTP response--clunky! Not to mention good "'ol fittsy":http://en.wikipedia.org/wiki/Fitts'_law: on a 24" monitor with a browser that centres popups it makes for a lot of mouse cruising between the item's trash can icon and the "OK" button in the dialog box.
   
-  h3. Facebook Get It
+  h2. Facebook Get It
   
   The Facebook designers seem to be creating much more efficient UI in the async/Ajax department. Take for example marking messages read or unread:
   
@@ -96,11 +96,11 @@
   
   When deleting a message they remove it instantaneously and then updated the other bits of the UI with a roundtrip to the server. You'll also notice there's bug in the count at the bottom of the message list. You'll also notice the confirmation dialog is position near where the mouse hit the "Delete" link.
   
-  h3. 37signals going the way of the UI dodo
+  h2. 37signals going the way of the UI dodo
   
   With only two UI brains and a bunch of Rails and Javascript engineers that are obviously making design decisions I don't like the odds of 37signals being able to produce the same polish that made their apps a hallmark of web user interface design.
   
-  h3. Speedy Rails development: a blessing or curse?
+  h2. Speedy Rails development: a blessing or curse?
   
   I always loved the fact that Rails was the perfect "magic behind the attractive and well designed curtains" (think Ryan Singer and Jason Fried handing DHH a well-designed prototype to bring to life) but it seems the majority of Rails applications launched in the past few years were driven by back-end design rather than front-end design, resulting in ugly interfaces and inefficient interactions.
   

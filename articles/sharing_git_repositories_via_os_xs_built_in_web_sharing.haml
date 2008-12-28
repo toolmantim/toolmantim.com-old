@@ -10,7 +10,7 @@
   
   If you are going offline it may also be worth perusing fellow railscamper <a href="http://flickr.com/photos/toolmantim/2078884703/in/set-72157603347852310/">Dr Nic</a>'s article showing us "how to mirror an SVN repo in git":http://drnicwilliams.com/2007/11/22/going-offline-without-your-favourite-subversion-repository/.
   
-  h3. Enable web sharing (i.e. Apache 2)
+  h2. Enable web sharing (i.e. Apache 2)
   
   Firstly make sure web sharing is enabled (System Preferences > Sharing). 
    
@@ -37,7 +37,7 @@
   
   There's little point progressing unless you get this working.
   
-  h3. Create the public repository
+  h2. Create the public repository
   
   Initialising the public repository is exactly the same as "setting up a new remote repository":http://toolmantim.com/article/2007/12/5/setting_up_a_new_remote_git_repository with the addition of a simple step.
   
@@ -56,7 +56,7 @@
   $ git remote add public /Users/tlucas/www/git/myapp.git
   $ git push public master</code></pre>
   
-  h3. Enable sharing via HTTP
+  h2. Enable sharing via HTTP
   
   "Deep within the git user manual":http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#exporting-via-http  are the two operations you'll need to do to your public repository so that other people are able to access it via HTTP:
   
@@ -64,7 +64,7 @@
   $ git --bare update-server-info
   $ chmod a+x hooks/post-update</code></pre>
   
-  h3. Test the public repository from another machine
+  h2. Test the public repository from another machine
   
   Jump onto another machine and have a stab at cloning the repository via HTTP.
   

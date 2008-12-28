@@ -16,7 +16,7 @@
   
   <a href="http://www.flickr.com/photos/toolmantim/135301539/"><img src="http://static.flickr.com/44/135301539_ea790e7112_m.jpg" width="240" height="160" alt="Life on Lido, II" /></a>
   
-  h3. Apply Capistrano
+  h2. Apply Capistrano
   
   Change into your application's directory and create the capistrano files:
   
@@ -40,7 +40,7 @@
   
   <a href="http://www.flickr.com/photos/toolmantim/127112515/"><img src="http://static.flickr.com/48/127112515_e842063b66_m.jpg" width="240" height="160" alt="Étagère" /></a>
   
-  h3. Customise the recipe
+  h2. Customise the recipe
   
   Open up @config/deploy.rb@ and have a look around. Look good? Replace the contents of the file with the contents of my "Segpub Capistrano Family Recipe":http://svn.aviditybytes.com/rails/libs/segpub_capistrano_recipe/deploy.rb.
   
@@ -52,7 +52,7 @@
   
   <a href="http://www.flickr.com/photos/toolmantim/127114137/"><img src="http://static.flickr.com/54/127114137_ae8e76c2b1_m.jpg" width="240" height="160" alt="" /></a>
   
-  h3. Initial setup of your Segpub account
+  h2. Initial setup of your Segpub account
   
   Execute setup on your local machine:
   
@@ -64,7 +64,7 @@
   
   <a href="http://www.flickr.com/photos/toolmantim/120672458/"><img src="http://static.flickr.com/46/120672458_226ca00411_m.jpg" width="240" height="161" alt="Colourful Ducky" /></a>
   
-  h3. Deploy your application
+  h2. Deploy your application
   
   And the final step, execute the following on your machine:
   
@@ -86,7 +86,7 @@
   
   <a href="http://www.flickr.com/photos/toolmantim/120672334/"><img src="http://static.flickr.com/44/120672334_3c66c67320_m.jpg" width="240" height="160" alt="" /></a>
   
-  h3. Hooking up resources not stored in SVN
+  h2. Hooking up resources not stored in SVN
   
   To get my app working I'll need to ssh in and manually create my @database.yml@ in the @shared@ directory. I'll also need to add an @after_update_code@ task to my deployment recipe which will create a symlink from the new deployment to the shared file.
   
@@ -102,7 +102,7 @@
   
   This exact task is included in my "Segpub Capistrano Family Recipe":http://svn.aviditybytes.com/rails/libs/segpub_capistrano_recipe/deploy.rb, so go steal it from there if you need.
   
-  h3. Further tweaking
+  h2. Further tweaking
   
   It's a good idea to "set up a cron job to clear your sessions":http://www.realityforge.org/articles/2006/03/01/removing-stale-rails-sessions every so often.
   

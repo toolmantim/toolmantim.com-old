@@ -21,7 +21,7 @@
   
   Notice no need for @unix-odbc@? OSX ships with ODBC and an ODBC admin tool to make our lives just that little bit easier.
   
-  h3. Install Ruby-DBI with FreeTDS
+  h2. Install Ruby-DBI with FreeTDS
   
   Make sure you've synced with the latest macports tree:
   
@@ -35,13 +35,13 @@
   
   You could also add @+dbd_mysql@ and @+dbd_pg@ if you like.
   
-  h3. Install FreeTDS
+  h2. Install FreeTDS
   
   @$ sudo port install freetds@
   
   easy peasy.
   
-  h3. Test FreeTDS
+  h2. Test FreeTDS
   
   We need to test that we can connect to the SQL server using FreeTDS's diagnostic tool, @tsql@ tool. We must make sure this works before proceeding with modifying configs and setting up ODBC.
   
@@ -74,7 +74,7 @@
   
   Woohoo! Now we're talkin.
   
-  h3. Configure FreeTDS
+  h2. Configure FreeTDS
   
   Now we've connected to SQL server using @tsql@ we add a server entry to the FreeTDS config file, which can be found at @/opt/local/etc/freetds/freetds.conf@
   
@@ -93,7 +93,7 @@
   1> 
   </code></pre>
   
-  h3. Add the FreeTDS ODBC driver
+  h2. Add the FreeTDS ODBC driver
   
   OS X ships with a small but handy tool ODBC Administrator, found in /Applications/Utilities, which you can use to manage your ODBC settings. Fire it up and go to the Drivers tab. Add the TDS driver with the following settings:
   
@@ -104,14 +104,14 @@
   Define as:   System
   </pre>
   
-  h3. Create an ODBC datasource
+  h2. Create an ODBC datasource
   
   Add a new User DSN In ODBC Administrator  with a name of somesqlserver (our Rails config will refer to this DSN) and the following Key/Values:
   
   <pre>ServerName: somesqlserver (the name used in the FreeTDS config file)
   Database: jobfutures (change to suit)</pre>
   
-  h3. Test the ODBC connection
+  h2. Test the ODBC connection
   
   Firstly we test using the @iodbctest@ tool:
   
@@ -142,7 +142,7 @@
   
   Woohoo! Only one tiny step between us and world SQLServer domination.
   
-  h3. Configure Rails
+  h2. Configure Rails
   
   All that's left is to modify our @database.yml@ to refer to our shiny new ODBC DSN:
   

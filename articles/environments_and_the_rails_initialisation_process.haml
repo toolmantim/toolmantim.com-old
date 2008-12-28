@@ -15,7 +15,7 @@
   
   Keep in mind that i'm only describing the default versions of the Rails generated <code>environment.rb</code> and <code>boot.rb</code>. You could, if you wanted, customise these however you like. 
   
-  h3. First step in loading your Rails application
+  h2. First step in loading your Rails application
   
   The first step to your Rails application being loaded is the "requiring" of your <code>environment.rb</code> file. In fact, this is the first of 3 lines that makes up the FCGI dispatcher, <code>dispatch.fcgi</code>:
   
@@ -38,7 +38,7 @@
   end
   </code></pre>
   
-  h3. boot.rb
+  h2. boot.rb
   
   The first thing your environment.rb does is load <code>boot.rb</code>, which does two things:
   
@@ -47,7 +47,7 @@
   
   That's it for <code>boot.rb</code>.
   
-  h3. Rails::Initializer.run and per-environment configs
+  h2. Rails::Initializer.run and per-environment configs
   
   The second thing your environment.rb does is execute <code>Rails::Initializer.run</code>.
   
@@ -85,7 +85,7 @@
   
   The answer: <code>Configuration#after_initialize</code>.
   
-  h3. config.after_initialize
+  h2. config.after_initialize
   
   From the rdocs:
   
@@ -95,7 +95,7 @@
   
   I've moved putting all app-specific calls in my environment files into <code>after_initialize</code> blocks for consistency.
   
-  h3. config.to_prepare
+  h2. config.to_prepare
   
   The <code>Dispatcher#to_prepare</code> method is similar to <code>Configuration#after_initialize</code>, but is used to execute code before each request, rather than on application initialization.
   
@@ -117,13 +117,13 @@
   end
   </code></pre>
   
-  h3. Environment vs Model
+  h2. Environment vs Model
   
   If you've hit a wall trying to do something in your environment, maybe the behaviour should really belong in your model? Environment's shouldn't really execute a whole bunch of code, they're really just meant to set up your application so it can be invoked (via the console, via script/runner, via the dispatcher or otherwise).
   
   See my previous article "avoid DB calls when setting up your environment":http://toolmantim.com/article/2006/12/9/avoid_db_calls_when_setting_up_your_environment for a more concrete example of trying to do too much in your environment initialisation.
   
-  h3. So where are all the hooks?
+  h2. So where are all the hooks?
   
   All the places you have a chance to initialise code when setting up your environment, in order of execution:
   
@@ -137,7 +137,7 @@
   
   and also the less used, but still notable, <code>config.to_prepare</code>, which gets executed by the Dispatcher on a per-request basis.
   
-  h3. Which one to use?
+  h2. Which one to use?
   
   Naturally, the next question will be "I have situation X. Where should I do my configuration?" Unfortunately there's no easy answer, and all I can say is "it depends."
   

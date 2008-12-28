@@ -7,7 +7,7 @@
   
   Unfortunately I hadn't had a chance to check it out before my <a href="http://faces.rubyonrails.com.au/groups/sydney/meetings/2008-10-08/presos/2">Cucumbers and Factory Girls presentation last month at RORO Sydney</a> so I couldn't say much about it, but I've just started using for the 2009 revision of the "LGSA Cultural Awards":http://culturalawards.lgsa.org.au/ website.
   
-  h3. What's Machinist?
+  h2. What's Machinist?
   
   Equipped with a <code>Lathe</code>, Machinist allows you to craft beautifully valid and well-populated ActiveRecord models.
   
@@ -15,7 +15,7 @@
   
   Machinist also includes Sham: a class allowing to you to create repeatable dummy data for your text fixtures. Sham helps to remove magic strings whilst ensuring your test data is deterministic.
   
-  h3. Installing Machinist
+  h2. Installing Machinist
   
   It's a Rails plugin, so simply:
   
@@ -29,7 +29,7 @@
   
   <pre><code class="ruby">require File.join(RAILS_ROOT, 'spec', 'blueprint')</code></pre>
   
-  h3. Defining your blueprints
+  h2. Defining your blueprints
   
   Machinist extends <code>ActiveRecord::Base</code> with the class methods <code>blueprint</code>, for defining the blueprint:
   
@@ -50,7 +50,7 @@
   post.title #=> "Hello world"
   </code></pre>
   
-  h3. Sham on you!
+  h2. Sham on you!
   
   Machinist includes Sham: a class allowing to you to create repeatable dummy data for your text fixtures.
   
@@ -96,7 +96,7 @@
   end
   </code></pre>
   
-  h3. Using them with specs and features
+  h2. Using them with specs and features
   
   To use your blueprints in your specs simply call <code>make</code>:
   
@@ -117,7 +117,7 @@
   end
   </code></pre>
   
-  h3. How does it compare to FactoryGirl?
+  h2. How does it compare to FactoryGirl?
   
   Machinist's syntax is definitely cleaner. The equivalent blueprint in FactoryGirl looks like:
   
@@ -166,7 +166,7 @@
   end
   </code></pre>
   
-  h3. Contribute or follow development
+  h2. Contribute or follow development
   
   The "machinist github repo":http://github.com/notahat/machinist is the best place to start.
   

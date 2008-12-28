@@ -33,28 +33,28 @@
   //open the window in default size.
   
   
-  		window.resizeTo(816 + 8 ,611 + 53)
-  	
-  	window.moveTo(0,0)
+      window.resizeTo(816 + 8 ,611 + 53)
+    
+    window.moveTo(0,0)
   
   
   //Vaibhav [28-Mar-2005] End
   
     //IE 4 enhancement - Joe Wong at 22 Oct 2002
   
-  		  //Vaibhav	[28-Mar-2005] Window name changed
+        //Vaibhav  [28-Mar-2005] Window name changed
             ibankWin = window.open("index.asp?redirected=True&JavaVendor=SUN&ClientPlatform=MacOSX&JVMVersion=&document=/xml/bank.xml&browser=Safari&ApplType=MacNS&cookies=True&size=&demo=&route=IBS&Version=1&IDMError=&card=","New","'menubar=no,location=no,menus=no,resizable=1,scrollbars,status,left=0,top=0,height=" + "611" + ",width=" + "816" + "'");
-  	        if (ibankWin.opener == null)
-  	        {
-  	          ibankWin.opener = window;
-  		        ibankWin.opener.name = "contentFrame";
-  	        }
+            if (ibankWin.opener == null)
+            {
+              ibankWin.opener = window;
+              ibankWin.opener.name = "contentFrame";
+            }
   
   
   if(!window.opener)
   {
-  	window.opener='x'; 
-  	window.close();
+    window.opener='x'; 
+    window.close();
   }
   
   

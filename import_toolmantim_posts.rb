@@ -17,7 +17,15 @@ Article.eager(:comments).filter(:category_id => 1).all.each do |article|
   f.puts "-# updated: #{article[:modified_at].strftime("%Y-%m-%d")}" if article[:modified_at]
   f.puts 
   f.puts ":textile"
-  f.puts article[:body].gsub(/^/,"  ").gsub('#{','\#{')
+  body = article[:body]
+  body.gsub!(/^/,"  ")
+  body.gsub!('#{','\#{')
+  body.gsub!("h3. ", "h2. ")
+  body.gsub!("h4. ", "h3. ")
+  # Fix up headings
+  body.gsub!("h3. ", "h2. ") if body.include?("h3. ") && !body.include?("h2. ") 
+  body.gsub!("\t", "  ")
+  f.puts body
   # unless article.comments.empty?
   #   f.puts
   #   f.puts "#archived-comments"

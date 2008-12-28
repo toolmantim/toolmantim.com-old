@@ -16,7 +16,7 @@
   
   <strong class="update">2nd update:</strong> It's @active_support@, not @activesupport@!
   
-  h3. Creatin tha module
+  h2. Creatin tha module
   
   Firstly, we'll set up a new module to store our config, let's call it @MyAppConfig@ and it can live in @RAILS_ROOT/config/my_app_config.rb@. In it, we'll create a standard Ruby module:
   
@@ -27,7 +27,7 @@
   end
   </code></pre>
   
-  h3. Hookin it in
+  h2. Hookin it in
   
   To allow each environment to customise the config we'll want to set this up before @Rails::Initializer#run@ is called within @environment.rb@ (see my previous article "Environments and the Rails Initialisation Process":http://toolmantim.com/article/2006/12/27/ for more info).
   
@@ -71,7 +71,7 @@
   <pre><code>irb> MyApp::Config.paypal_host
   => "https://www.sandbox.paypal.com"</code></pre>
   
-  h3. Sprinklin the sexy
+  h2. Sprinklin the sexy
   
   Ok, so far it's not looking too pretty is it? Don't worry... good 'ol ActiveSupport ships with a nice little helper, @mattr_accessor@, which provides exactly the same functionality as Ruby's @attr_accessor@ but for modules. Unfortunately the author chose for it a life of seclusion,  with a tattoo of @:nodoc:@, but that's never stopped us brave venturers before.
   
@@ -88,7 +88,7 @@
   
   So now we have our @environment.rb@ requiring this module and we can access it anywhere in our Rails application with a simple <code class="ruby">MyApp::Config. paypal_host</code>.
   
-  h3. Overidin the defaults
+  h2. Overidin the defaults
   
   To override config vars in different environments you can simply call its @mattr_writer@. For example, we'll want to use the live paypal server in production, so we add the following line to the bottom of @RAILS_ROOT/config/environments/production.rb@:
   
@@ -96,7 +96,7 @@
   
   and voila! That's all there is to it.
   
-  h3. So you wanna get funky
+  h2. So you wanna get funky
   
   ...and here's some exercises for the reader (all of which are a purely academic pursuit I'd most probably not bother using):
   

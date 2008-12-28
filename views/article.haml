@@ -1,29 +1,29 @@
 .article
-  %h1
-    %a{:href => article_path(@article)}= @article.title
+  .about
+    %h1
+      %a{:href => article_path(@article)}= @article.title
 
-  %p.published
-    %em
+    %p.published
       Published
       = @article.published.strftime("%B %d, %Y")
 
-  = @article_html
-
-  %h1 Feedback and discussion
+  .content= @article_html
 
   .feedback
+    %h1 Feedback and discussion
     %p
-      For errors, updates or feedback please shoot an email to <span class="email">t.lucas@#{thisdomain}</span>. Discussion will return shortly.
+      For errors, updates or feedback please shoot an email to <span class="email">t.lucas@#{thisdomain}</span>. Discussion, along with the old comments, will return shortly.
 
   - previous_article, next_article = previous_article(@article), next_article(@article)
 
   - if (previous_article || next_article)
-    %h1 More reading&hellip;
-    - if previous_article
-      %p
-        Previously:
-        %a{:href => article_path(previous_article)}== #{previous_article.title}
-    - if next_article
-      %p
-        Next up:
-        %a{:href => article_path(next_article)}== #{next_article.title}
+    .more-reading
+      %h1 More reading&hellip;
+      - if previous_article
+        %p
+          Previously:
+          %a{:href => article_path(previous_article)}== #{previous_article.title}
+      - if next_article
+        %p
+          Next up:
+          %a{:href => article_path(next_article)}== #{next_article.title}

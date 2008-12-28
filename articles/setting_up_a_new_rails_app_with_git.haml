@@ -8,7 +8,7 @@
   
   I'm assuming you've managed to compile and install the 5TB of dependencies required to install git (@sudo port install git-core@). You'll also want to set your name and email in the global config (@git config --global user.name "Your Name"; git config --global user.email "your@email.com"@).
   
-  h3. For the impatient
+  h2. For the impatient
   
   Create a top, project-level @.gitignore@ file containing:
   
@@ -30,7 +30,7 @@
   
   Read on if you want a step-by-step guide as to what's going on.
   
-  h3. Creating a new edge rails app
+  h2. Creating a new edge rails app
   
   Firstly, let's create a brand-spanking-new Rails 2.0 app called YeOldGitYou from rails trunk.
   
@@ -115,7 +115,7 @@
         create  log/development.log
         create  log/test.log</code></pre>
   
-  h3. Creating a new git repository
+  h2. Creating a new git repository
   
   Git repository's are a-dime-a-dozen. There's no such thing as a working copy, everything's just a git repository containing copies of other git repositories. When you develop locally you're committing to a local git repository, stored in the @.git@ directory of your project.
   
@@ -135,18 +135,18 @@
   # Untracked files:
   #   (use "git add <file>..." to include in what will be committed)
   #
-  #	README
-  #	Rakefile
-  #	app/
-  #	config/
-  #	doc/
-  #	log/
-  #	public/
-  #	script/
-  #	test/
+  #  README
+  #  Rakefile
+  #  app/
+  #  config/
+  #  doc/
+  #  log/
+  #  public/
+  #  script/
+  #  test/
   nothing added to commit but untracked files present (use "git add" to track)</code></pre>
   
-  h3. Ignoring log files
+  h2. Ignoring log files
   
   Firstly let's ignore all log files. Create a @.gitignore@ file:
   
@@ -166,15 +166,15 @@
   # Untracked files:
   #   (use "git add <file>..." to include in what will be committed)
   #
-  #	.gitignore
-  #	README
-  #	Rakefile
-  #	app/
-  #	config/
-  #	doc/
-  #	public/
-  #	script/
-  #	test/
+  #  .gitignore
+  #  README
+  #  Rakefile
+  #  app/
+  #  config/
+  #  doc/
+  #  public/
+  #  script/
+  #  test/
   nothing added to commit but untracked files present (use "git add" to track)</code></pre>
   
   Notice anything different? Well, there's our newly created .gitignore file. You'll also notice the log directory is completely gone. This is bad as the Rails logger will throw a big error when it tries to create your @development.log@ when you boot up the server. So why has the log directory disappeared?
@@ -197,23 +197,23 @@
   # Untracked files:
   #   (use "git add <file>..." to include in what will be committed)
   #
-  #	.gitignore
-  #	README
-  #	Rakefile
-  #	app/
-  #	config/
-  #	doc/
-  #	log/
-  #	public/
-  #	script/
-  #	test/
+  #  .gitignore
+  #  README
+  #  Rakefile
+  #  app/
+  #  config/
+  #  doc/
+  #  log/
+  #  public/
+  #  script/
+  #  test/
   nothing added to commit but untracked files present (use "git add" to track)</code></pre>
   
   Woohoo! There's our log directory.
   
   If your @log@ directory still isn't showing up maybe you're trying to ignore @log/*@. In this case git will also ignore the @.gitignore@ file and you'll need to use the more specific ignore pattern of @log/[^.]*@ as per "Clifford Heath's hot tip":http://groups.google.com/group/rails-oceania/browse_thread/thread/2c8611dc93917952/e175f72310823547?#e175f72310823547.
   
-  h3. Ignoring the other un-fu files
+  h2. Ignoring the other un-fu files
   
   So what's left to do? Ignore any files in any of the @tmp@ subdirectories (I don't even want to track the tmp directories themselves)
   
@@ -231,7 +231,7 @@
   doc/app
   </code></pre>
   
-  h3. Committing everything
+  h2. Committing everything
   
   Before doing a commit in git you need to add files to the "index". The index represents "my current changeset" and is what will be committed when you type @git commit@. We've been looking at the status of the index using @git status@. Unlike Subversion modified files won't be committed unless you @git add@ them first. 
   
@@ -246,53 +246,53 @@
   # Changes to be committed:
   #   (use "git rm --cached <file>..." to unstage)
   #
-  #	new file: .gitignore
-  #	new file: README
-  #	new file: Rakefile
-  #	new file: app/controllers/application.rb
-  #	new file: app/helpers/application_helper.rb
-  #	new file: config/boot.rb
-  #	new file: config/database.yml
-  #	new file: config/environment.rb
-  #	new file: config/environments/development.rb
-  #	new file: config/environments/production.rb
-  #	new file: config/environments/test.rb
-  #	new file: config/initializers/inflections.rb
-  #	new file: config/initializers/mime_types.rb
-  #	new file: config/routes.rb
-  #	new file: doc/README_FOR_APP
-  #	new file: log/.gitignore
-  #	new file: public/.htaccess
-  #	new file: public/404.html
-  #	new file: public/422.html
-  #	new file: public/500.html
-  #	new file: public/dispatch.cgi
-  #	new file: public/dispatch.fcgi
-  #	new file: public/dispatch.rb
-  #	new file: public/favicon.ico
-  #	new file: public/images/rails.png
-  #	new file: public/index.html
-  #	new file: public/javascripts/application.js
-  #	new file: public/javascripts/controls.js
-  #	new file: public/javascripts/dragdrop.js
-  #	new file: public/javascripts/effects.js
-  #	new file: public/javascripts/prototype.js
-  #	new file: public/robots.txt
-  #	new file: script/about
-  #	new file: script/console
-  #	new file: script/destroy
-  #	new file: script/generate
-  #	new file: script/performance/benchmarker
-  #	new file: script/performance/profiler
-  #	new file: script/performance/request
-  #	new file: script/plugin
-  #	new file: script/process/inspector
-  #	new file: script/process/reaper
-  #	new file: script/process/spawner
-  #	new file: script/runner
-  #	new file: script/server
-  #	new file: test/test_helper.rb
-  #	new file: tmp/.gitignore
+  #  new file: .gitignore
+  #  new file: README
+  #  new file: Rakefile
+  #  new file: app/controllers/application.rb
+  #  new file: app/helpers/application_helper.rb
+  #  new file: config/boot.rb
+  #  new file: config/database.yml
+  #  new file: config/environment.rb
+  #  new file: config/environments/development.rb
+  #  new file: config/environments/production.rb
+  #  new file: config/environments/test.rb
+  #  new file: config/initializers/inflections.rb
+  #  new file: config/initializers/mime_types.rb
+  #  new file: config/routes.rb
+  #  new file: doc/README_FOR_APP
+  #  new file: log/.gitignore
+  #  new file: public/.htaccess
+  #  new file: public/404.html
+  #  new file: public/422.html
+  #  new file: public/500.html
+  #  new file: public/dispatch.cgi
+  #  new file: public/dispatch.fcgi
+  #  new file: public/dispatch.rb
+  #  new file: public/favicon.ico
+  #  new file: public/images/rails.png
+  #  new file: public/index.html
+  #  new file: public/javascripts/application.js
+  #  new file: public/javascripts/controls.js
+  #  new file: public/javascripts/dragdrop.js
+  #  new file: public/javascripts/effects.js
+  #  new file: public/javascripts/prototype.js
+  #  new file: public/robots.txt
+  #  new file: script/about
+  #  new file: script/console
+  #  new file: script/destroy
+  #  new file: script/generate
+  #  new file: script/performance/benchmarker
+  #  new file: script/performance/profiler
+  #  new file: script/performance/request
+  #  new file: script/plugin
+  #  new file: script/process/inspector
+  #  new file: script/process/reaper
+  #  new file: script/process/spawner
+  #  new file: script/runner
+  #  new file: script/server
+  #  new file: test/test_helper.rb
+  #  new file: tmp/.gitignore
   #
   </code></pre>
   
@@ -356,7 +356,7 @@
   # On branch master
   nothing to commit (working directory clean)</code></pre>
   
-  h3. Freezing rails into vendor
+  h2. Freezing rails into vendor
   
   Last thing to do is freeze rails into vendor. I'll @svn export@ from the rails trunk copy I used to create the app in the first place:
   
@@ -370,7 +370,7 @@
   $ git commit -m "Vendor'd rails trunk rev. 8276"
   </code></pre>
   
-  h3. Celebratory drinks
+  h2. Celebratory drinks
   
   That's it. Now you can push your local git repo to some remote location and start collaborating all distributed-like.
   

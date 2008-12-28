@@ -7,7 +7,7 @@
   
   This is somewhat of a follow-up to the previous article "setting up a new rails app with git":http://toolmantim.com/article/2007/12/5/setting_up_a_new_rails_app_with_git.
   
-  h3. For the impatient
+  h2. For the impatient
   
   Set up the new bare repo on the server:
   
@@ -30,7 +30,7 @@
   
   Read further for a step-by-step explanation of what's going on.
   
-  h3. Pre-flight sanity check
+  h2. Pre-flight sanity check
   
   Setting up a remote repository is fairly simple but somewhat confusing at first. Firstly, let's check out what remote repositories are being tracked in our git repo:
   
@@ -54,7 +54,7 @@
   
   A pretty bare-minimum config file.
   
-  h3. Creating the bare remote repository
+  h2. Creating the bare remote repository
   
   Before we can push our local master branch to a remote repository we need to create the remote repository. To do this we'll ssh in and create it on the server:
   
@@ -72,7 +72,7 @@
   
   A short aside about what git means by <em>bare</em>: A default git repository assumes that you'll be using it as your working directory, so git stores the actual bare repository files in a @.git@ directory alongside all the project files. Remote repositories don't need copies of the files on the filesystem unlike working copies, all they need are the deltas and binary what-nots of the repository itself. This is what "bare" means to git. Just the repository itself.
   
-  h3. Adding the remote repository to our local git repository configuration
+  h2. Adding the remote repository to our local git repository configuration
   
   Now that we've created the remote repository we'll add it to our local repository as a remote server called "origin" using @git remote add@, which is just a nicer way of updating our config file for us:
   
@@ -82,17 +82,17 @@
   Let's see what it added to the config file:
   
   <pre><code>[core]
-  	repositoryformatversion = 0
-  	filemode = true
-  	bare = false
-  	logallrefupdates = true
+    repositoryformatversion = 0
+    filemode = true
+    bare = false
+    logallrefupdates = true
   [remote "origin"]
-  	url = ssh://myserver.com/var/git/myapp.git
-  	fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
+    url = ssh://myserver.com/var/git/myapp.git
+    fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
   
   We now have a remote repository "origin" that will fetch all of it's @refs/heads/*@ branches and store them in our local repo in @refs/remotes/origin/*@ when a @git fetch@ is performed.
   
-  h3. Pushing to the remote repository
+  h2. Pushing to the remote repository
   
   The time has come to push our local master branch to the origin's master branch. We do that using the @git push <target> <local>@ command.
   
@@ -120,22 +120,22 @@
   
   and push and pull to your heart's content.
   
-  h3. Track the remote branch
+  h2. Track the remote branch
   
   You can specify the default remote repository for pushing and pulling using git-branch's track option. You'd normally do this by specifying the @--track@ option when creating your local master branch, but as it already exists we'll just update the config manually like so:
   
   <pre><code>[branch "master"]
-  	remote = origin
-  	merge = refs/heads/master
+    remote = origin
+    merge = refs/heads/master
   </code></pre>
   
   Now you can simply @git push@ and @git pull@.
   
-  h3. Sharing the remote repository with the world
+  h2. Sharing the remote repository with the world
   
   If you want to set it up as a public repository be sure to check out the Git manual's chapter on "public git repositories":http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#public-repositories.
   
-  h3. Working with remote repository branches
+  h2. Working with remote repository branches
   
   @git remote show@ is used to inspect a remote repository. It goes and checks the remote repository to see what branches have been added and removed since the last @git fetch@.
   
@@ -221,10 +221,10 @@
   Also notice, like we manually changed for master, @.git/config@ has a new entry for this new tracking branch:
   
   <pre><code>[branch "dev/rails-2"]
-  	remote = origin
-  	merge = refs/heads/dev/rails-2
+    remote = origin
+    merge = refs/heads/dev/rails-2
   </code></pre>
   
-  h3. Further Reading
+  h2. Further Reading
   
   "Sourcemage's Git Guide":http://wiki.sourcemage.org/Git_Guide has some very very handy real-life examples of git commands you'll often need.

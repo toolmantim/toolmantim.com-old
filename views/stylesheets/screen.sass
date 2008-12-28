@@ -1,7 +1,7 @@
 @import views/stylesheets/reset.sass
 
 !bright_blue = #7ab8f8
-!standard_text = #a6abaf
+!standard_text = #b8bdc1
 !very_bright_text = #fff
 !bright_text = #d6dbde
 !dull_text = #5b6168
@@ -10,6 +10,9 @@
 =standard_text_size
   :font-size 1.4em
   :line-height 1.5em
+  
+=bell_gothic
+  :font-family "Bell Gothic Std", arial, sans-serif
 
 / Site-wide element styles
 
@@ -31,7 +34,7 @@ html
   
 body
   :font-size 62.5%
-  :font-family "Bell Gothic Std", arial, sans-serif
+  +bell_gothic
   :color = !standard_text
   :background transparent url(/images/background-glow.png) no-repeat center top
   :min-height 538px
@@ -54,9 +57,10 @@ body
   :text-indent -2000px
 
 #about
-  :background-color = #393e44
+  :background-color #393e44
   :-webkit-border-radius 5px
   :padding 20px 20px 15px 20px
+  :margin-top 40px
   
   :position relative
   
@@ -202,3 +206,97 @@ body.archive
       :margin-left 10px
       :width 410px
       +standard_text_size
+
+!article_width = 540px
+
+.article
+  h1
+    :font-size 1.8em
+    :margin-top 2em
+    :margin-bottom 1em
+    :color = !very_bright_text
+    
+  .about
+    h1
+      :margin-top 0
+      
+  .published
+    +standard_text_size
+    :margin-bottom 2em
+    :text-transform uppercase
+    :font-size 1.2em
+    :color = !bright_text
+  
+  .feedback, .more-reading
+    p
+      +standard_text_size
+      :width = !article_width
+  
+  .content
+    :font-family "Lucida Grande"
+  
+    > *
+      :width = !article_width
+
+    p, li
+      +standard_text_size
+      :font-size 1.2em
+      :line-height 1.7em
+
+    ul, ol
+      :padding-left 2em
+    ul li, ol li
+      :margin-left 1em
+    ul li
+      :list-style disc
+    ol li
+      :list-style numeric
+
+    p, ul, ol
+      :margin-bottom 1em
+      code
+        :font-size 1.2em
+    
+    
+    h2, h3
+      +bell_gothic
+      :width = !article_width
+    
+    h2
+      :font-size 1.8em
+      :color = !dull_text
+      :padding-bottom 0.1em
+      :margin-top 2em
+      :margin-bottom 0.8em
+      :text-transform uppercase
+      :text-shadow #000 0 0 0
+      :border-bottom 1px solid
+      ;border-bottom-color = !very_dull_text
+    h3
+      :font-size 1.8em
+      :color = !bright_text
+      :margin-top 1.5em
+      :margin-bottom 0.8em
+    h4
+      :font-size = 1.2em * 0.9
+      :text-transform uppercase
+    pre
+      :font-family Monaco, courier
+      :font-size 1.6em
+      :margin-bottom 1em
+      :line-height 1.1em
+      :padding-left 20px
+      :color = !bright_text
+      :text-shadow #000 0 0 0
+      
+    pre+h2, pre+h3
+      :margin-top 2.5em
+      
+    sup
+      :vertical-align super
+      :font-size 0.8em
+      
+    embed, object
+      :margin-bottom 10px
+    
+    @import views/stylesheets/code_highlighting.sass

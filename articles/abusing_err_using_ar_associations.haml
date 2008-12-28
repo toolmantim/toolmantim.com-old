@@ -46,7 +46,7 @@
   
     has_many :versions, :order => "created_at", :dependent => true
     has_one  :current_version, :class_name => "Version", :order => "created_at DESC"
-  	 
+     
     def find_or_build_version(number = nil)
       number ? versions[number.to_i - 1] : versions.build(:body => body)
     end
