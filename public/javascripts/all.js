@@ -1,3 +1,8 @@
+// CSS grid
+$(function() {
+  if (window.location.toString().match(/\?grid$/)) $(document.body).addClass("grid");
+})
+
 // Email links
 $(function() {
   $(".email").each(function() {

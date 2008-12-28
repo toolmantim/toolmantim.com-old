@@ -1,7 +1,155 @@
 @import views/stylesheets/reset.sass
 
+!link_colour = #7ab8f8
+!link_hover_colour = #fff
+!strong_color = #d6dbde
+
+=standard_text_size
+  :font-size 1.4em
+  :line-height 1.5em
+
 html
   :font-size 100%
+  :background #31363c url(/images/background.gif)
   
 body
   :font-size 62.5%
+  :font-family "Bell Gothic Std", arial, sans-serif
+  :color #a6abaf
+  :background transparent url(/images/background-glow.png) no-repeat center top
+  :min-height 538px
+
+  &.grid #body-inner
+    :background transparent url(/images/grid.gif) repeat-y
+
+#body-inner
+  :width 760px
+  :margin 0 auto
+  :z-index 1
+  :position relative
+  :padding-top = 110+50px
+
+#top
+  :position absolute
+  :top 0
+  :left 0
+  :text-indent -2000px
+
+a
+  :color = !link_colour
+  :text-decoration none
+
+a:hover, a:active
+  :color = !link_hover_colour
+
+strong
+  :color = !strong_color
+
+p.quip
+  :clear left
+  :margin-top 20px
+  :font-size 1.2em
+
+  &, & a
+    :color #4c5156
+  a:hover
+    :color #7ab8f8
+
+h1.major
+  :position absolute
+  :top 90px
+  :right 110px
+  :font-size 2.4em
+  :text-shadow #000 0 0 0
+  :color #fff
+
+#about
+  h1
+    :position absolute
+    :top 50px
+    :left 0px
+    :width 210px
+    :height 55px
+    / Not preferable but on a transparent bg
+    :text-indent -10000px 
+    span
+      :position absolute
+      :top 0
+      :left 0
+      :width 100%
+      :height 100%
+      :background transparent url(/images/logo.gif) no-repeat
+
+#navigation
+  :float left
+  +standard_text_size
+
+  li
+    :float left
+    :margin-right 10px
+  
+    a, a:active
+      :display block
+      :color #a6abaf
+      :padding 6px 10px 0px 10px
+      :background-color #42474c
+    
+    a:hover
+      :color #d6dbde
+      :background-color #5b6168
+
+body.home
+  #body-inner
+    :padding-top 0
+
+  #about, p.quip
+    :margin-left 330px
+    :width 300px
+  
+  #about
+    :padding-top 110px
+    :position relative
+    
+    h1
+      :left -250px
+      :top 113px
+    
+    p
+      +standard_text_size
+      :margin-bottom 10px
+      
+    #navigation
+      :margin-bottom 30px
+
+body.archive
+  ol.archive
+    :margin-left 220px
+
+  ol
+    li
+      :position relative
+    h2
+      :font-size 2.4em
+      :position absolute
+      :top 1px
+      :left -220px
+      :width 100px
+      :text-align right
+      :text-shadow #000 0 0 0
+      :color #5b6168
+    h3
+      +standard_text_size
+      :position absolute
+      :top 0
+      :left -110px
+      :width 100px
+      :text-align right
+    > li
+      :margin-bottom 40px
+    > li > ol > li
+      :margin-bottom 20px
+    > li > ol > li > ol > li
+      :margin-bottom 10px
+      :margin-left 10px
+      :width 410px
+      +standard_text_size

@@ -1,8 +1,9 @@
-%h1 Articles
+- @body_class = "archive"
+- @page_title = "Articles on toolmantim.com"
 
-%p .
+%h1.major Articles
 
-%ol.timeline.archive
+%ol.archive
   - for year in @articles_by_year_then_month.keys.sort.reverse
     %li
       %h2= year
