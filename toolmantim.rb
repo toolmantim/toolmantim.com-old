@@ -27,6 +27,9 @@ helpers do
   def versioned_js(js)
     "/javascripts/#{js}.js?" + File.mtime(File.join(Sinatra.application.options.public, "javascripts", "#{js}.js")).to_i.to_s
   end
+  def partial(name)
+    haml(:"_#{name}", :layout => false)
+  end
 end
 
 before do

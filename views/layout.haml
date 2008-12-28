@@ -20,44 +20,14 @@
   
       = yield
 
-      #about
-        %h1
-          %a{:href => "/", :title => "Home"}
-            %span
-            toolmantim
+      = partial :site_header
 
-        %p.intro
-          I'm <strong>Tim Lucas</strong>, a web app designer and developer currently in Sydney&nbsp;Australia.
-
-        %p.blurb
-          I run the <strong>web&nbsp;application design and development</strong> company <a
-          href="http://agencyrainford.com/">Agency&nbsp;Rainford</a>, <a
-          href="http://www.slideshare.net/toolmantim/">present</a> on various
-          technical topics, <a href="http://flickr.com/photos/toolmantim">snap the
-          occasional photo</a>, <a href="http://twitter.com/toolmantim">tweet</a>
-          my going-ons, share <a href="http://github.com/toolmantim">teh codes</a>
-          and post other tid-bits to the&nbsp;<a
-          href="http://tumble.toolmantim.com/">tumble</a>.
-
-        %p.recent
-          Most recently I published
-          %a{:href => article_path(@articles.first)}= @articles.first.title
-          == (#{@articles.first.published.strftime("%B %d, %Y")})
-
-        %p.contact
-          Shoot an email to <span class="email">t.lucas@#{thisdomain}</span> and <strong>say&nbsp;hello</strong>.
-      
-        
-        %ul#navigation
-          %li
-            %a{:href => "/articles"} Articles &rarr;
-          %li
-            %a{:href => "/projects"} Projects &rarr;
-
+      - unless @hide_about
+        #about= partial :meta
 
       %p.quip
         Powered by
-        %a{:href => "http://github.com/toolmantim/toolmantim"}= Quip.random
+        %a{:href => "http://github.com/toolmantim/toolmantim", :title => "View source"}= Quip.random
 
     - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
       %script{:src => versioned_js(js), :type => "text/javascript"}

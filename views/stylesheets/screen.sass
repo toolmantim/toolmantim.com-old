@@ -1,12 +1,29 @@
 @import views/stylesheets/reset.sass
 
-!link_colour = #7ab8f8
-!link_hover_colour = #fff
-!strong_color = #d6dbde
-
+!bright_blue = #7ab8f8
+!standard_text = #a6abaf
+!very_bright_text = #fff
+!bright_text = #d6dbde
+!dull_text = #5b6168
+!very_dull_text = #4c5156
+ 
 =standard_text_size
   :font-size 1.4em
   :line-height 1.5em
+
+/ Site-wide element styles
+
+a
+  :color = !bright_blue
+  :text-decoration none
+
+a:hover, a:active
+  :color = !very_bright_text
+
+strong
+  :color = !bright_text
+
+/* Layout styles
 
 html
   :font-size 100%
@@ -15,9 +32,10 @@ html
 body
   :font-size 62.5%
   :font-family "Bell Gothic Std", arial, sans-serif
-  :color #a6abaf
+  :color = !standard_text
   :background transparent url(/images/background-glow.png) no-repeat center top
   :min-height 538px
+  :padding-bottom 5em
 
   &.grid #body-inner
     :background transparent url(/images/grid.gif) repeat-y
@@ -35,25 +53,86 @@ body
   :left 0
   :text-indent -2000px
 
-a
-  :color = !link_colour
-  :text-decoration none
+#about
+  :background-color = #393e44
+  :-webkit-border-radius 5px
+  :padding 20px 20px 15px 20px
+  
+  :position relative
+  
+  p.intro, #navigation
+    :position absolute
+    :left 20px
+    :width 350px
+  
+  p.intro
+    :top 15px
+    :font-size 2.1em
+    :line-height 1.545em
+    :text-shadow #000 0 0 0
+    
+  #navigation
+    :bottom 20px
 
-a:hover, a:active
-  :color = !link_hover_colour
+  p.contact
+    :top 10.5em
+    
+  p.contact, p.blurb, p.recent
+    :font-size 1.2em
+    :line-height 1.8em
+  
+  p.blurb, p.recent, p.contact
+    :margin-left 350px
+    
+  p.blurb, p.recent
+    :margin-bottom 9px
 
-strong
-  :color = !strong_color
+h1.site-header
+  :position absolute
+  :top 50px
+  :left 0px
+  :width 210px
+  :height 55px
+  / Not preferable but on a transparent bg
+  :text-indent -10000px 
+  span
+    :position absolute
+    :top 0
+    :left 0
+    :width 100%
+    :height 100%
+    :background transparent url(/images/logo.gif) no-repeat
+
+#navigation
+  :float left
+  +standard_text_size
+
+  li
+    :float left
+    :margin-right 10px
+
+    a, a:active
+      :display block
+      :color = !standard_text
+      :padding 6px 10px 0px 10px
+      :background-color = !very_dull_text
+
+    a:hover
+      :color = !very_bright_text
+      :background-color = !dull_text
 
 p.quip
   :clear left
   :margin-top 20px
   :font-size 1.2em
+  :text-align right
 
   &, & a
-    :color #4c5156
+    :color = !very_dull_text
   a:hover
-    :color #7ab8f8
+    :color = !dull_text
+
+/* Content-specific styles
 
 h1.major
   :position absolute
@@ -63,69 +142,38 @@ h1.major
   :text-shadow #000 0 0 0
   :color #fff
 
-#about
-  h1
-    :position absolute
-    :top 50px
-    :left 0px
-    :width 210px
-    :height 55px
-    / Not preferable but on a transparent bg
-    :text-indent -10000px 
-    span
-      :position absolute
-      :top 0
-      :left 0
-      :width 100%
-      :height 100%
-      :background transparent url(/images/logo.gif) no-repeat
-
-#navigation
-  :float left
-  +standard_text_size
-
-  li
-    :float left
-    :margin-right 10px
-  
-    a, a:active
-      :display block
-      :color #a6abaf
-      :padding 6px 10px 0px 10px
-      :background-color #42474c
-    
-    a:hover
-      :color #d6dbde
-      :background-color #5b6168
 
 body.home
   #body-inner
     :padding-top 0
 
-  #about, p.quip
+  h1.site-header
+    :left 85px
+    :top 113px
+
+  .meta, p.quip
     :margin-left 330px
     :width 300px
   
-  #about
+  p.quip
+    :text-align left
+  
+  .meta
     :padding-top 110px
     :position relative
-    
-    h1
-      :left -250px
-      :top 113px
     
     p
       +standard_text_size
       :margin-bottom 10px
       
     #navigation
+      :margin-top 20px
       :margin-bottom 30px
-
+      
 body.archive
   ol.archive
     :margin-left 220px
 
-  ol
     li
       :position relative
     h2
@@ -144,6 +192,7 @@ body.archive
       :left -110px
       :width 100px
       :text-align right
+      :text-shadow #000 0 0 0
     > li
       :margin-bottom 40px
     > li > ol > li

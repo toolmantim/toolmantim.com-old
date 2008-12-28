@@ -1,0 +1,26 @@
+%p.intro
+  I'm <strong>Tim Lucas</strong>, a web app designer and developer currently in Sydney&nbsp;Australia.
+
+%p.blurb
+  I run a <strong>web&nbsp;application design and development</strong> company <a
+  href="http://agencyrainford.com/">Agency&nbsp;Rainford</a>, <a
+  href="http://www.slideshare.net/toolmantim/">present</a> on various
+  technical topics, <a href="http://flickr.com/photos/toolmantim">snap the
+  occasional photo</a>, <a href="http://twitter.com/toolmantim">tweet</a>
+  my going-ons, share <a href="http://github.com/toolmantim">teh codes</a>
+  and post other tid-bits to the&nbsp;<a
+  href="http://tumble.toolmantim.com/">tumble</a>.
+
+%p.recent
+  Most recently I published
+  %a{:href => article_path(@articles.first)}= @articles.first.title
+  == (#{@articles.first.published.strftime("%B %d, %Y")})
+
+%p.contact
+  Shoot an email to <span class="email">t.lucas@#{thisdomain}</span> and <strong>say&nbsp;hello</strong>.
+
+%ul#navigation
+  %li
+    %a{:href => "/articles"} Articles &rarr;
+  %li
+    %a{:href => "/projects"} Projects &rarr;
