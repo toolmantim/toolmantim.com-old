@@ -4,17 +4,14 @@ require 'sinatra'
 __DIR__ = File.dirname(__FILE__)
 
 %w(article quip).each do |model|
-  require "#{__DIR__}/lib/#{model}"
+  require File.join(File.dirname(__FILE__), "/lib/#{model}")
 end
 
-Article.path = "#{__DIR__}/articles"
+Article.path = File.join(Sinatra.application.options.root, "articles")
 
 helpers do
   def article_path(article)
     "/articles/#{article.slug}"
-  end
-  def partial(name)
-    haml :"_#{name}", :layout => false
   end
   def next_article(article)
     next_index = @articles.index(article) - 1
@@ -24,6 +21,12 @@ helpers do
     prev_index = @articles.index(article) + 1
     @articles[prev_index] unless prev_index > @articles.length + 1
   end
+  def versioned_stylesheet(stylesheet)
+    "/stylesheets/#{stylesheet}.css?" + File.mtime(File.join(Sinatra.application.options.views, "stylesheets", "#{stylesheet}.sass")).to_i.to_s
+  end
+  def versioned_js(js)
+    "/javascripts/#{js}.js?" + File.mtime(File.join(Sinatra.application.options.public, "javascripts", "#{js}.js")).to_i.to_s
+  end
 end
 
 before do
@@ -32,6 +35,14 @@ end
 
 get '/' do
   haml :home
+end
+
+%w( screen ).each do |stylesheet|
+  get "/stylesheets/#{stylesheet}.css" do
+    content_type 'text/stylesheet'
+    headers "Expires" => (Time.now + 60*60*24*356*3).httpdate # Cache for 3 years
+    sass :"stylesheets/#{stylesheet}"
+  end
 end
 
 get '/articles/:id' do
@@ -57,11 +68,16 @@ end
 
 get '/articles.atom' do
   content_type 'application/atom+xml'
-  haml :feed
+  haml :feed, :layout => false
 end
 
 get '/projects' do
   haml :projects
+end
+
+get '/sitemap.xml' do
+  content_type 'application/xml'
+  haml :sitemap, :layout => false
 end
 
 not_found do

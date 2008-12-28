@@ -36,30 +36,3 @@
     end
   end
   </code></pre>
-
-#comments.comments
-  %h3 Comments
-  %p.old-comments New comments are no longer being accepted.
-  %ol
-    %li#comment_439
-      %p.author
-        %a{:href => 'http://interblah.net'} James Adam
-      .body
-        :textile
-          I'm not sure that I'd agree it's evil to do these things in <tt>environment/*</tt> - just that Rails doesn't support it. Here's hoping that 2.0 will bring a reconsidered startup routine that makes what seems natural, actually possible :)
-    %li#comment_1537
-      %p.author
-        Brian Hartin
-      .body
-        :textile
-          By extension, this means that you shouldn't reference any models either, if your models do any 'class-load time' database calls, e.g.<br/><br/>
-          <pre>
-          class StatusCode < ActiveRecord::Base
-            # Define constants representing each status
-            APPROVED = self.find(...)
-            DENIED = # ...
-            # ...
-          end
-          </pre>
-          
-          I'm currently thinking on the best way to solve that one.

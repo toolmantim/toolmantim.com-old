@@ -1,5 +1,5 @@
 .article
-  %h3
+  %h1
     %a{:href => article_path(@article)}= @article.title
 
   %p.published
@@ -9,14 +9,16 @@
 
   = @article_html
 
-  %h3 Feedback
-  %p.feedback
-    Email any feedback, typos or rants to <span class="email">t.lucas@#{thisdomain}</span>
+  %h1 Feedback and discussion
+
+  .feedback
+    %p
+      For errors, updates or feedback please shoot an email to <span class="email">t.lucas@#{thisdomain}</span>. Discussion will return shortly.
 
   - previous_article, next_article = previous_article(@article), next_article(@article)
 
   - if (previous_article || next_article)
-    %h3 More reading&hellip;
+    %h1 More reading&hellip;
     - if previous_article
       %p
         Previously:

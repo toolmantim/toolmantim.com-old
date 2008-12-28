@@ -15,37 +15,3 @@
   Capistrano will checkout your project locally, zip it up and scp it to the releases directory on the deployment host.
   
   Now you can tell your host to "git":http://git.or.cz/ farked (though no promises they won't nuke your all your data, "BOFH":http://members.iinet.net.au/~bofh/ style)
-
-#comments.comments
-  %h3 Comments
-  %p.old-comments New comments are no longer being accepted.
-  %ol
-    %li#comment_1356
-      %p.author
-        Michael Koukoullis
-      .body
-        :textile
-          Get git or git farked. Have set it up on my new slice, planning to use gitosis to host repositories.
-    %li#comment_1357
-      %p.author
-        %a{:href => 'http://www.hasmanydevelopers.com'} Aníbal Rojas
-      .body
-        :textile
-          Actually, it is usefull if you are deploying to a server under the administration of a paranoid sysadmin blocking every port and protocol differente from SSH and HTTP ;-)
-    %li#comment_1488
-      %p.author
-        %a{:href => 'http://pobox.com/~kwerle'} Kurt Werle
-      .body
-        :textile
-          Very useful.  I do with that the cap documentation was a little fuller, and I didn't have to google for "capistrano scp" to find out how to do this.
-          
-          Thanks!
-          
-    %li#comment_1548
-      %p.author
-        ae
-      .body
-        :textile
-          Technically, its using sftp, not the same thing as scp.
-          
-          You have to configure an ftp server and all that BS, why not just use scp out of the box?

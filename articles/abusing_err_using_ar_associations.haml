@@ -72,35 +72,3 @@
   has_one will take only a single record from the resulting query, similar to a @find(:first)@, using a SQL @limit@ clause.
   
   For more neat tricks have a look at the rest of the "i2 codebase":http://dev.rubyonrails.org/browser/tools/i2/trunk/app/ -- it's a cool little app.
-
-#comments.comments
-  %h3 Comments
-  %p.old-comments New comments are no longer being accepted.
-  %ol
-    %li#comment_241
-      %p.author
-        %a{:href => 'http://trixnews.com'} Jacek Becela
-      .body
-        :textile
-          Is it possible to use these tricks with has_many :through assosciations in some way? (:class_name is ignored then)
-          
-          I want something like this:
-          
-          auction.cars
-          auction.sold_cars
-          auction.not_sold_cars
-          and so on. Car is associated with Auction through Exposure join model (Car can be exposed on many auctions).
-    %li#comment_255
-      %p.author
-        %a{:href => 'http://toolmantim.com'} Tim Lucas
-      .body
-        :textile
-          Good question... I haven't really tried. Give it a try and report back!
-    %li#comment_400
-      %p.author
-        rick
-      .body
-        :textile
-          has_many :through associations are unique, since they read a source association for info.  Use :source instead of :class_name or :foreign_key to configure it.
-          
-          has_many :sold_cars, :through => :exposures, :source => :car, :conditions => ...

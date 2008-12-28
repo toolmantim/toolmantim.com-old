@@ -6,27 +6,61 @@
     
     %link{:href => "http://feeds.feedburner.com/toolmantim", :rel => "alternate", :title => "Recent articles", :type => "application/atom+xml"}/
 
-    %link{:href => "/stylesheets/toolmantim.css", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
-    /[if lt IE 7]
-      %link{:href => "/stylesheets/ie.css", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => versioned_stylesheet('screen'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
 
     %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
     %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
 
-    
-
   %body{:class => @body_class}
-    .content
-      .header
-        %h1
-          %a{ :href => "/" }
-            %img{ :src => "/images/logo.png", :height => "60", :alt => "toolmantim", :width => "228" }/
-      = yield
-      - unless @hide_fat_footer
-        .fat-footer
-          = partial :meta
-      .footer
-        .quip== Powered by #{Quip.random}
+    - unless @hide_skip_nav
+      #top
+        %p
+          %a{:href => "#about"} Skip to navigation
+  
+    = yield
+
+    #about
+      %h1
+        %span
+        %a{:href => "/", :title => "Home"} toolmantim
+
+      %ul
+        %li
+          %a{:href => "/articles"} Articles
+        %li
+          %a{:href => "/projects"} Projects
+      
+      %p.intro
+        I'm Tim Lucas, a web app designer and developer currently in Sydney&nbsp;Oz.
+
+      %p.blurb
+        I run the web&nbsp;application design and development company <a
+        href="http://agencyrainford.com/">Agency Rainford</a>, <a
+        href="http://www.slideshare.net/toolmantim/">present</a> on various
+        technical topics, <a href="http://flickr.com/photos/toolmantim">snap the
+        occasional photo</a>, <a href="http://twitter.com/toolmantim">tweet</a>
+        my going-ons, share <a href="http://github.com/toolmantim">teh codes</a>
+        and post other tid-bits to the&nbsp;<a
+        href="http://tumble.toolmantim.com/">tumble</a>.
+
+      %p.recent
+        Most recently I published
+        %a{:href => article_path(@articles.first)}= @articles.first.title
+        on
+        %em== #{@articles.first.published.strftime("%d %B %y")}.
+
+      %p.nav
+        Browse <a href="/articles">previously published articles</a>
+        as well as <a href="/projects">recently launched&nbsp;projects</a>.
+
+      %p.contact
+        Shoot an email to <span class="email">t.lucas@#{thisdomain}</span> and say&nbsp;hello.
+      
+
+    %p.quip
+      Powered by
+      %a{:href => "http://github.com/toolmantim/toolmantim"}
+        %em= Quip.random
 
     - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
-      %script{:src => "/javascripts/#{js}.js", :type => "text/javascript"}
+      %script{:src => versioned_js(js), :type => "text/javascript"}
