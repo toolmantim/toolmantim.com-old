@@ -17,5 +17,6 @@ The following directories and their contents are Copyright Tim Lucas. You may no
 
 * @/articles/@
 * @/public/images/@
+* @/design/@*
 
 All other directories and files are MIT Licensed.
