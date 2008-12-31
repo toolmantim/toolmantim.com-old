@@ -1,53 +1,74 @@
+- @body_class = "projects"
 - @page_title = "Recent Projects by Tim Lucas"
+
+- index = -1
 
 %h1.major Projects
 
-%p 
+%ol.projects
+  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
+  %li.odd
+    %h1 v2 of toolmantim.com
+    %p
+      A long-due overhaul of this site, I revamped it from the ground up. A
+      new design, simpler file-based article publishing, removal of comments and
+      discussions and <a href="http://github.com/toolmantim/toolmantim">open-sourced code base</a>. <strong>Launched January 2009</strong>.
+    %p.link
+      %a{:href => "http://toolmantim.com/"} toolmantim.com &rarr;
+    %ul.images
+      %li
+        %img{:src => "/images/project-placeholder-1.jpg", :width => "320", :height => "213", :alt => "toolmantim 1"}/
+      %li
+        %img{:src => "/images/project-placeholder-2.jpg", :width => "320", :height => "213", :alt => "toolmantim 2"}/
+      %li
+        %img{:src => "/images/project-placeholder-3.jpg", :width => "320", :height => "213", :alt => "toolmantim 3"}/
+      %li
+        %img{:src => "/images/project-placeholder-2.jpg", :width => "320", :height => "213", :alt => "toolmantim 4"}/
+      %li
+        %img{:src => "/images/project-placeholder-1.jpg", :width => "320", :height => "213", :alt => "toolmantim 5"}/
 
-%ol.timeline.projects
-  %li
-    %h2 2009
-    %ol
+  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
+  %li.odd
+    %h1 Hello Canary
+    %p
+      For my beautiful girlfriend&rsquo;s graphic design business, I
+      helped guide her design and executed it from photoshop to the
+      final product. I presented on "Static(ish) sites with nanoc and sinatra"
+      at the Sydney roro meetup shortly after explaining some of the Ruby I managed to sneak in.
+    %p.link
+      %a{:href => "http://hellotherecanary.com/"} hellotherecanary.com &rarr;
+    %ul.images
       %li
-        %h3 January
-        %ol
-          %li
-            %h4
-              %a{:href => "/"} v2 of this site - toolmantim.com
-            %p ...
-  %li
-    %h2 2008
-    %ol
+        %img{:src => "/images/project-placeholder-1.jpg", :width => "320", :height => "213", :alt => "hellocanary 1"}/
       %li
-        %h3 December
-        %ol
-          %li
-            %h4
-              %a{:href => "http://hellotherecanary.com/"} Hello Canary - hellotherecanary.com
-            %p
-              For my beautiful girlfriend&rsquo;s graphic design business, I
-              helped guide her design and executed it from photoshop to the
-              final product. I presented on "Static(ish) sites with nanoc and sinatra"
-              at the Sydney roro meetup shortly after explaining some of the Ruby I managed to sneak in.
-          %li
-            %p
-              %a{:href => "http://whatwouldmylesdo.com/"} What Would Myles Do - whatwouldmylesdo.com
-            %p A single-serving-site providing a direct tap into Myles' brain. 
+        %img{:src => "/images/project-placeholder-2.jpg", :width => "320", :height => "213", :alt => "hellocanary 2"}/
       %li
-        %h3 September
-        %ol
-          %li
-            %h4
-              %a{:href => "http://webjam.com.au/home.mobile"} Mobile v. of the Webjam site - webjam.com.au/home.mobile
-            %p ...
-          %li
-            %p
-              %a{:href => "http://webjam.com.au"} Relaunch of the Webjam site - webjam.com.au
-            %p ...
+        %img{:src => "/images/project-placeholder-3.jpg", :width => "320", :height => "213", :alt => "hellocanary 3"}/
+
+  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
+  %li.odd
+    %h1 What Would Myles Do
+    %p
+      A single-serving-site providing a direct tap into Myles&rsquo; brain.
+    %p.link
+      %a{:href => "http://whatwouldmylesdo.com/"} whatwouldmylesdo.com &rarr;
+    %ul.images
       %li
-        %h3 July
-        %ol
-          %li
-            %h4
-              %a{:href => "http://iphone.news.com.au/"} iPhone version of news.com.au - iphone.news.com.au
-            %p ...
+        %img{:src => "/images/project-placeholder-1.jpg", :width => "320", :height => "213", :alt => ""}/
+      %li
+        %img{:src => "/images/project-placeholder-2.jpg", :width => "320", :height => "213", :alt => ""}/
+      %li
+        %img{:src => "/images/project-placeholder-3.jpg", :width => "320", :height => "213", :alt => ""}/
+
+  -# mobile v of webjam.com.au
+  -# voting system for webjam.com.au
+  -# iphone.news.com.au
+
+  -# and if I could be fucked:
+    -# webjam.com.au
+    -# an.tisanta.com
+    -# iworkontheweb.com
+    -# trigger for RMIT
+    -# meetweaver.com
+    -# connections
+    -# web directions ticketing system

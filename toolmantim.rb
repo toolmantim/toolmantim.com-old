@@ -42,7 +42,7 @@ end
 
 %w( screen ).each do |stylesheet|
   get "/stylesheets/#{stylesheet}.css" do
-    content_type 'text/stylesheet'
+    content_type 'text/css'
     headers "Expires" => (Time.now + 60*60*24*356*3).httpdate # Cache for 3 years
     sass :"stylesheets/#{stylesheet}"
   end
