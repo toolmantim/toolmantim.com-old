@@ -241,7 +241,7 @@ body.archive
       :width = !article_width
   
   .content
-    :font-family "Lucida Grande"
+    :font-family "Lucida Grande", Arial, sans-serif
     :margin-bottom 50px
   
     > *
@@ -249,6 +249,7 @@ body.archive
 
     p, li
       +standard_text_size
+      :word-spacing -0.1em
       :font-size 1.2em
       :line-height 1.7em
 
@@ -269,18 +270,19 @@ body.archive
     
     h2, h3
       +bell_gothic
+      :word-spacing 0.2em
       :width = !article_width
+      :line-height 1.5em
     
     h2
       :font-size 1.6em
       :color = !dull_text
       :padding-bottom 0.1em
       :margin-top 2em
-      :margin-bottom 0.8em
+      :margin-bottom 0.5em
       :text-transform uppercase
       :text-shadow #000 0 0 0
-      :border-bottom 1px solid
-      ;border-bottom-color = !very_dull_text
+      :border-bottom-color = !very_dull_text
     h3
       :font-size 1.8em
       :color = !bright_text
