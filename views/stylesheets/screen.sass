@@ -88,7 +88,6 @@ body
     :top 15px
     :font-size 2.1em
     :line-height 1.545em
-    :text-shadow #000 0 0 0
     
   #navigation
     :bottom 20px
@@ -154,8 +153,13 @@ h1.major
   :top 90px
   :right 0
   :font-size 2.4em
-  :text-shadow #000 0 0 0
   :color #fff
+  
+  a, a:active
+    :color = !very_bright_text
+  
+  a:hover
+    :color = !bright_blue
 
 body.home
   #body-inner
@@ -197,7 +201,6 @@ body.archive
       :left -220px
       :width 100px
       :text-align right
-      :text-shadow #000 0 0 0
       :color #5b6168
     h3
       +standard_text_size
@@ -206,7 +209,6 @@ body.archive
       :left -110px
       :width 100px
       :text-align right
-      :text-shadow #000 0 0 0
     > li
       :margin-bottom 40px
     > li > ol > li
@@ -281,7 +283,6 @@ body.archive
       :margin-top 2em
       :margin-bottom 0.5em
       :text-transform uppercase
-      :text-shadow #000 0 0 0
       :border-bottom-color = !very_dull_text
     h3
       :font-size 1.8em
@@ -291,22 +292,21 @@ body.archive
     h4
       :font-size = 1.2em * 0.9
       :text-transform uppercase
+      
+    blockquote, pre
+      :padding-left 20px
+
     pre
       :font-family Monaco, courier
       :font-size 1.6em
       :margin-bottom 1em
       :line-height 1.1em
-      :padding-left 20px
       :color = !bright_text
-      :text-shadow #000 0 0 0
-      
     pre+h2, pre+h3
       :margin-top 2.5em
-      
     sup
       :vertical-align super
       :font-size 0.8em
-      
     embed, object
       :margin-bottom 10px
     
