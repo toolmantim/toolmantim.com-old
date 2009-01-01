@@ -1,1 +1,19 @@
 !!! xml
+%urlset{:xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9"}
+  %url
+    %loc http://toolmantim.com/
+    %priority 1.0
+    %changefreq daily
+  %url
+    %loc http://toolmantim.com/projects
+    %priority 0.8
+    %changefreq monthly
+  %url
+    %loc http://toolmantim.com/articles
+    %priority 0.8
+    %changefreq weekly
+  - for article in @articles
+    %url
+      %loc== http://toolmantim.com#{article_path(article)}
+      %priority 0.6
+      %changefreq monthly
