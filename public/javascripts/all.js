@@ -39,6 +39,8 @@ $(function() {
     
     navigator.find("a:first").click();
     
+    navigator.css({"display":"none"});
     imagesContainer.parent().append(navigator);
+    navigator.fadeIn(1000);
   });
 });
