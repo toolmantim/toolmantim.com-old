@@ -9,6 +9,13 @@ end
 
 Article.path = File.join(Sinatra.application.options.root, "articles")
 
+# Add Ruby 1.9's xmlschema method
+class Date
+  def xmlschema
+    strftime("%Y-%m-%dT%H:%M:%S%Z")
+  end unless defined?(xmlschema)
+end
+
 helpers do
   def article_path(article)
     "/articles/#{article.slug}"
@@ -30,6 +37,9 @@ helpers do
   def partial(name)
     haml(:"_#{name}", :layout => false)
   end
+  def article_html(article)
+    haml(article.template, :layout => false)
+  end
 end
 
 before do
@@ -50,7 +60,6 @@ end
 
 get '/articles/:id' do
   @article = Article[params[:id]] # or 404
-  @article_html = haml(@article.template, :layout => false)
   haml :article
 end
 

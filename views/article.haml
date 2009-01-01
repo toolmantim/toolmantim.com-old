@@ -6,7 +6,7 @@
       Published
       = @article.published.strftime("%B %d, %Y")
 
-  .content= @article_html
+  .content= article_html(@article)
 
   .feedback
     %h1 Feedback and discussion
