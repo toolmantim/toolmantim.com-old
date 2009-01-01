@@ -1,13 +1,10 @@
 - @body_class = "projects"
 - @page_title = "Recent Projects by Tim Lucas"
 
-- index = -1
-
 %h1.major Projects
 
 %ol.projects
-  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
-  %li.odd
+  %li
     %h1 v2 of toolmantim.com
     %p
       A long-due overhaul of this site, I revamped it from the ground up. A
@@ -27,8 +24,7 @@
       %li
         %img{:src => "/images/project-placeholder-1.jpg", :width => "320", :height => "213", :alt => "toolmantim 5"}/
 
-  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
-  %li.odd
+  %li
     %h1 Hello Canary
     %p
       For my beautiful girlfriend&rsquo;s graphic design business, I
@@ -45,8 +41,7 @@
       %li
         %img{:src => "/images/project-placeholder-3.jpg", :width => "320", :height => "213", :alt => "hellocanary 3"}/
 
-  -# %li{:class => (index+=1) % 2 == 0 ? 'even' : 'odd'}
-  %li.odd
+  %li
     %h1 What Would Myles Do
     %p
       A single-serving-site providing a direct tap into Myles&rsquo; brain.
