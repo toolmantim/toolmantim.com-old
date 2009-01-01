@@ -8,8 +8,9 @@
 
     %link{:href => versioned_stylesheet('screen'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
 
-    %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
-    %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
+    - if @show_open_id_delegate
+      %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
+      %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
 
   %body{:class => @body_class}
     #body-inner
