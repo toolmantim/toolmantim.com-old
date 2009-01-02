@@ -59,7 +59,7 @@ end
 end
 
 get '/articles/:id' do
-  @article = Article[params[:id]] # or 404
+  @article = Article[params[:id]] || raise(Sinatra::NotFound)
   haml :article
 end
 
