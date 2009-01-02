@@ -1,0 +1,53 @@
+-# title: Refreshed, realigned and ready for 2009
+-# published: 2009-01-02
+
+:textile
+
+  It was at over 2.5 years ago I did anything major to toolmantim.com. For the last 2.4 years I've wanted to redesign it and the past 1.5 years I've wanted to re-code it. Top that off with working on the new (but yet to be released) "Agency Rainford":http://agencyrainford.com site and Carla's "Hello Canary":http://hellotherecanary.com I'd had enough and found some hours between "Squatter":http://flickr.com/photos/toolmantim/3142586197/ and "rediculously well-decorated desserts":http://flickr.com/photos/toolmantim/3134787020/ these holidays to get something new up.
+
+  h2. Menki
+
+  (enki logo)
+
+  It was about 9 months ago I started writing "Menki":http://github.com/toolmantim/menki, the <a href="http://enkiblog.com/">Enki</a>-inspired blogging software that was never to be. <a href="hassox"></a> and <a href="">lachlanhardy</a> pitched in with patches&#8212;hell Lachlan noticed a PSD I'd pushed and coded up the design for the Menki site w/o me even knowing, what a dude, but as I started to realise a few things the less I saw that Menki was necessary. Two weeks later and a few spare holiday hours pushing to github and here it is, the new toolmantim, shiny and reading for your viewing.
+
+  h2. Simplifying ze codes
+
+  Releasing generalised code for reuse by other developers has never particularly interested me, I'm much more excited about doing the simplest thing possible and sharing my learnings with others similar to myself (teach a man to fish yakyakyak). The idea of creating and supporting blog software that has a bunch of features I have no use for quite frankly scares me. I'm hoping that "these few hundred lines":http://github.com/toolmantim/toolmantim of open-sourced code might be more useful.
+  
+  My requirements were simple:
+
+  # Create and preview articles with good live preview
+  # Make any style and site changes necessary as I authored the article
+  # Provide an ATOM for the articles
+  # Provide a mechanism for article feedback
+
+  My second requirement is probably the most important and something any DB-based article store approach fails to do elegantly: tweaking a site's style and adding images etc to accompany a piece of writing.
+  
+  (aside) Even as I wrote the above unordered list I had to tweak the stylings for article &lt;ol&gt;'s
+  
+  You'd thinking loading every article off the file system on every request might be a bit slow, but you'd be mistaken. The slowest part is in fact sorting every article by published date (which I've worked around with my own @<=>@ method). Article titles and dates are set using a HAML comment at the top of each article and a regex is simply used to pull out the meta-data. The simplest thing that could possibly work.
+  
+  Feel free to steal and plunder, it's all MIT etc, and you've "plenty of other options":http://github.com/search?q=blog if it's of no use. If you're keen to see something extracted then gimme a holler.
+  
+  h2. A new design
+  
+  I love to work with great designers so it's not often I get a chance to give design and front-end coding some time: things like setting up "a grid":http://toolmantim.com/?grid, fidgeting with source order and trackpad photoshopping was a lot of fun.
+  
+  (original menki design)
+  
+  I quite liked the original Menki design so I decided to run with it as a base for this new design.
+  
+  h2. Comments and discussion
+  
+  A well trodden topic, and not one with the same answer for everyone, I've debated long and hard about whether to include comments and their value to the site. Many of the technical articles, such as a "Getting Rails talking to SQLServer on OSX via ODBC":http://toolmantim.com/articles/getting_rails_talking_to_sqlserver_on_osx_via_odbc, are old and discussing software I haven't touched since writing about it. By leaving comments there is that a half-assed but ok way to let other people keep my content relevant? Not really.
+  
+  What about open-ended discussion, such as "Full-blown APIs with respond_to?":http://toolmantim.com/articles/full_blown_apis_with_respond_to. Not really the place for it.
+  
+  \...and finally there's that whole "Social Media thang":http://liako.biz/2008/12/thank-you-2008-you-finally-gave-new-media-a-name/. Open conservations and mass collaboration are important to me, but is a comment field the best way to accommodate for it? Twitter is too brief, emails aren't open, and comments don't really feel open or live enough either.
+  
+  In the mean time I've included the old comments in the articles until I converge on some kind of consensus.
+  
+  h2. Onwards and upwards
+  
+  \...
