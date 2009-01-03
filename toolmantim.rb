@@ -2,7 +2,9 @@ require 'rubygems'
 gem 'sinatra', '~> 0.3'
 require 'sinatra'
 
-__DIR__ = File.dirname(__FILE__)
+gem 'haml', '~> 2.0'
+gem 'RedCloth'
+gem 'rdiscount'
 
 %w(article quip).each do |model|
   require File.join(File.dirname(__FILE__), "/lib/#{model}")
