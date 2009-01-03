@@ -104,3 +104,8 @@ end
 not_found do
   haml :not_found
 end
+
+error do
+  @exception = request.env['sinatra.error']
+  haml :error
+end
