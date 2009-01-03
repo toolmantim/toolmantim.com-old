@@ -97,6 +97,10 @@ get '/articles.atom' do
   haml :feed, :layout => false
 end
 
+get '/tech/atom.xml' do
+  redirect 'http://feeds.feedburner.com/toolmantim', 301
+end
+
 get '/projects' do
   haml :projects
 end
