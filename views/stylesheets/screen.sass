@@ -21,15 +21,19 @@
   :color = !very_bright_text
 
 =highlight_link
+  :font-family "Lucida Grande", arial, sans-serif
   :display block
   :color = !standard_text
-  :padding 2px 10px 0 10px
+  :padding 0 0.8em 0 0.8em
   :background-color = !very_dull_text
-  :line-height 2em
+  :line-height 2.2em
 
 =highlight_link_hover
   :color = !very_bright_text
   :background-color = !dull_text
+
+=highlight_after
+  :content ' →'
 
 / Site-wide element styles
 
@@ -127,7 +131,7 @@ h1.site-header
 
 #navigation
   :float left
-  +standard_text_size
+  :font-size 1.2em
 
   li
     :float left
@@ -138,6 +142,9 @@ h1.site-header
     
     a:hover
       +highlight_link_hover
+    
+    a:after
+      +highlight_after
 
 p.quip
   :clear left
@@ -388,12 +395,17 @@ body.projects
         :margin-bottom 1em
 
         &.link
+          :font-size 1.2em
+        
           a, a:active
             +highlight_link
             :float left
 
           a:hover
             +highlight_link_hover
+            
+          a:after
+            +highlight_after
 
       .images
         :width 320px
