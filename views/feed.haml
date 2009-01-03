@@ -2,23 +2,23 @@
 %feed{:xmlns => "http://www.w3.org/2005/Atom"}
  
   %title toolmantim articles
+  %link{:href => "http://toolmantim.com/articles.atom", :rel => "self", :hreflang => "en", :type => "text/html"}/
   %link{:href => "http://toolmantim.com/articles", :rel => "alternate", :hreflang => "en", :type => "text/html"}/
- 
+   
   %author
     %name Tim Lucas
     %uri http://toolmantim.com/
     %email t.lucas@toolmantim.com
 
-  %id tag:toolmantim.com,/articles
+  %id tag:toolmantim.com,2009-01-04:/articles
   %updated= @articles.first.published.xmlschema
 
   - for article in @articles[0..14]
     %entry
-      %id== tag:toolmantim.com,#{article_path(article)}
+      %id== tag:toolmantim.com,2009-01-04:#{article_path(article)}
       %title{:type => "html"}= article.title
-      - if article.updated
-        %updated= article.updated.xmlschema
       %published= article.published.xmlschema
+      %updated= (article.updated || article.published).xmlschema
       %link{:href => "http://toolmantim.com#{article_path(article)}", :rel => "alternate", :hreflang => "en", :type => "text/html"}/
       %content{:type => "xhtml", "xml:lang"=>"en", "xml:base"=>"http://toolmantim.com/"}
         %div{:xmlns => "http://www.w3.org/1999/xhtml"}= absoluteify_links(article_html(article))
