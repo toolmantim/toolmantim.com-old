@@ -1,5 +1,3 @@
-require 'date'
-
 class Article
   def self.path=(path)
     @path = path
@@ -21,7 +19,7 @@ class Article
     text[/\-\s*#\s*#{name}:\s*(.+)/, 1]
   end
   def self.parse_date(date_string)
-    date_string && Date.civil(*date_string.split('-').map{|s|s.to_i})
+    date_string && Time.local(*date_string.split('-').map{|s|s.to_i})
   end
   
   attr_reader :path, :template

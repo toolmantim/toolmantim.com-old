@@ -60,7 +60,7 @@ describe "Article.parse_date" do
     Article.parse_date(nil).should be_nil
   end
   it "returns the date" do
-    Article.parse_date("2008-12-25").should == Date.new(2008,12,25)
+    Article.parse_date("2008-12-25").should == Time.local(2008,12,25)
   end
   it "returns blows up if given an invalid date" do
     lambda { Article.parse_date("12-25-2008") }.should raise_error
