@@ -10,7 +10,7 @@
       %ol
         - for month in @articles_by_year_then_month[year].keys.sort.reverse
           %li
-            %h3= Date.new(2008, month, 1).strftime("%B")
+            %h3= Time.new(2008, month, 1).strftime("%B")
             %ol
               - for article in @articles_by_year_then_month[year][month].sort
                 %li
