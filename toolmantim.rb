@@ -111,10 +111,12 @@ get '/sitemap.xml' do
 end
 
 not_found do
+  content_type 'text/html'
   haml :not_found
 end
 
 error do
   @error = request.env['sinatra.error'].to_s
+  content_type 'text/html'
   haml :error
 end unless Sinatra.application.options.env == :development
