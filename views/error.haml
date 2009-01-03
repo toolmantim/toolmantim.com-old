@@ -1,5 +1,10 @@
 - @page_title = "toolmantim.com - error"
 - @body_class = "error"
 
-%p Deary me! Looks like there was an error.
-%p= @exception.name
+%p
+  %strong Deary me!
+  Looks like there was an error:
+  &= @error
+
+%p
+  Drop an email to <span class="email">t.lucas@#{thisdomain}</span> and I'll get right onto it.
