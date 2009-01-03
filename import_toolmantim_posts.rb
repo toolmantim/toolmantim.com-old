@@ -30,7 +30,7 @@ Article.eager(:comments).filter(:category_id => 1).all.each do |article|
     f.puts
     f.puts "#archived-comments"
     f.puts "  %h1 Archived comments"
-    f.puts "  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below."
+    f.puts "  %p Comments were previously allowed on articles. Though no new comments are being accepted you can see the old comments below."
     f.puts "  %ol"
     article.comments.each do |comment|
       f.puts "    %li#comment_#{comment[:id]}"
