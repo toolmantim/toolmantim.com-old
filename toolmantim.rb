@@ -40,6 +40,9 @@ helpers do
   def article_html(article)
     haml(article.template, :layout => false)
   end
+  def article_image_path(article, image)
+    "/images/articles/#{article.slug}/#{image}"
+  end
 end
 
 before do

@@ -4,8 +4,10 @@
 !standard_text = #b8bdc1
 !very_bright_text = #fff
 !bright_text = #d6dbde
+!slightly_dull_text = #939ba4
 !dull_text = #5b6168
 !very_dull_text = #4c5156
+!grey_background = #393e44
  
 =standard_text_size
   :font-size 1.4em
@@ -72,7 +74,7 @@ body
 
 #about
   :clear both
-  :background-color #393e44
+  :background-color = !grey_background
   :-webkit-border-radius 5px
   :padding 20px 20px 15px 20px
   :margin-top 40px
@@ -259,12 +261,13 @@ body.archive
       :padding-left 2em
     ul li, ol li
       :margin-left 1em
+      :margin-bottom 0.2em
     ul li
       :list-style disc
     ol li
-      :list-style numeric
+      :list-style decimal
 
-    p, ul, ol
+    p, ul, ol, blockquote
       :margin-bottom 1em
       code
         :font-size 1.2em
@@ -285,16 +288,23 @@ body.archive
       :text-transform uppercase
       :border-bottom-color = !very_dull_text
     h3
-      :font-size 1.8em
-      :color = !bright_text
-      :margin-top 1.5em
-      :margin-bottom 0.8em
+      :font-size 1.6em
+      :color = !dull_text
+      :margin-top 1em
+      :margin-bottom 0.2em
     h4
       :font-size = 1.2em * 0.9
       :text-transform uppercase
       
-    blockquote, pre
+    pre
       :padding-left 20px
+      
+    blockquote
+      :padding 1em 1em 1px 1.5em
+      :background-color = !grey_background
+      :margin-bottom 2em
+      :-webkit-border-radius 1em
+      :color = !slightly_dull_text
 
     pre
       :font-family Monaco, courier
@@ -309,6 +319,51 @@ body.archive
       :font-size 0.8em
     embed, object
       :margin-bottom 10px
+    
+    .pic p, .caption
+      :color #f00
+      
+    .pic a img, .frame
+      :border 1px solid
+      :border-color = !very_dull_text
+    .pic a:hover img
+      :border-color = !bright_blue
+      
+    .one
+      :width 100px
+    .two
+      :width 210px
+    .three
+      :width 320px
+    .four
+      :width 430px
+    .five
+      :width 540px
+    .six
+      :width 650px
+    .seven
+      :width 760px
+      
+    .left
+      :float left
+      :margin-right 20px
+    .right
+      :float right
+      :margin-left 20px
+    / img floated right within text
+    .right.inset 
+      :margin 0 120px 0 20px
+    / img floated right within text
+    .left.inset
+      :margin-left 230px
+      
+    #archived-comments
+      h1
+        +bell_gothic
+      pre
+        :font-size 1.2em
+      li
+        :font-size 1.0em
     
     @import views/stylesheets/code_highlighting.sass
 
