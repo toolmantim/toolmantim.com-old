@@ -1,3 +1,5 @@
+require 'date'
+
 class Article
   def self.path=(path)
     @path = path
