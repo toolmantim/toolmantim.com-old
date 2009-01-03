@@ -43,6 +43,11 @@ helpers do
   def article_image_path(article, image)
     "/images/articles/#{article.slug}/#{image}"
   end
+  def absoluteify_links(html)
+    html.
+      gsub(/href=(["'])(\/.*?)(["'])/, 'href=\1http://toolmantim.com\2\3').
+      gsub(/src=(["'])(\/.*?)(["'])/, 'src=\1http://toolmantim.com\2\3')
+  end
 end
 
 before do
