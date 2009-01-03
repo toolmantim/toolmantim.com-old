@@ -3,7 +3,7 @@ gem 'sinatra', '~> 0.3'
 require 'sinatra'
 
 gem 'haml', '~> 2.0'
-gem 'RedCloth'
+gem 'RedCloth', '~> 3'
 gem 'rdiscount'
 
 %w(article quip).each do |model|
