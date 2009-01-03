@@ -175,7 +175,7 @@
   If you're a Victorian head to the "October Melbourne RORO meetup":http://groups.google.com/group/rails-oceania/browse_thread/thread/bf70bf2d254f1987 where Pete will be demonstrating how to lathe Ruby objects with his new contraption.
 
 #archived-comments
-  %h1 Archived Comments
+  %h1 Archived comments
   %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
   %ol
     %li#comment_1542
@@ -272,3 +272,21 @@
           @timriley nice... interesting about Markov. For sample data that'd be mighty handy.
           
           @sam: yep, a typo. Fixed and thanks!
+    %li#comment_1553
+      %p.author
+        %a{:href => 'http://johnjwright.com'} John Wright
+      .body
+        :textile
+          Any idea how to use this from IRB?  I think it would be convenient for testing out different scenarios in irb as well.
+    %li#comment_1554
+      %p.author
+        %a{:href => 'http://toolmantim.com/'} Tim Lucas
+      .body
+        :textile
+          @johnwright: yeah you should be able to simply <code>require 'spec/blueprint'</code> and off you go.
+    %li#comment_1555
+      %p.author
+        John Wrigt
+      .body
+        :textile
+          Yes, that works assuming your RAILS_ENV=test so that machinists and sham are required and the machinist module is included in ActiveRecord::Base as is done in vendor/plugins/machinists/init.rb.

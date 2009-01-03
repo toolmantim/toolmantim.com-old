@@ -230,7 +230,7 @@
   "Sourcemage's Git Guide":http://wiki.sourcemage.org/Git_Guide has some very very handy real-life examples of git commands you'll often need.
 
 #archived-comments
-  %h1 Archived Comments
+  %h1 Archived comments
   %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
   %ol
     %li#comment_1384
@@ -413,3 +413,27 @@
             git-config branch.master.merge refs/heads/master
           
           I have a fear of manually editing anything in the actual repository :)
+    %li#comment_1559
+      %p.author
+        Gabriel
+      .body
+        :textile
+          Thanks a lot for the post, it was helpful.
+          
+          I was trying to setup a public repo that people could get at via http - and to do that, you need to do two more commands on the remote repo:
+          
+          $ git --bare update-server-info
+          $ mv hooks/post-update.sample hooks/post-update
+          
+          (the second command didn't work for me - the hook was already in the right place)
+          
+          This is from the git documentation:
+          http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#public-repositories
+    %li#comment_1560
+      %p.author
+        Gabriel
+      .body
+        :textile
+          One addendum to my prior comment: you need to mark the post-update hook as executable:
+          
+          chmod +x hooks/post-update
