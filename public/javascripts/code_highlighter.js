@@ -275,6 +275,6 @@ CodeHighlighter.addStyle("html", {
 
 CodeHighlighter.addStyle("shell",{
 	keywords : {
-		exp: /(\$ ?)([^\n]+)/,
-	},
+		exp: /(\$ ?)([^\n]+)/
+	}
 });
