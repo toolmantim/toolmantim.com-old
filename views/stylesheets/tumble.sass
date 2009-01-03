@@ -1,0 +1,201 @@
+!title_color = #444
+!description_color = #777
+!post_title_color = #6498cc    
+!text_color = #444
+!inline_link_color = #6498cc
+!quote_color = #888
+!quote_border_color = #6498cc
+!quote_source_color = #555
+!link_post_color = #c00
+!conversation_background_1_color = #f4f4f4
+!conversation_background_2_color = #e8e8e8
+!conversation_border_color = #bbb
+!conversation_text_color = #444
+!date_color = #222
+!date_block_color = #222
+!date_block_text_color = #333
+
+div
+  &.tumble
+    :width 420px
+    :margin-left 270px
+    :position relative
+
+    a
+      :text-decoration underline
+
+    h2
+      :margin-top 50px
+      :margin-bottom 50px
+      :text-transform none
+      :color #999
+
+    pre
+      :width 170%
+
+  &#content div#description
+    :position absolute
+    :right -170px
+    :width 160px
+    :text-align right
+
+  &#description
+    :font Normal 17px Helvetica,sans-serif
+    :line-height 20px
+    :color = !description_color
+
+    a
+      :color = !description_color
+
+  &.post
+    :position relative
+    :margin-bottom 40px
+    :padding-right 20px
+
+    div
+      &.date
+        :position absolute
+        :left -260px
+        :text-align right
+        :width 230px
+        :white-space nowrap
+        :font-size 34px
+        :letter-spacing -2px
+        :color = !date_color
+        :text-transform uppercase
+        :line-height 35px
+
+        div.date_brick
+          :float right
+          :height 30px
+          :width 45px
+          :background-color = !date_block_color
+          :color = !date_block_text_color
+          :font Bold 12px Verdana, Sans-Serif
+          :text-align center
+          :line-height 12px
+          :margin-left 10px
+          :padding-top 5px
+          :letter-spacing 0px
+          :overflow hidden
+
+      &.caption
+        :font-size 14px
+        :font-weight bold
+        :color #ffc500
+        :margin-top 10px
+        :padding 0px 20px 0px 20px
+
+        a
+          :color #ffc500
+
+      &.regular
+        :font-size 12px
+        :color = !text_color
+        :line-height 17px
+
+        blockquote
+          :font-style italic
+          :border-left solid 2px = !text_color
+          :padding-left 10px
+
+      &.quote div
+        &.quote_text
+          :font-family Helvetica, sans-serif
+          :font-weight bold
+          :color #fff
+          :border-left solid 5px
+          :border-left-color = !quote_border_color
+          :padding-left 10px
+
+          span
+            &.short
+              :font-size 36px
+              :line-height 40px
+              :letter-spacing -1px
+
+            &.medium
+              :font-size 25px
+              :line-height 27px
+              :letter-spacing -1px
+
+            &.long
+              :font-size 16px
+              :line-height 20px
+
+          a
+            :color = !quote_color
+
+        &.source
+          :font-size 16px
+          :font-weight Bold
+          :color = !quote_source_color
+          :margin-top 5px
+
+          a
+            :color = !quote_source_color
+
+      &.link a
+        :font Bold 20px Helvetica, sans-serif
+        :letter-spacing -1px
+        :color = !link_post_color
+
+      &.conversation ul
+        :list-style-type none
+        :margin 0px
+        :padding 0px 0px 0px 1px
+        :border-left solid 5px = !conversation_border_color
+
+        li
+          :font-size 12px
+          :padding 4px 10px 4px 8px
+          :color = !conversation_text_color
+          :margin-bottom 1px
+
+          span
+            &.label
+              :font-weight bold
+
+            &.user_1
+              :color #666
+
+            &.user_2
+              :color #888
+
+            &.user_3
+              :color #aaa
+
+          &.odd
+            :background-color = !conversation_background_1_color
+
+          &.even
+            :background-color = !conversation_background_2_color
+
+      &.video
+        :width 400px
+        :margin auto
+
+    img.permalink
+      :width 14px
+      :height 13px
+      :border-width 0px
+      :background-color #000
+      :display none
+      :position absolute
+      :right 0px
+      :top 0px
+      :z-index 10
+
+    &:hover img.permalink
+      :display inline
+
+    h2
+      :font-size 18px
+      :font-weight Bold
+      :color = !post_title_color
+      :letter-spacing -1px
+      :margin 0px 0px 5px 0px
+
+      a
+        :color = !post_title_color
+        :text-decoration none
