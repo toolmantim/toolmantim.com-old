@@ -64,7 +64,7 @@ get '/' do
   haml :home
 end
 
-%w( screen ie7 ie6 ).each do |stylesheet|
+%w( screen ie7 ie6 tumble ).each do |stylesheet|
   get "/stylesheets/#{stylesheet}.css" do
     content_type 'text/css'
     headers "Expires" => (Time.now + 60*60*24*356*3).httpdate # Cache for 3 years
@@ -117,4 +117,4 @@ end
 error do
   @error = request.env['sinatra.error'].to_s
   haml :error
-end
+end unless Sinatra.application.options.env == :development
