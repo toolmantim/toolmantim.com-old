@@ -1,0 +1,1 @@
+* Just using a date for publishing means funky things for different timezones as the ATOM feeds use timestamps, not dates.
