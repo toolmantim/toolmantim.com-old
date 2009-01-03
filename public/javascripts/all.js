@@ -25,14 +25,20 @@ $(function() {
       var image = $(this);
       var selector = $("<li><a href='javascript:void(0)'><span></span>" + image.attr("alt") + "</a></li>");
       selector.find("a").attr("title", image.attr("alt")).click(function() {
-        // Toggle navigator dots
-        navigator.find("a").removeClass("active");
-        $(this).addClass("active");
-        // Swap images
-        var currentImage = imagesContainer.find("img:visible");
-        currentImage.css({"z-index":1});
-        image.css({"z-index":0}).show();
-        currentImage.fadeOut(500);
+        var oldImage = navigator.data("currentImage");
+        // Already active?
+        if (oldImage == image) {
+          return;
+        } else {
+          navigator.data("currentImage", image);
+          // Toggle navigator dots
+          navigator.find("a").removeClass("active");
+          $(this).addClass("active");
+          // Swap images
+          if (oldImage) oldImage.css({"z-index":1});
+          image.css({"z-index":0}).show();
+          if (oldImage) oldImage.fadeOut(500);
+        }
       });
       navigator.append(selector);
     })
