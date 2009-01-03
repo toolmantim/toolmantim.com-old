@@ -1,4 +1,5 @@
 require 'rubygems'
+gem 'sinatra', '~> 0.3'
 require 'sinatra'
 
 __DIR__ = File.dirname(__FILE__)
