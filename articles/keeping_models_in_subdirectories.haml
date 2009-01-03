@@ -40,3 +40,80 @@
   I wonder if I can add a user script and customise the styles in "NetNewsWire":http://www.newsgator.com/NGOLProduct.aspx?ProdID=NetNewsWire to get the same affect for all blog posts following this convention.
   
   The only change I made was concatting CodeHighlighter into one file to reduce the page load by 4 HTTP requests.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_369
+      %p.author
+        %a{:href => 'http://flickr.com/photos/lachlanhardy'} Lachlan Hardy
+      .body
+        :textile
+          Now if you'd just change the default code colour to something different to post text life would be sweet ;)
+          
+          I like it, actually. Glad I got out of the feed reader!
+    %li#comment_370
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          That better?
+    %li#comment_371
+      %p.author
+        %a{:href => 'http://www.themaninblue.com'} Cameron Adams
+      .body
+        :textile
+          You made me get out of Google Reader for that!?
+          
+          Bastard.
+    %li#comment_373
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          How about <a href="http://toolmantim.com/article/2006/11/29/instance_eval_brings_sexy_back">this</a>?
+    %li#comment_383
+      %p.author
+        %a{:href => 'http://myles.id.au'} Myles Byrne
+      .body
+        :textile
+          Another great tip from the toolman. I just started moving some of my sti models into subdirectories and noticed a small issue with your example:
+          
+          <pre><code class="ruby">
+          config.load_paths += %w( \#{RAILS_ROOT}/app/models/payments )
+          </code></pre>
+          
+          ... should use the @%W( ... )@ (capital W) syntax if you want interpolation.
+          
+          Also this:
+          
+          <pre><code class="ruby">
+          config.load_paths += Dir["\#{RAILS_ROOT}/app/models/*"].find_all { |f| File.stat(f).directory? }
+          </code></pre>
+          
+          ... will include all first level subdirectories without having to explicitly name them.
+          
+          Two comments in one day. Next thing you know I might actually start blogging.
+    %li#comment_384
+      %p.author
+        %a{:href => 'http://myles.id.au'} Myles Byrne
+      .body
+        :textile
+          Damn it. I put class="ruby" in my @code@ tags and your comment system (or maybe redcloth?) ate them.
+          
+          Your fancy javascript highlighting code too good for my snippets? ... maybe I'll just take my little nuggets of wisdom elsewhere.
+    %li#comment_386
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Reverse engineering my code highlighting now Myles? hah! That'll teach you.
+          
+          Yeah over these hols I'm going to boost up this site a bit... I'll make sure people can preview, as well as post pretty code snippets and be updated to follow-up comments.
+    %li#comment_387
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Nice one on that snippet btw. Sooner or later we could tumblelog this stuff.

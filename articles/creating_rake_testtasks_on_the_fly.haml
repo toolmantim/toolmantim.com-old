@@ -35,3 +35,68 @@
   The most unsexy part is the @had_errors@, but I can't think of nice why to write that. We need to catch the errors because when a @Rake::TestTask@ fails it throws an exception, but we want to run all the tests, even if some fail, and still have Ruby give the correct error return code to shell.
   
   It's not the first time lately that @eval@ has come to the rescue. I have a feeling that I'm soon going to be known around the office as "eval black magic boy".
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_471
+      %p.author
+        %a{:href => 'http://interblah.net'} James Adam
+      .body
+        :textile
+          Is there any reason why you don't generate the TestTasks outside of your "task :the_lot" task, and then have all the generated tasks as dependencies?
+          
+          <pre><code>namespace :test do
+            CORE_PLUGINS = %w(jf_core_models ...)
+            CORE_PLUGINS.each do |p|
+              Rake::TestTask.new(p => :environment) do |t|
+                t.libs << "test" 
+                t.verbose = true
+                t.pattern = "vendor/plugins/\#{p}/test/**/*.rb" 
+              end
+            end
+            desc "Test the core plugins and the main application" 
+            task :the_lot => CORE_PLUGINS
+          end</code></pre>
+          
+          I'm not sure if that would retain the error-handling behaviour that you're after, however.
+          
+          If the fixture paths are the real issue, have a look at the testing extensions that the "engines plugin 1.2 release":http://svn.rails-engines.org/engines/tags/rel_1.2.0/lib/engines/testing.rb provides - it was developed with testing multiple plugins in mind.
+    %li#comment_474
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          James: Nice, I like it. It does though have the problem of failing if any of the plugin tests fail... you'd need to expand the task to do that, as you said.
+          
+          Cheers for that link. We handle fixture paths using a plugin we've developed, ExternalFixtures, so we can specify:
+          
+          <pre><code>
+          class Admin::UsersControllerTest < Test::Unit::TestCase
+            fixtures :access_logs
+            external_fixtures PLUGIN_PATHS[:jf_core_models] => [:users, :roles, :user_roles]
+          end
+          </code></pre>
+          
+          I'm not a fan of the idea of copying around fixture files.
+    %li#comment_476
+      %p.author
+        %a{:href => 'http://interblah.net'} James Adam
+      .body
+        :textile
+          I'd be interested to see your plugin. Earlier versions of the engines plugin tried to add more "smarts" to the fixtures method, specifying the file and the class to be used, but it became too complicated to support as Rails itself evolved.
+          
+          The current approach of mirroring all the fixtures to a known temporary location when the tests are run is the simplest, least intrusive solution that should still work for everyone, which is why I opted for that rather than some (much needed) patching to the fixtures mechanism itself. It's pragmatism over elegance, unfortunately.
+          
+          Keep up the good work!
+    %li#comment_479
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Our External Fixtures plugin is a bit of a hack. We had to call the original <code>Test::Unit::TestCase#load_fixtures</code> from within our <code>Test::Unit::TestCase#load_fixtures_with_external_fixtures</code>, and then copy+paste the original <code>#load_with_fixtures</code> implementation.
+          
+          It'd be a simple core patch to parameterize <code>#load_with_fixtures</code> method so we don't have to reimplement it. That'd need to be accepted into core before we could release the plugin.
+          
+          For the moment, the Engines way of doing things is probably best for general consumption.

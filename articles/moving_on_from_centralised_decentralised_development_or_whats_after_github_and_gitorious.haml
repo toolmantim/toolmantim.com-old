@@ -43,3 +43,166 @@
   Do we *need* to sacrifice distributed and open development to gain these benefits of communication and interaction?
   
   As we use tools such as gitorious and github let's dream, and plan, an open and distributed system which provides the same level of communication and interaction whilst keeping with the distributed and open development model.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_1455
+      %p.author
+        %a{:href => 'http://lachstock.com.au'} Lachlan Hardy
+      .body
+        :textile
+          These are some great points, Tim. Especially about playpens of innovation versus solid open tools. The first thing that springs to mind when I read this is: "how do we build a simple usable GUI for our local Git hosting?"
+          
+          But as I said to you the other day while we were cussing out Github for being unavailable (we were a little 'in the moment', I think, and forgot we were dealing with a closed beta - big ups to Chris Wanstrath for sending an invite to some punk he didn't know and to Dr Nic for the geekiest wedding present a Rubyist could want right now: another invite)... Right, where was I? What time is it? Ugh.
+          
+          Anyway, as I was saying, I think both Github and Gitorious (as sweet as they are) are old thinking applied to new problems. And that's okay because, as I think you're saying here, we're not even sure what those new problems are yet. We're too new to this. As a community. 
+          
+          I'm sure there are hardcore kernel hackers out there who've encountered some of this before, but they're probably not Rubyists and our problems are different to theirs. And we'll have different ways to solve them.
+          
+          Let's not forget the Pythonistas (what do the Pythonic call themselves?) - there are a hell of a lot of Python repositories on Github. And a bunch of other sexy languages too. This isn't just a Ruby problem. We shouldn't look only to our own community for solutions. This is a broader issue for everyone using distributed source control.
+          
+          I'd love to see folks run with your questions, build on that list and start answering them. We might start with some old thinking, but I'm sure we'll grow from there.
+    %li#comment_1456
+      %p.author
+        Alex Mankuta
+      .body
+        :textile
+          Take a look at <a href="http://launchpad.net/">Launchpad</a>. While they support only Bazaar they have some nice features other should adopt. Like remote branches. You can have everything of LP like bug tracker, blueprints and all the community and keep your code in your repository elsewhere.
+    %li#comment_1457
+      %p.author
+        %a{:href => 'http://www.travisswicegood.com'} Travis Swicegood
+      .body
+        :textile
+          Excellent post and mirrors a lot of what I've been thinking.  What we need is distributed versions of that communication data.  I'm thinking things like trackbacks on clone and such modifying repository metadata.  With that, the sites like Github could parse the data and help make it visual, but there's no dependency on them.
+    %li#comment_1458
+      %p.author
+        %a{:href => 'http://nathanherald.com'} Nathan
+      .body
+        :textile
+          It's kinda like blogger.com is for blogging: hosted, not as customizable, but does alright for starting out because it breaks the barriers for entry down.
+          
+          github's downtime was irrelevant for my projects. I use github as a means to distribute what I do to others easily. If I set up my own self-hosted UI for people to browse my git repos (or my forks) then it might suffer downtime as well. git-format-patch really is the best way for me to get code changes to team members if they need it quick.
+          
+          I do see many people using it as a central repository, but I don't think github forces you into that model. I see github as the public branch that I push to as an authority where anyone can download the latest code. Linus has this as well, a public repo that he pushes to when he feels like it.
+          
+          github is not the center of _my_ development, it's one of those yellow smilies out on the edge :) 
+    %li#comment_1459
+      %p.author
+        %a{:href => 'http://nathanherald.com'} Nathan
+      .body
+        :textile
+          Also, I do agree Travis that the communication data should be standardized and portable across systems. That would allow for easier collaboration between disparate UI's or systems.
+    %li#comment_1460
+      %p.author
+        %a{:href => 'http://blog.mmediasys.com'} Luis Lavena
+      .body
+        :textile
+          I second Alex Mankuta comment.
+          
+          The whole idea of decentralized VCS is that you can have everything *elsewhere*, but we are putting everything on the same bucket.
+          
+          What will be great if both services can work with remote forks monitoring.
+          
+          Bazaar as example provide some dumb protocol publishing, like ftp and sftp. I see some problem with Git on that topic: I need to setup a Git server just to share my fork with others.
+          
+          Also, *fork* isn't as good as it sounds... keep track of so many "variations" of the same work can get complex and make my eyes bleed :-P
+          
+          Take a look at the "network":http://github.com/wycats/merb-core/network (fork list) of merb-core.
+          
+          Take that as example, when you see the commits log from these forks, you mostly see "merge with"... keeping the fork up-to-date, but I don't see any particulay contribution there that justify the fork.
+          
+          Anyway, just a silly point of view from someone who doesn't like _fork_ everything.
+    %li#comment_1461
+      %p.author
+        %a{:href => 'http://www.timocracy.com'} Tim Connor
+      .body
+        :textile
+          There isn't any problem with using the faux-centralized services, because it's git.  You still have a local copy and can push it up anywhere you want if they go down.  Yeah, it'd be a mild inconvenience, the first time, but once you have it up on your own server, and it's up on github, and somewhere else....
+          
+          Maybe down the road it will be a smart network of redundant nodes, but it's not like having some of them on github now prevents that.
+    %li#comment_1462
+      %p.author
+        %a{:href => 'http://johansorensen.com'} Johan Sorensen
+      .body
+        :textile
+          The point of Gitorious is mainly exposure to ease collaboration. That means that there has to be a known place where contributors can get their repository from, and likewise a place for you to find your contributors changes. That inherently means that there has to exist a somewhat centralized point that at the very least acts as a starting point for collaboration.
+          
+          Using that point as the only one isn't the right way to do it. Gitorious.org itself for instance is deployed from another branch on anther server all together, but the repository on the site acts as my "hey, here's my changes". Like wise, the clones off the project on gitorious acts as their respective owners' showcase/notification to me of their changes. The people running gitorious on their own internal company servers, run it from a fork somewhere behind their firewalls.
+          
+          But, I get what your point it and I somewhat agree (and it's been a topic on the "mailinglist":http://groups.google.com/group/gitorious/browse_frm/thread/c50cec74f9f67b4d "too":http://groups.google.com/group/gitorious/browse_frm/thread/40a541377060cb34) that it's something to aim for. However, you also have to balance it against the fact that in order to build a community around your project, you need at least a point for it to rotate around. For Git itself that's the mailinglist, it doesn't get any more centralized than that, but that doesn't have to be the only place where git development takes place (it isn't), but it's where the development is being discussed and reviewed That part is the key purpose behind gitorious (or at least, a take on it), it's not there yet it but it's well underway. And further decentralization is definitely something to aim for, as long as the cost isn't inherent fragmentation.
+    %li#comment_1463
+      %p.author
+        %a{:href => 'http://www.atnan.com'} Nathan de Vries
+      .body
+        :textile
+          This is one of the reasons why I get a bit hot under the collar when developers relatively new to DVCS start advocating a model which is inherantly broken. I think Github looks fantastic, but at the moment I think it's altogether missing the point. Or perhaps more accurately, its users are missing the point.
+          
+          One of the major reasons Github has become the "central blue frowny face" is that they decided to create a social network *and* provide a Git repository hosting service, with no seperation between the two. This means that the majority of Github users are using Github like SVK with a remote repository & local checkout, and pushing upstream when they're connected to the interwebs.
+          
+          Of course, this is a side effect of Git which requires smarts on both the client & server, and Github's done pretty damn well when it comes to providing a decent Git hosting service. You can understand why everything is centralised, because Github's workflow is optimised for that.
+          
+          In contrast, sites like Ohloh.net provide the social aspect of collaborative development, while leaving it up to the developers to maintain their repository. In the case of Ohloh.net, developers can link in their CVS, SVN or Git repositories, which allows others to discover the project and potentially help out. Launchpad has a similar approach with their "Remote Branches", minus the social interaction.
+          
+          Github needs to move away from the "one-stop-git-shop" concept, and act more like a smiley out on the edge.
+    %li#comment_1464
+      %p.author
+        %a{:href => 'http://railsfreak.com'} Josh Owens
+      .body
+        :textile
+          Is there really an issue here?  Github being down did what to you?  Stopped you from committing?  Stopped you from deploying via github?
+          
+          This seems like a simple issue to solve... Setup a "server" and put the repo on it, then just add another remote on your local machine and push to it, or setup a cron script to do a pull on the server side.
+          
+          Don't fault github or gitorious if you don't leverage the distributed nature of git.
+    %li#comment_1465
+      %p.author
+        %a{:href => 'http://www.atnan.com'} Nathan de Vries
+      .body
+        :textile
+          @Josh Owens: It may help if you read what Tim wrote.
+          
+          The issue is that Github has centralised a decentralised workflow. The example given was that despite 27 people forking the Rails Textmate bundle, *all of them were hosted on Github*. In the event that Github goes down (which it did), it's unavailable everywhere.
+    %li#comment_1466
+      %p.author
+        %a{:href => 'http://railsfreak.com'} Josh Owens
+      .body
+        :textile
+          Nathan,
+          
+          Would it make you happy if I wrote a quick script to add into the github post-receive hook field that would auto pull your repo to a publicly available git repo on your box?  I mean, it might take 10 minutes to get this great feature, and then we are back to yellow smileys?
+          
+          Tim,
+          
+          You want smart nodes?  It is pretty easy to use something like god + a ruby script to accomplish this, or even the post-receive script that I mentioned above.  Or write a post-commit hook for your own git repo and auto-push to github instead?
+          
+          Come on guys.  Non-issue.
+    %li#comment_1467
+      %p.author
+        %a{:href => 'http://www.mustacheinc.com'} mustache
+      .body
+        :textile
+          Github at its simplest solves the biggest problem with dcvs, exposing your repository to other people. Are we supposed to just add a million users to our laptops and let people pull via ssh?
+          
+          The argument that 'what if github goes down' doesn't even make sense. How is it different if github goes down than if you weren't using github at all? Either way, your repository isn't publicly available.
+          
+          All using github does is add another clone in the cloud that people can pull from on a whim. 
+          
+          
+    %li#comment_1481
+      %p.author
+        mdub
+      .body
+        :textile
+          Git, a BETTER better CVS. :-)
+    %li#comment_1501
+      %p.author
+        slicks
+      .body
+        :textile
+          @ Josh: 
+          
+          Would it make you happy if people did the same thing with svn?
+          
+          The point is that the workflow is still centralized. Everyone using github (as their *MAIN* sharing medium) is kidding themselves in thinking that they've somehow adopted a decentralized workflow. Sure, you can make offline commits while github is down-- but if people are tracking you through that one site it won't matter what you do locally until it's back up. You could hack your local repo and mirror it somewhere else-- sure.. you can do that with just about any SCM with relative ease-- but I bet most people won't find out about the mirror until the centralized server is back up.

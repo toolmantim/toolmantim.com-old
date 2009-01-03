@@ -166,3 +166,123 @@
   # The community (and Jamis in particular) is open to admitting they don't know all the answers and are sharing knowledge instead of getting on high horses or climbing ivory towers.
   
   Time for the ActionController weight-watchers plan.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_459
+      %p.author
+        %a{:href => 'http://topfunky.com'} topfunky
+      .body
+        :textile
+          Well written.
+          
+          I started a new app in December and wrote most of it in this fashion. It also makes the code much more reusable since models are available everywhere but controller methods are only available in one place.
+    %li#comment_460
+      %p.author
+        Andi
+      .body
+        :textile
+          Nice article. Basically you're using "Exceptions" to propagate Domain errors. If this is a good thing or not is up to the programmer. In Java it's not considered very good style. Then again, Ruby isn't Java ;)
+    %li#comment_461
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @topfunky: thanks. Yeah, I can imagine it'd be handy when adding APIs and in other scripts.
+          
+          @Andi: The ruby/java distinction shouldn't really make any difference. I understand the sentiment, but how should this code then be written, whilst making sure the model is enforcing consistency?
+    %li#comment_462
+      %p.author
+        %a{:href => 'http://www.seoonrails.com/'} Eadz
+      .body
+        :textile
+          I haven't written my user activation code yet, but it's next on the list so perfect timing with this great post Tim :)
+    %li#comment_463
+      %p.author
+        Shane
+      .body
+        :textile
+          A quick question.  Why did you decided to use user.send(:activate!) instead of user.activate!
+          
+          Thanks
+    %li#comment_464
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @shane: <code>User#activate!</code> is a private method, and as <code>User.find_and_activate!</code> is a class method it can't directly call it. I don't mind this slight hack as it's contained within the same class. It does proabably deserve a comment in the code though.
+    %li#comment_467
+      %p.author
+        Max
+      .body
+        :textile
+          @Andi: on the contrary, that's how checked Exceptions in Java *should* be used. Forcing developers to catch TheDataBaseIsOnFireSoWhatchaGoingToDoAboutItExceptions is poor design. On the other hand, any error condition that the application *can* do something about is almost certainly part of the business domain.
+    %li#comment_468
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Max's point makes more sense to me than "[you shouldn't use] Exceptions to propagate Domain errors"
+    %li#comment_547
+      %p.author
+        %a{:href => 'http://ud8.net'} nicolas
+      .body
+        :textile
+          but you still have the problem pointed out  by Barry Hess in http://technoweenie.stikipad.com/plugins/show/User+Activation
+          (about the need to check for empty params[:activation_code] due to the danger of getting reconfirmed and logged in as an other unreconfirmed user). but beside this.. thank you for this eye-opener (can i use this phrase in english? ;-) )
+    %li#comment_548
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks nicolas. I've updated the article above to handle this, though I think nil argument should still be handled correctly within @User.find_and_activate@ level rather than the controller. 
+    %li#comment_609
+      %p.author
+        %a{:href => 'http://www.webapart.be'} Geoffroy
+      .body
+        :textile
+          This is just brilliant! I am java developer for a living and a Rails developer as part time occupation and this is the way I work in java but couldn't figure out how to adapt this to Ruby. Thanks for the pointers.
+    %li#comment_754
+      %p.author
+        steve
+      .body
+        :textile
+          Great post!  I am wondering why find_and_activate! and activate! has to be separate?  The code in the latter could easily be inserted into the end of the former.
+    %li#comment_780
+      %p.author
+        %a{:href => 'http://the.railsi.st'} Patrick Crowley
+      .body
+        :textile
+          I, too, am digging this code.
+          
+          It would be nice to see a followup post, with a complete, working code example. Activation affects login and signup, but I don't see that fully documented here.
+          
+          The <a href="http://technoweenie.stikipad.com/plugins/show/User+Activation">acts_as_authenticated docs on activation</a> are kind of half-assed, so I'm sure a more complete activation example would be very welcome.
+    %li#comment_781
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Alright Patrick... and I've been meaning to post some mods to AAA with some other fixes too. I'll keep you posted.
+    %li#comment_822
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Doesn't the activate! method need to set the activation_code to nil as well as setting activated_at, otherwise activated? will never return true.
+    %li#comment_823
+      %p.author
+        %a{:href => 'http://thelucid.com'} Jamie Hill
+      .body
+        :textile
+          Apologies for the double post. Is there any reason why the activate! method can't be public (avoiding the send hack)?
+    %li#comment_835
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Jamie: ahh I left out the implemention of the @User#activated?@ method in the final example. An implementation of @def activated?; activated_at? end@ should work.
+          
+          No reason to keep it private except for that your making it public. For my intent and purpose it was to be only called from the class method.

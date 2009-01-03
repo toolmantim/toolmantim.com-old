@@ -21,3 +21,40 @@
   * the "thin":http://code.macournoyer.com/thin/ merb adapter
   
   Soon I'll chuck in "haproxy":http://haproxy.1wt.eu/ for load balancing across merb instances.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_1497
+      %p.author
+        %a{:href => 'http://drnicwilliams.com'} Dr Nic
+      .body
+        :textile
+          Bahumbug. Nothing related to deployment is "blazingly obvious" :) All articles on the topic are justified.
+    %li#comment_1498
+      %p.author
+        %a{:href => 'http://hughevans.net'} Hugh
+      .body
+        :textile
+          Would thin's support for unix socket connections still work in this setup do you think?
+    %li#comment_1499
+      %p.author
+        %a{:href => 'http://macournoyer.com'} marcournoyer
+      .body
+        :textile
+          @hugh you can use unix socket w/ thin form the merb script by specifying a path to a socket file for the -h option:
+          
+          merb -a thin -h /tmp/thin.sock
+    %li#comment_1500
+      %p.author
+        %a{:href => 'http://hughevans.net'} Hugh
+      .body
+        :textile
+          @marcournoyer awesome, thin rocks. Thanks :)
+    %li#comment_1504
+      %p.author
+        %a{:href => 'http://bubbal.co.uk'} Sam Nardoni
+      .body
+        :textile
+          I know this comment is side tracking a little, but passenger (mod_rails) now supports rack. Have you thought about using that?

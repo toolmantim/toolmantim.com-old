@@ -46,3 +46,38 @@
   <code>@person = Person.find(params[:id])</code>
   
   fixed everything, and it's now ticking along smoothly again.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_332
+      %p.author
+        %a{:href => 'http://leftjustified.net/'} Andrew Krespanis
+      .body
+        :textile
+          Ha! Cam's fault, Cam's fault, nah nah nee nah nah. ;)
+    %li#comment_865
+      %p.author
+        %a{:href => 'http://www.akitaonrails.com'} AkitaOnRails
+      .body
+        :textile
+          Well, A lot of outer joins can really freak out a query, but on the other hand I don't know how much data you have.
+          
+          Did you certify that your tables are all correctly indexed in the first place? Mainly in the foreign key columns? This should speed up things considerably.
+    %li#comment_866
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Akita: Yep the tables are indexed correctly, it's just that the query that the eager includes was generating SQL larger than MySQL's query buffer
+    %li#comment_1449
+      %p.author
+        %a{:href => 'http://www.samsaffron.com'} Sam Saffron
+      .body
+        :textile
+          FWIW, 
+          
+          I added my 2 cents on this at my "blog":http://www.samsaffron.com/archive/2008/03/15/You+should+be+very+careful+when+using+ActiveRecord+eager+loading
+          
+          The way ActiveRecord implements eager loading is wrong. 

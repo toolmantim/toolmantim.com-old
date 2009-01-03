@@ -58,3 +58,22 @@
   </code></pre>
   
   In your view you then just need to check if the field is required and mark it as so.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_523
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com/'} Dan Kubb
+      .body
+        :textile
+          What about using alias_method_chain to write method that intercept calls to the validates_* methods, and populates instance variables like you do here?  That way anyone who's written code using the standard approach can reflect on them rather than using a new syntax.
+    %li#comment_524
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Dan. Yeah you could, and people have already "had a go":http://www.google.com/search?q=rails+validation+reflection, but the validations API doesn't really provide much of what you'd need for creating forms with nice readable requirements. The above code is just a very simple example for learning purposes, I doubt it'd be that useful in a real-life app.
+          
+          I'm sure there's a bunch of other situations where it'd be very useful to have full validation reflections, just like association reflections, I just haven't had the need myself.

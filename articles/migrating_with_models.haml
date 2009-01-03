@@ -77,3 +77,46 @@
   </code></pre>
   
   Wallah! No external code dependencies. Nobody can break our migration... no matter what they can do to the code in @/app/models/@. And we still get to use our ActiveRecord mojo.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_88
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          and the "same discussion":http://wrath.rubyonrails.org/pipermail/rails-core/2006-February/000830.html was going on in the rails-core mailing list a few days ago
+    %li#comment_90
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          btw if you are initialising positions like above you want to start them from 1, not 0 (i.e. @Model.find(:all).inject(1) { ... }@)
+    %li#comment_178
+      %p.author
+        Anonymous
+      .body
+        :textile
+          Great article.  Definitely something I can use in my development.
+          
+          p.s.  It's Voila, not Wallah!  ;-P
+    %li#comment_179
+      %p.author
+        %a{:href => 'http://www.recentrambles.com'} charlie bowman
+      .body
+        :textile
+          I hadn't even thought about that! That's definately something to think about if you're working with open source, since it changes so frequently.
+    %li#comment_572
+      %p.author
+        %a{:href => 'http://teamaskins.net'} Ben Askins
+      .body
+        :textile
+          If only I was subscribed to your blog back in feb 2006.  I could have avoided some grief over the last couple of days.
+    %li#comment_573
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Well at least you found it when you had the grief! The fact that the migration documentation encourages you to use your models doesn't help either.

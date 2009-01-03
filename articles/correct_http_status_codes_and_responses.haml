@@ -45,3 +45,38 @@
   Should we not even bother returning errors with this level of detail and just output a plain text message outlining the errors?
   
   Surely these roads have been well travelled?
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_309
+      %p.author
+        %a{:href => 'http://lindsayevans.com/'} Lindsay
+      .body
+        :textile
+          Hi Tim,
+          
+          Not sure how useful it is, but WEBDAV has a bunch of <a href="http://www.webdav.org/specs/rfc2518.html#status.code.extensions.to.http11">HTTP status code extensions</a>, in particular '422 Unprocessable Entity'
+          
+          On the error message: In most of my apps I'm displaying a generic 'there were errors' message, then highlighting each field that was invalid & displaying the appropriate message - so the more detail provided the better.
+    %li#comment_313
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Lindsay... that addresses part of the problem.
+          
+          Turns out "400 Validator Error" is "how they're looking at doing it":http://dev.rubyonrails.org/changeset/5068 in Rails 1.2, though they're just relying on the 400 status code, not the "Validation Error"
+    %li#comment_494
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com'} Dan Kubb
+      .body
+        :textile
+          In edge rails they're using 422 Unprocessable Entity.
+    %li#comment_836
+      %p.author
+        murphy
+      .body
+        :textile
+          That was helpful, thanks! I will use 422 from now on.

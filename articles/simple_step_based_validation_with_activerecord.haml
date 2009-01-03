@@ -51,3 +51,100 @@
       project_for_step.valid?
     end
   end</code></pre>
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_1345
+      %p.author
+        justin
+      .body
+        :textile
+          maybe you should look at acts_as_state_machine ??
+          
+          Good docs here : 
+          
+          http://rails.aizatto.com/2007/05/24/ruby-on-rails-finite-state-machine-plugin-acts_as_state_machine/
+    %li#comment_1346
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>justin</em>: acts_as_state_machine is overkill for what I needed, and my brain just doesn't work in state machines. I also don't want the object to have a single current state.
+          
+          For this instance I'd much prefer to use the simpler solution which does exactly what I need and nothing more, that I can understand by simply looking at the code, has much less chance of breaking with Rails' changes and produces much more readable code.
+    %li#comment_1347
+      %p.author
+        Michael Koukoullis
+      .body
+        :textile
+          Dude I love your rails voodoo 
+    %li#comment_1348
+      %p.author
+        %a{:href => 'http://pivotalblabs.com'} Nick Kallen
+      .body
+        :textile
+          Very very elegant. Although I hate what you did with the controller.
+    %li#comment_1349
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          <em>Nick</em>: I hear ya. I also tried a version of the controller with separate edit/update for each step via routes but it turns out less concise w/o adding a route mapper helper method. I was <em>this</em> close to posting the alternative controller and route code but it was just a distraction from the main point of step-based validation.
+    %li#comment_1350
+      %p.author
+        %a{:href => 'http://peepcode.com'} topfunky
+      .body
+        :textile
+          I like the idea, but the syntax seems awkward. What about building a dynamic method for each step?
+          
+            @project.save_as_summary(params[:project])
+          
+          Then that would return true or false if the item validated and saved successfully.
+    %li#comment_1352
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          hrmm yes... though I'd like to keep to the standard valid/save/update methods.
+          
+          What about?
+          
+          <pre><code>@project = Project.find(params[:id]).as_summary_step
+          if @project.update_attributes(params[:project])
+          </code></pre>
+    %li#comment_1353
+      %p.author
+        %a{:href => 'http://pivotalblabs.com'} Nick Kallen
+      .body
+        :textile
+          Tim -- don't do it. Encapsulation!! the caller of project.save should know nothing of the state machine that lies within!
+    %li#comment_1355
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          but there is no state machine. A project can be valid for multiple steps at the one time... it's not a step-by-step progress kind of thing.
+          
+          It's more about perspectives than states, much the same as Jay's validatable plugin.
+    %li#comment_1358
+      %p.author
+        %a{:href => 'http://yeahnah.org'} Ryan Allen
+      .body
+        :textile
+          That's a nice way of doing conditional validation. I didn't quite get what you were doing at first but I got it now :) As for state machines, I've used them for managing lifecycles of domain objects, and the code that it yields is very, very concise (I wrote my own state machine library as I didn't realise acts_as_state_machine was more mature, when I first checked it ages ago it was a bit bunk).
+          
+          I think the problem with state machines and them 'not fitting' is they're muddled with theory and lots of examples in C... From what I can tell you can apply them to lots of things (like how Zed applies them to parsing HTTP w/ Ragel in Mongrel) if you cut through the cruft and use a high level API.
+    %li#comment_1359
+      %p.author
+        %a{:href => 'http://yeahnah.org'} Ryan Allen
+      .body
+        :textile
+          Another possibility is creating separate models for each perspective rather than clumping them all in to one model. Hard to say without seeing more specifically what you're trying to model.
+    %li#comment_1401
+      %p.author
+        %a{:href => 'http://mega.blaix.com/'} Justin
+      .body
+        :textile
+          Wow, this would have come in handy on a project several months ago. I think we ended up just putting the object in a session and checking each validation by hand until we could finally save on the last step. Very very dirty. I feel disgusting even talking about it now. I am so ashamed...

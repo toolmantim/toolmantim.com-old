@@ -103,3 +103,140 @@
    * Extending @Module@ with @mattr_accessor_with_default@
    * Extending @Rails::Config@ to provide a @my_app@ method, so instead of @MyApp::Config.paypal_host@ in your environments you could just use @my_app.paypal_host@
    * Implement @MyApp.config(&block)@ for block-style configuration
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_598
+      %p.author
+        %a{:href => 'http://darwinweb.net/'} Gabe da Silveira
+      .body
+        :textile
+          I dig this approach.  In order to get an app up and running quickly I recently had to do this:
+          
+          ssl_required :checkout, :process_payment if RAILS_ENV == 'production'
+          
+          Mostly because I just didn't have time to get Apache proxying to my development mongrel for local SSL testing.
+          
+          But after seeing this I'm thinking making SSL a configurable option would be a reusable approach since any of the three environments may or may not support SSL in any given scenario.
+    %li#comment_599
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Gabe: Exactly. Not to mention if you added more environments, such as staging. In this app I used the config to specify what protocol to use for @default_url_options@ in my <code>ActionMailer</code>'s:
+          
+          <pre><code>
+          module TicketSystem
+            module Config
+              # Protocol used when generating URLs in ActionMailers
+              mattr_accessor :mailer_protocol
+              @@mailer_protocol = "http"
+            end
+          end
+          </code></pre>
+    %li#comment_601
+      %p.author
+        %a{:href => 'http://whatsnextapp.com'} maxm
+      .body
+        :textile
+          And if you're too lazy to repeat the attribute name, throw this in at the end:
+          
+          <pre><code>
+          module Config
+           @@some_var="some value"
+          
+            class_variables.each do |v|
+              mattr_accessor v[(2..-1)]
+            end
+          end
+          </code></pre>
+    %li#comment_603
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          mr max, dat, is sexy.
+    %li#comment_605
+      %p.author
+        %a{:href => 'http://www.mmahq.com'} Dr J
+      .body
+        :textile
+          I'm getting an error trying to start my mongrel process because it is choking on the activesupport include line:
+          
+          <code>require 'activesupport'</code>
+          
+          <code>
+          /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__': no such file to load -- activesupport (LoadError)
+                  from /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+                  from /home/cjolicoeur/rp_badge_signup/trunk/config/../config/my_app_config.rb:1
+                  from /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
+                  from /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+                  from /home/cjolicoeur/rp_badge_signup/trunk/config/environment.rb:19
+                  from /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
+                  from /usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+                  from /usr/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:155:in `rails'
+                   ... 8 levels...
+                  from /usr/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+                  from /usr/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+                  from /usr/bin/mongrel_rails:18:in `load'
+                  from /usr/bin/mongrel_rails:18
+          </code>
+          
+          any thoughts?
+          
+    %li#comment_606
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Whoops sorry Dr J, that should read @require 'active_support'@
+    %li#comment_635
+      %p.author
+        EP
+      .body
+        :textile
+          Thanks for this. It was very helpful!
+    %li#comment_1084
+      %p.author
+        Greg Clarke
+      .body
+        :textile
+          Very helpful post Tim.  The info here plus your "Environments and the Rails initialisation process" helped me my solve my config problems and that has made my day.  Thanks very much.
+    %li#comment_1489
+      %p.author
+        Justin Winkler
+      .body
+        :textile
+          I've tried this method, both with rails v1.2.3 and v2.0.2, and in both instances, my module is populated as expected with my first hit to a controller, but in all subsequent hits all the properties on the Module are nil'd our, or set to whatever is defined in the Module, essentially losing any "override" set in my specific environment file. Did you run into anything like this?
+    %li#comment_1490
+      %p.author
+        Justin Winkler
+      .body
+        :textile
+          Found the issue; it's due to the config.cache_classes=false within development.rb. The problem is that the Module containing the configuration is reloaded with every request, but the values set within development.rb are not. I really like your approach, but it seems difficult to use in development due to this issue. Would be interesting to see if somehow the Module could be cached, or if the the development configuration could be placed in some location that would cause it to be reloaded along with the Module itself, rather than declaring development configuration directly on the Module. Keep up the good work, very good information! :)
+    %li#comment_1491
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @Justin Winkler did you "require" the file from environment.rb? Rails 2 only reload files that have been auto-required, anything manually required shouldn't be reloaded on every request.
+    %li#comment_1492
+      %p.author
+        Justin Winkler
+      .body
+        :textile
+          You are correct sir! :) I was not aware that's how rails reloaded classes. Thanks much!
+    %li#comment_1505
+      %p.author
+        Samir
+      .body
+        :textile
+          Thanx. Works like a charm. Much appreciated!
+    %li#comment_1541
+      %p.author
+        Dave H
+      .body
+        :textile
+          Worked for me too, thanks. The n00b mistake I made was that my app has the same name as some of my models, and so when I followed the naming convention I ended up with several name conflicts. I resolved the conflict by naming the Modules something other than the Model name. Thanks!

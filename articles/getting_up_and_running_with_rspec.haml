@@ -41,3 +41,50 @@
   Next step is to add fixtures to @spec/fixtures@ and flesh out your model specification some more.
   
   Now you can go add "BDD" on to the bottom of that Web2.0 developer skills list ;)
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_480
+      %p.author
+        %a{:href => 'http://topfunky.com'} topfunky
+      .body
+        :textile
+          I've been reluctant to commit to RSpec for projects since it still appears to be under heavy development, and things change often. 
+          
+          Do you feel that it's stable enough to use 100% for a project, or is it still for the early adopters?
+    %li#comment_481
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          I'm not really sure... I'm not involved in the RSpec community enough to say. The feeling I've got though is that the basics are nailed down enough to use w/o worrying about things changing. I guess it's the same call as "do I use Rails v1.2 or edge?"
+    %li#comment_482
+      %p.author
+        Lachie
+      .body
+        :textile
+          The RSpec folks have at long last committed to a 1.0 API http://rubyforge.org/pipermail/rspec-users/2007-February/000642.html
+    %li#comment_483
+      %p.author
+        %a{:href => 'http://evang.eli.st/blog/'} Pat Maddox
+      .body
+        :textile
+          I've been using RSpec since 0.6.x, and I've always used edge.  There's been a bit of pain, but over all it's been worth it to me.
+          
+          It's at a point now where you can safely use it though.  I'm using it for all my Ruby coding at work, anyway.
+    %li#comment_484
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          thanks Lachie, I knew you'd know. I like custom matchers.
+          
+          Thanks Pat. As this is a new project and if 0.8 wasn't coming out in a few weeks I'd probably move to edge...
+    %li#comment_485
+      %p.author
+        %a{:href => 'http://spicycode.com/'} Chad Humphries
+      .body
+        :textile
+          Over at The Edge Case we have used RSpec exclusively for the last several releases (since rubyconf).   We have had a few ups and downs but things are great all in all.

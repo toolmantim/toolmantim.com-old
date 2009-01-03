@@ -71,3 +71,22 @@
   <pre><code class="shell">$ git clone http://tim.local/~tlucas/git/myapp.git</code></pre>
   
   If all is well you should now have a local clone of the repository. Fire up @gitk@ to browse through all the revision history.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_1402
+      %p.author
+        %a{:href => 'http://peepcode.com'} topfunky
+      .body
+        :textile
+          Too easy! Thanks for the clear instructions.
+          
+          I banged my head against this until I realized that the "--bare init" or "--bare clone" is really necessary. You can't just cp an existing repository and expect to serve it up.
+    %li#comment_1403
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Yeah I got sick of just fumbling around and decided to figure out what the deal was once and for all. So confusing at first the whole bare thing.

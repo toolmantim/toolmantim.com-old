@@ -60,3 +60,60 @@
   It's a similar technique we used when creating "simple step-based validation":http://toolmantim.com/article/2007/11/13/simple_step_based_validation_with_activerecord.
   
   If the problem you're solving is more complex then you may consider using Jay Field's excellent <a href="http://validatable.rubyforge.org/">Validatable plugin</a> which does a whole bunch of things, one of which is validation grouping.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_1428
+      %p.author
+        %a{:href => 'http://drnicwilliams.com'} Dr Nic
+      .body
+        :textile
+          I like the use of instance variables to represent controller state. I think I've coded around this problem in too many different ways in the past; e.g. pass current_user into model methods. I'll perhaps never find a happy one-hole-for-all-golf-balls approach.
+    %li#comment_1429
+      %p.author
+        Matthijs Langenberg
+      .body
+        :textile
+          Be aware of the fact that a user (not an admin!) can simply add "user[validate_as_admin]=1" to the   post data when calling UsersController#create.
+          
+          Be sure to add attr_protected :validate_as_admin to the User model.
+    %li#comment_1430
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @DrNic: yeah i've tried some funky things too, most too tricky for their own good in the end.
+          
+          @Matthijs: ahhh nice catch! Thanks. I've updated the article.
+    %li#comment_1431
+      %p.author
+        %a{:href => 'http://m.onkey.org'} Pratik
+      .body
+        :textile
+          Hey Tim
+          
+          Nice post. Another way to do this would be something like http://pastie.org/145293
+    %li#comment_1432
+      %p.author
+        %a{:href => 'http://henrik.nyh.se'} Henrik N
+      .body
+        :textile
+          Nice and simple.
+          
+          I also like your use of a Format module as opposed to just doing User::EMAIL.
+    %li#comment_1445
+      %p.author
+        %a{:href => 'http://blog.AntaresTrader.com'} StarTrader
+      .body
+        :textile
+          This is fine if a User instance is only written when the user is created, but what about the situation where an admin creates a user, then the user whats to change some of the information in their User entry?  This would cause the validation to fail.
+          
+          I think then that this validation is only good during creation.
+    %li#comment_1446
+      %p.author
+        %a{:href => 'http://toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          @StarTrader: sure sure, sorry for not pointing that out. You'd need to do a similar thing in the update action too.

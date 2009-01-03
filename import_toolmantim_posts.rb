@@ -26,23 +26,23 @@ Article.eager(:comments).filter(:category_id => 1).all.each do |article|
   body.gsub!("h3. ", "h2. ") if body.include?("h3. ") && !body.include?("h2. ") 
   body.gsub!("\t", "  ")
   f.puts body
-  # unless article.comments.empty?
-  #   f.puts
-  #   f.puts "#archived-comments"
-  #   f.puts "  %h1 Archived Comments"
-  #   f.puts "  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below."
-  #   f.puts "  %ol"
-  #   article.comments.each do |comment|
-  #     f.puts "    %li#comment_#{comment[:id]}"
-  #     f.puts "      %p.author"
-  #     if comment[:url] && !comment[:url].empty?
-  #       f.puts "        %a{:href => '#{comment[:url]}'} #{comment[:author]}"
-  #     else
-  #       f.puts "        #{comment[:author]}"
-  #     end
-  #     f.puts "      .body"
-  #     f.puts "        :textile"
-  #     f.puts comment[:body].gsub(/^/,"          ").gsub('#{','\#{')
-  #   end
-  # end
+  unless article.comments.empty?
+    f.puts
+    f.puts "#archived-comments"
+    f.puts "  %h1 Archived comments"
+    f.puts "  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below."
+    f.puts "  %ol"
+    article.comments.each do |comment|
+      f.puts "    %li#comment_#{comment[:id]}"
+      f.puts "      %p.author"
+      if comment[:url] && !comment[:url].empty?
+        f.puts "        %a{:href => '#{comment[:url]}'} #{comment[:author]}"
+      else
+        f.puts "        #{comment[:author]}"
+      end
+      f.puts "      .body"
+      f.puts "        :textile"
+      f.puts comment[:body].gsub(/^/,"          ").gsub('#{','\#{')
+    end
+  end
 end

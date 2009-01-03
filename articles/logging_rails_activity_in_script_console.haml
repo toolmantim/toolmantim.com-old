@@ -16,3 +16,34 @@
   Chuck that into environment.rb and you'll get log messages straight into your @script/console@ when interacting with your models. If there was a way to tell if you were in the rails console within @.irbrc@ you could do it system wide.
   
   Can anybody else see a _tryactiverecord.com_ in the making? Why_, you hear that?
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_469
+      %p.author
+        %a{:href => 'http://spicycode.com/'} Chad Humphries
+      .body
+        :textile
+          I do something like this in my irbrc:
+          
+          <pre><code>
+          script_console_running = (ENV.include?('RAILS_ENV') and IRB.conf[:LOAD_MODULES].include?('console_with_helpers'))
+          rails_running = (ENV.include?('RAILS_ENV') and !IRB.conf[:LOAD_MODULES].include?('console_with_helpers'))
+          irb_standalone_running = (!script_console_running and !rails_running)
+          </code></pre>
+          
+          To test it out yourself add the above and the below to your .irbrc file.  
+          
+          <pre><code>
+          puts "script_console_running=\#{script_console_running}"
+          puts "rails_running=\#{rails_running}"
+          puts "irb_standalone_running=\#{irb_standalone_running}"
+          </code></pre>
+    %li#comment_470
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Sweet, thanks Chad! I've used this in my .irbrc and it works a treat.

@@ -76,3 +76,88 @@
   </pre>
   
   I'll get hold of "Mike":http://codemode.blogspot.com/ and we should be able to work this into "deprec":http://deprec.rubyforge.org in the next week or so.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_455
+      %p.author
+        %a{:href => 'http://autopilotmarketing.com/'} Dan Kubb
+      .body
+        :textile
+          Very nice, I can't wait to see these commands integrated into deprec.
+          
+          As a side note, do you have any cap recipes to setup and configure iptables?
+    %li#comment_456
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Dan: no iptables config yet. Haven't locked my slice down too well yet, and deprec's standard setup is far from secure. What I hope to help make happen is something like the following, for an app named "toolman":
+          # Apache runs as "toolman-web"
+          # Mongrel runs as "toolman-rails"
+          # toolman-web and toolman-rails are both in group toolman
+          # @/var/www/appname@ is chown'd toolman-rails:toolman
+          # @/var/www/appname@ is chmod with only @ug+r@, with public having @u+w@ for rails caching, uploads, etc
+          
+          The deploy user would use sudo to write to the app dirs, and fix perms on code update.
+          
+          Each app in ther server would run under different perms so neither could comprimise one another.
+    %li#comment_457
+      %p.author
+        Mike Bailey
+      .body
+        :textile
+          Nice site Tim. I' finish with my current employer this week so will have a bit more time for deprec.
+          
+          Here's the instructions I sent to Matt at Slicehost. You'll want to use the '_as_root' version of setup_admin_user.
+          
+          - Mike
+          
+          # Install rails app on Slicehost.com server with deprec
+          
+          $ sudo gem install deprec --include-dependencies
+          
+          $ export HOSTS=63.99.9.165
+          
+          $ cap setup_admin_account_as_root
+          Enter userid for new user: mbailey
+          Password: xxxxxx
+          Enter new UNIX password: : xxxxx
+          Retype new UNIX password: : xxxxx
+          
+          $ cap setup_ssh_keys
+          Password: xxxxx
+          
+          
+          # You can now log into your slicehost using your new account (with sudo)
+          # This alone saves a lot of manual work setting your login. (But wait, there's more!)
+          
+          $ ssh 63.99.9.165
+          Linux deprec 2.6.16.29-xen #3 SMP Sun Oct 15 13:15:34 BST 2006 x86_64 GNU/Linux
+          
+          $ sudo echo "sudo working new account!"
+          sudo working for new account!
+          
+          $ logout
+          Connection to 63.99.9.165 closed.
+          
+          
+          # You can now use the standard deprec commands to install your rails app
+          
+          $ cap install_rails_stack
+          $ cd /path/to/railsapp
+          $ deprec --apply-to . --name projectname --domain www.projectname.com
+          # edit config/deploy.rb to put in details of your subversion repository
+          $ cap deprec_setup
+          $ cap deploy_with_migrations
+          $ cap restart_apache
+          
+          # Your application should now be running on your slicehost server!
+    %li#comment_458
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Thanks Mike.

@@ -58,3 +58,54 @@
   "!http://farm1.static.flickr.com/59/215437646_f7c426183b_m.jpg(Moose head - not live - by Ed Fladung)!":http://flickr.com/photos/edfladung/215437646/
   
   The possibilities for customising autotest are endless: set up your own continuous integration using @Autotest::AutoUpdate@ with remote-growl, IRC and email notifications; or, write something that uses uses "Ruby/SerialPort":http://ruby-serialport.rubyforge.org/ to make your office's talking moose head (you do have one, don't you?) read haiku on behalf of the team member who comitted failing code.
+
+#archived-comments
+  %h1 Archived Comments
+  %p Previously comments were allowed on articles. Though no new comments are being accepted you can see the old comments below.
+  %ol
+    %li#comment_576
+      %p.author
+        %a{:href => 'http://lachstock.com.au'} Lachlan Hardy
+      .body
+        :textile
+          Is a talking moose head anything like a <a href="http://www.nabaztag.com/">Nabaztag</a>?
+          
+          Thanks for the article, Tim. I get the feeling I'm going to need lots of tests for my work :)
+    %li#comment_578
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          omg it's a talking rabbit with lights and an API!!! I'm so buying one of these.
+    %li#comment_580
+      %p.author
+        %a{:href => 'http://www.rexchung.com'} Rex
+      .body
+        :textile
+          The applescript say hook is super cool. Didn't think of doing that, Growl notify still takes away the attention.
+    %li#comment_581
+      %p.author
+        %a{:href => 'http://darwinweb.net/'} Gabe da Silveira
+      .body
+        :textile
+          I gotta dig into this stuff more.  "Autotest was my only stumbling block when I added namespaced functional tests to my project":http://darwinweb.net/article/Namespacing_Tests_With_Zentests_Autotest.  I discovered that it got the mapping right if I appended @Test@ to my module name.  At the time I just needed the tests to work, but this is inspiring all kinds of other ideas.
+    %li#comment_582
+      %p.author
+        %a{:href => 'http://blog.zenspider.com/'} Ryan Davis
+      .body
+        :textile
+          Thanks for the props!
+          
+          FYI, osascript isn't needed. `say` is a command line as well.
+          
+          Also, please merge your redgreen into mine and submit a patch. No reason for a second plugin if it is just regexp differences.
+    %li#comment_583
+      %p.author
+        %a{:href => 'http://www.toolmantim.com'} Tim Lucas
+      .body
+        :textile
+          Rex: yeah, I much prefer more subtle signals for CI testing on my machine... leave the alarm bells for the team CI buids.
+          
+          Gabe: I'm sure you could adapt the @AutoTest::SpecFixtures@ to detect changes correctly for your application.
+          
+          Ryan: a command line 'say'. Cool! If I can't figure out a way for the regexp to live inside the rspec related part of autotest I guess I'll just extend the built-in regexp. It's tricky not being able to 'require' a plugin to configure it w/o actually activating it.
