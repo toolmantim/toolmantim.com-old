@@ -51,6 +51,9 @@ helpers do
       gsub(/href=(["'])(\/.*?)(["'])/, 'href=\1http://toolmantim.com\2\3').
       gsub(/src=(["'])(\/.*?)(["'])/, 'src=\1http://toolmantim.com\2\3')
   end
+  def strip_tags(html)
+    html.gsub(/<\/?[^>]*>/, "")
+  end
 end
 
 before do

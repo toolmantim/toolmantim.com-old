@@ -16,7 +16,7 @@
   - for article in @articles[0..14]
     %entry
       %id== tag:toolmantim.com,2009-01-04:#{article_path(article)}
-      %title{:type => "html"}= article.title
+      %title{:type => "html"}= strip_tags(article.title)
       %published= article.published.xmlschema
       %updated= (article.updated || article.published).xmlschema
       %link{:href => "http://toolmantim.com#{article_path(article)}", :rel => "alternate", :hreflang => "en", :type => "text/html"}/
