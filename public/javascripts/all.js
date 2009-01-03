@@ -18,6 +18,8 @@ $(function() {
   $("body.projects ol.projects li ul.images").each(function() {
     var imagesContainer = $(this);
     
+    if (imagesContainer.find("img").length <= 1) return;
+    
     imagesContainer.find("img").hide();
     
     var navigator = $("<ul class='image-navigator' style='z-index:2'></ul>");
