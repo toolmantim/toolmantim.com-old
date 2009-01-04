@@ -455,7 +455,89 @@ body.projects-js ol.projects > li
       &:hover span
         :background-position -20px 0
         
-.not-found p, .error p
-  +standard_text_size
-  :text-align center
-  :margin-bottom 1em
+.not-found .content, .error .content
+  p
+    +standard_text_size
+    :text-align center
+    :margin-bottom 1em
+
+.tumble
+  :color = !standard_text
+  :width 400px
+  :margin-left 210px
+  :margin-bottom 50px
+  
+  .post
+    :margin-bottom 50px
+    :position relative
+    .info
+      :position absolute
+      :top 5px
+      :left -15em
+      :width 12em
+      :text-align right
+      .date
+        :text-transform uppercase
+        :font-size 1.2em
+        :color = !dull_text
+      .permalink
+        :margin-top 0.3em
+        :font-size 2.4em
+        a
+          :color = !dull_text
+        a:hover
+          :color = !bright_blue
+  
+    > a
+      :position absolute
+      :top 0
+      :right -2em
+      :color = !dull_text
+      :font-weight bold
+      :font-size 1.4em
+      
+    > a:hover
+      :color = !bright_blue
+  
+  .quote
+    .source
+      :font-size 1.2em
+      :line-height 1.5em
+    .quote_text
+      :color #fff
+      :font-weight bold
+      :margin-bottom 1em
+      .short
+        :font-size 3.6em
+        :line-height 1.2em
+      .medium
+        :font-size 2.7em
+        :line-height 1.2em
+      .long
+        :font-size 1.8em
+        :line-height 1.2em
+
+  .link
+    +standard_text_size
+    a
+      :font-size = 1.8/1.4em
+    
+  .photo
+    .caption
+      +standard_text_size
+      :margin-top 1em
+      
+  .prevnext
+    :font-size 1.4em
+    :text-align center
+    a
+      +highlight_link
+      &.prev
+        :float left
+      &.next
+        :float right
+      &:hover
+        +highlight_link_hover
+    .page
+      :line-height 2.5em
+      :color = !dull_text

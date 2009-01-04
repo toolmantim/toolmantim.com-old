@@ -110,6 +110,10 @@ get '/sitemap.xml' do
   haml :sitemap, :layout => false
 end
 
+get '/sample-tumble' do
+  haml :sample_tumble
+end if Sinatra.application.options.env == :development
+
 not_found do
   content_type 'text/html'
   haml :not_found
