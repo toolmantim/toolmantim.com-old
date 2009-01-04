@@ -512,21 +512,51 @@ body.projects-js ol.projects > li
         :line-height 1.2em
       .medium
         :font-size 2.7em
-        :line-height 1.2em
+        :line-height 1.4em
       .long
         :font-size 1.8em
-        :line-height 1.2em
+        :line-height 1.6em
 
   .link
     +standard_text_size
     a
       :font-size = 1.8/1.4em
     
-  .photo
-    .caption
-      +standard_text_size
-      :margin-top 1em
+  .caption
+    +standard_text_size
+    :margin-top 1em
       
+  .regular
+    h2
+      :font-size 1.8em
+      :line-height 1.5em
+      :margin-bottom 0.5em
+      a
+        :color = !very_bright_text
+      a:hover
+        :color = !bright_blue
+
+    p, li
+      +standard_text_size
+      :font-size 1.4em
+      :line-height 1.7em
+
+    ul, ol
+      :padding-left 2em
+    ul li, ol li
+      :margin-left 1em
+      :margin-bottom 0.2em
+    ul li
+      :list-style disc
+    ol li
+      :list-style decimal
+
+    p, ul, ol, blockquote
+      :margin-bottom 1em
+      code
+        :font-size 1.2em
+    
+
   .prevnext
     :font-size 1.4em
     :text-align center
