@@ -13,10 +13,12 @@ What does this mean for "Menki":http://github.com/toolmantim/menki? I'm not conv
 
 h2. License
 
-The following directories and their contents are Copyright Tim Lucas. You may not reuse anything therein without my permission:
+The following files, directories and their contents are Copyright Tim Lucas. You may not reuse anything therein without my permission:
 
 * @/articles/@
-* @/public/images/@
 * @/design/@
+* @/public/favicon.ico@*
+* @/public/images/@
+* @/public/files/@
 
 All other directories and files are MIT Licensed.
