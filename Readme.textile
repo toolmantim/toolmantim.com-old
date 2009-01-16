@@ -17,7 +17,7 @@ The following files, directories and their contents are Copyright Tim Lucas. You
 
 * @/articles/@
 * @/design/@
-* @/public/favicon.ico@*
+* @/public/favicon.ico@
 * @/public/images/@
 * @/public/files/@
 
