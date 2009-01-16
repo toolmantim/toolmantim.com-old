@@ -1,4 +1,4 @@
-This is the source code that will soon power "toolmantim.com":http://toolmantim.com/. It's a simple Sinatra application serving up haml-based articles from disk.
+This is the source code that power's "toolmantim.com":http://toolmantim.com/. It's a simple Sinatra application serving up haml-based articles from disk.
 
 The idea is that you want publishing to be previewable, simple and versioned. You want to be able to tweak the appearance of your site as you produce more complex articles. You want to simply add an image to your site, not build a whole admin providing file uploads. The major downside (if it is indeed at all a downside) is to publish you need access to your repo so you can git commit and cap deploy, though I could imagine using github's web editing features to add articles and trigger a site update w/o touching a terminal.
 
