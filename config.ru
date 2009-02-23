@@ -1,7 +1,11 @@
 ENV['TZ'] = 'Australia/Sydney'
 
 require 'rubygems'
-gem 'sinatra', '~> 0.3'
+
+gem 'rack', '0.9.1'
+require 'rack'
+
+gem 'sinatra', '0.9.0.4'
 require 'sinatra'
 
 gem 'teapot', '~> 1'
@@ -18,4 +22,4 @@ require File.join(File.dirname(__FILE__), "toolmantim.rb")
 
 use Teapot, "English Breakfast"
 
-run Sinatra.application
+run Sinatra::Application

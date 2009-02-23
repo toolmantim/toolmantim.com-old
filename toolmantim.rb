@@ -1,16 +1,20 @@
 require 'rubygems'
-gem 'sinatra', '~> 0.3'
+gem 'sinatra', '0.9.0.4'
 require 'sinatra'
 
-gem 'haml', '~> 2.0'
-gem 'RedCloth', '~> 3'
+gem 'haml', '~> 2.0.0'
+require 'haml'
+
+gem 'RedCloth', '~> 3.0'
 gem 'rdiscount'
 
+__DIR__ = File.dirname(__FILE__)
+
 %w(article quip).each do |model|
-  require File.join(File.dirname(__FILE__), "/lib/#{model}")
+  load "#{__DIR__}/lib/#{model}.rb"
 end
 
-Article.path = File.join(Sinatra.application.options.root, "articles")
+Article.path = "#{__DIR__}/articles"
 
 # Add Ruby 1.9's xmlschema method
 class Date
@@ -32,13 +36,13 @@ helpers do
     @articles[prev_index] unless prev_index > @articles.length + 1
   end
   def versioned_stylesheet(stylesheet)
-    "/stylesheets/#{stylesheet}.css?" + File.mtime(File.join(Sinatra.application.options.views, "stylesheets", "#{stylesheet}.sass")).to_i.to_s
+    "/stylesheets/#{stylesheet}.css?" + File.mtime(File.join(Sinatra::Application.views, "stylesheets", "#{stylesheet}.sass")).to_i.to_s
   end
   def versioned_js(js)
-    "/javascripts/#{js}.js?" + File.mtime(File.join(Sinatra.application.options.public, "javascripts", "#{js}.js")).to_i.to_s
+    "/javascripts/#{js}.js?" + File.mtime(File.join(Sinatra::Application.public, "javascripts", "#{js}.js")).to_i.to_s
   end
   def versioned_favicon
-    "/favicon.ico?" + File.mtime(File.join(Sinatra.application.options.public, "favicon.ico")).to_i.to_s
+    "/favicon.ico?" + File.mtime(File.join(Sinatra::Application.public, "favicon.ico")).to_i.to_s
   end
   def partial(name)
     haml(:"_#{name}", :layout => false)
@@ -70,7 +74,7 @@ end
 %w( screen ie7 ie6 tumble ).each do |stylesheet|
   get "/stylesheets/#{stylesheet}.css" do
     content_type 'text/css'
-    headers "Expires" => (Time.now + 60*60*24*356*3).httpdate # Cache for 3 years
+    response["Expires"] = (Time.now + 60*60*24*356*3).httpdate # Cache for 3 years
     sass :"stylesheets/#{stylesheet}"
   end
 end
@@ -115,7 +119,7 @@ end
 
 get '/sample-tumble' do
   haml :sample_tumble
-end if Sinatra.application.options.env == :development
+end if Sinatra::Application.environment == :development
 
 not_found do
   content_type 'text/html'
@@ -126,4 +130,4 @@ error do
   @error = request.env['sinatra.error'].to_s
   content_type 'text/html'
   haml :error
-end unless Sinatra.application.options.env == :development
+end unless Sinatra::Application.environment == :development
