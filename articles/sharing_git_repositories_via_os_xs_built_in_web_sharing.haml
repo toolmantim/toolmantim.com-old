@@ -28,6 +28,8 @@
     Allow from all
   </Directory></code></pre>
   
+  Alternatively you could change <code>/etc/apache2/extra/httpd-userdir.conf</code> to use <code>www</code> instead of <code>Sites</code> as the default user directory.
+  
   Restart apache2, put in a test file and see what happens:
   
   <pre><code class="shell">$ sudo apachectl restart
