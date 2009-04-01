@@ -163,12 +163,14 @@ h1.major
   :position absolute
   :top 90px
   :right 0
+  :text-align right
+
   :font-size 2.4em
   :color #fff
-  
+
   a, a:active
     :color = !very_bright_text
-  
+
   a:hover
     :color = !bright_blue
 
@@ -229,6 +231,20 @@ body.archive
       :margin-left 10px
       :width 410px
       +standard_text_size
+
+p.page-desc
+  :margin-bottom 2em
+  :font-size 1.4em
+  :line-height 1.5em
+  :color = !slightly_dull_text
+
+body.archive p.page-desc
+  :margin-left 230px
+  :width 420px
+
+body.projects p.page-desc
+  :margin-left 340px
+  :width 310px
 
 !article_width = 540px
 
@@ -577,3 +593,38 @@ body.projects-js ol.projects > li
     .page
       :line-height 2.5em
       :color = !dull_text
+      
+body.photo
+  #body-inner
+    :padding-top 20px
+
+  .portrait
+    :width 500px
+    :margin 0 auto
+    img
+      :width 500px
+  
+  .landscape
+    :width 700px
+    :margin 0 auto
+    img
+      :width 700px
+    
+  .return
+    :margin 1em 0
+    :font-size 1.4em
+
+  h1
+    :margin-top 9px
+    :font-size 1.8em
+
+body.photos
+  img
+    :width 75px
+    :height 75px
+  li
+    :float left
+    :margin-right 10px
+  h2
+    :margin 1em 0
+    :font-size 1.8em

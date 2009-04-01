@@ -35,9 +35,10 @@
         = partial :site_header
         #about= partial :meta
 
-      %p.quip
-        Powered by
-        %a{:href => "http://github.com/toolmantim/toolmantim", :title => "View source"}= Quip.random
+      - unless @hide_quip
+        %p.quip
+          Powered by
+          %a{:href => "http://github.com/toolmantim/toolmantim", :title => "View source"}= Quip.random
 
     - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
       %script{:src => versioned_js(js), :type => "text/javascript"}

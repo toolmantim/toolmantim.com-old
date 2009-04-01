@@ -1,0 +1,23 @@
+- @body_class = "photos"
+- @page_title = "Photos by Tim Lucas"
+
+%h1.major Photos
+
+.recent
+  %h2
+    Recent from the
+    %a{:href => "http://flickr.com/photos/toolmantim"} flickr stream
+  %p{:style => "font-size:1.4em; color: yellow"} (insert string of thumbnails)
+
+.featured
+  %h2 Featured
+  %ul
+    %li.landscape
+      %a{:href => "/photos/landscape"}
+        %img{:src => "/photos/IMG_2477.jpg"}/
+    %li.landscape
+      %a{:href => "/photos/landscape"}
+        %img{:src => "/photos/IMG_2506.jpg"}/
+    %li.portrait
+      %a{:href => "/photos/portrait"}
+        %img{:src => "/photos/IMG_2471.jpg"}/

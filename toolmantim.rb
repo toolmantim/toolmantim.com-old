@@ -112,6 +112,18 @@ get '/projects' do
   haml :projects
 end
 
+get '/photos' do
+  haml :photos
+end
+
+get '/photos/portrait' do
+  haml :photo_portrait
+end
+
+get '/photos/landscape' do
+  haml :photo_landscape
+end
+
 get '/sitemap.xml' do
   content_type 'application/xml'
   haml :sitemap, :layout => false
