@@ -8,6 +8,10 @@ require 'haml'
 gem 'RedCloth', '~> 3.0'
 gem 'rdiscount'
 
+require 'net/http'
+require 'uri'
+require 'hpricot'
+
 __DIR__ = File.dirname(__FILE__)
 
 %w(article quip).each do |model|
@@ -21,6 +25,15 @@ class Date
   def xmlschema
     strftime("%Y-%m-%dT%H:%M:%S%Z")
   end unless defined?(xmlschema)
+end
+
+class Flickr
+  class << self
+    def featured
+      h = Hpricot(Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.search?api_key=user_id=&tags=feature")))
+      h/:photos
+    end
+  end
 end
 
 helpers do
@@ -113,6 +126,7 @@ get '/projects' do
 end
 
 get '/photos' do
+  @photos = Flickr.featured
   haml :photos
 end
 

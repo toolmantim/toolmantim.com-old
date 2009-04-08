@@ -12,12 +12,19 @@
 .featured
   %h2 Featured
   %ul
-    %li.landscape
-      %a{:href => "/photos/landscape"}
-        %img{:src => "/photos/IMG_2477.jpg"}/
-    %li.landscape
-      %a{:href => "/photos/landscape"}
-        %img{:src => "/photos/IMG_2506.jpg"}/
-    %li.portrait
-      %a{:href => "/photos/portrait"}
-        %img{:src => "/photos/IMG_2471.jpg"}/
+    - for photo in @photos
+      %li
+        %a{:href => ""}
+          %img{:src => "http://farm1.static.flickr.com/#{photo/:server}/#{photo/:id}_#{photo/:secret}.jpg"}
+
+    -# %li.landscape
+    -#   %a{:href => "/photos/landscape"}
+    -#     %img{:src => "/photos/IMG_2477.jpg"}/
+    -# %li.landscape
+    -#   %a{:href => "/photos/landscape"}
+    -#     %img{:src => "/photos/IMG_2506.jpg"}/
+    -# %li.portrait
+    -#   %a{:href => "/photos/portrait"}
+    -#     %img{:src => "/photos/IMG_2471.jpg"}/
+    -# 
+    -#     
