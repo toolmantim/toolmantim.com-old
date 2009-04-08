@@ -9,13 +9,13 @@
     
     %link{:rel => "shortcut icon", :href => versioned_favicon}/
 
-    %link{:href => versioned_stylesheet('screen'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
-
-    /[if lte IE 7]
-      %link{:href => versioned_stylesheet('ie7'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
-    /[if lte IE 6]
-      %link{:href => versioned_stylesheet('ie6'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
-      %script{:src => "http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js",  :type => "text/javascript"}
+    -# %link{:href => versioned_stylesheet('screen'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    -# 
+    -# /[if lte IE 7]
+    -#   %link{:href => versioned_stylesheet('ie7'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    -# /[if lte IE 6]
+    -#   %link{:href => versioned_stylesheet('ie6'), :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    -#   %script{:src => "http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js",  :type => "text/javascript"}
 
     - if @show_open_id_delegate
       %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
@@ -39,8 +39,8 @@
         Powered by
         %a{:href => "http://github.com/toolmantim/toolmantim", :title => "View source"}= Quip.random
 
-    - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
-      %script{:src => versioned_js(js), :type => "text/javascript"}
+    -# - %w( jquery-1.2.6.min code_highlighter all ).each do |js|
+    -#   %script{:src => versioned_js(js), :type => "text/javascript"}
 
     %script{:type => "text/javascript"}
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
