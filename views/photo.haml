@@ -1,0 +1,23 @@
+- @hide_about = @hide_skip_nav = @hide_quip = true
+- @body_class = "photo"
+- @page_title = "Photo: "
+
+- image_padding = 20
+- large_size = @sizes.find {|s| s[:label] == "Large"}
+- @head_content = %(<style type="text/css" media="screen">#body-inner { width: #{large_size[:width].to_i + image_padding * 2}px }</style>)
+
+.photo
+  %a{:href => flickr_url(@photo)}
+    %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height]}/
+
+  - if (@photo/:title).text.strip.length != 0
+    %h1= (@photo/:title).text
+
+  - if (@photo/:description).text.strip.length != 0
+    .description
+      = (@photo/:description).text.split("\n\n").map {|s| "<p>#{s}</p>"}
+
+  %p.return
+    %a{:href => "/photos"}
+      Return to 
+      photos &rarr;

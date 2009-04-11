@@ -594,29 +594,39 @@ body.projects-js ol.projects > li
       :line-height 2.5em
       :color = !dull_text
       
+body.landscape #body-inner
+  :width = 1024px + 20px + 20px
+
+body.portrait #body-inner
+  :width = 650px + 20px + 20px
+
 body.photo
+  :background #000
+
   #body-inner
     :padding-top 20px
-
-  .portrait
-    :width 500px
-    :margin 0 auto
-    img
-      :width 500px
-  
-  .landscape
-    :width 700px
-    :margin 0 auto
-    img
-      :width 700px
     
+  .photo img
+    :border 20px solid #fff
+
   .return
-    :margin 1em 0
+    :margin-top 20px
     :font-size 1.4em
+    
+    a, a:active
+      :color #666
+      
+    a:hover
+      :color #999
 
   h1
-    :margin-top 9px
-    :font-size 1.8em
+    :margin-top 20px
+    :font-size 2.4em
+    
+  .description p
+    :margin 10px 0
+    +standard_text_size
+    :width 40em
 
 body.photos
   h2
@@ -624,17 +634,30 @@ body.photos
     :font-size 1.8em
     :clear both
     :margin 0
-    :padding 2em 0 1em 0
+    :padding 1em 0 0.5em 0
 
   .recent, .featured
+    :float left
+    :clear left
+  
     ul, li
       :display inline
 
     img
       :float left
-      :margin-right 11px
+      :margin-right 9px
       :margin-bottom 11px
       
+  .recent
+    :padding-top 0
+
   .featured
-    ul
-      :margin-bottom 20px
+    :margin-bottom 20px
+    
+    a.last
+      :display block
+      :float left
+      :margin-left -5px
+      
+      img
+        :width 500px

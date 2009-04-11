@@ -1,40 +1,28 @@
 - @body_class = "photos"
 - @page_title = "Photos by Tim Lucas"
 
-- def flickr_src(photo, size=nil); "http://farm1.static.flickr.com/#{photo[:server]}/#{photo[:id]}_#{photo[:secret]}#{size && "_#{size}"}.jpg"; end
+- def flickr_square(photo); %(<img src="#{flickr_src(photo, "s")}" width="75" height="75" />); end
+- def photo_path(photo); "/photos/#{photo[:id]}"; end
 
 %h1.major Photos
 
 .recent
   %h2
-    Recent from the
-    %a{:href => "http://flickr.com/photos/toolmantim"} flickr stream
+    Most recent from
+    %a{:href => "http://flickr.com/photos/toolmantim"} the stream
   
   %ul
     - for photo in @recent_photos
       %li
-        %a{:href => "http://www.flickr.com/photos/toolmantim/#{photo[:id]}"}
-          %img{:src => flickr_src(photo, "s")}/
+        %a{:href => flickr_url(photo)}= flickr_square(photo)
 
 .featured
   %h2 Featured
   
-  %img.last{:src => flickr_src(@feature_photos[0])}/
-  
+  %a.last{:href => photo_path(@feature_photos[0])}
+    %img{:src => flickr_src(@feature_photos[0])}/
+
   %ul
     - for photo in @feature_photos[1..-1]
       %li
-        %a{:href => ""}
-          %img{:src => flickr_src(photo, "s")}/
-
-    -# %li.landscape
-    -#   %a{:href => "/photos/landscape"}
-    -#     %img{:src => "/photos/IMG_2477.jpg"}/
-    -# %li.landscape
-    -#   %a{:href => "/photos/landscape"}
-    -#     %img{:src => "/photos/IMG_2506.jpg"}/
-    -# %li.portrait
-    -#   %a{:href => "/photos/portrait"}
-    -#     %img{:src => "/photos/IMG_2471.jpg"}/
-    -# 
-    -#     
+        %a{:href => photo_path(photo)}= flickr_square(photo)

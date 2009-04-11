@@ -29,11 +29,17 @@ end
 
 class Flickr
   def self.photos(method, params={})
-    Hpricot(
-      Net::HTTP.get(
-        URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}")
-      )
-    )/:photo
+    call(method, params)/:photo
+  end
+  def self.photo(*args)
+    photos(*args).first
+  end
+  def self.sizes(photo)
+    call("getSizes", "photo_id" => photo[:id])/:size
+  end
+  def self.call(method, params)
+    res = Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}"))
+    return Hpricot(res) if !res.include?('stat="fail"')
   end
 end
 
@@ -74,6 +80,12 @@ helpers do
   end
   def strip_tags(html)
     html.gsub(/<\/?[^>]*>/, "")
+  end
+  def flickr_src(photo, size=nil)
+    "http://farm#{photo[:farm]}.static.flickr.com/#{photo[:server]}/#{photo[:id]}_#{photo[:secret]}#{size && "_#{size}"}.jpg"
+  end
+  def flickr_url(photo)
+    "http://www.flickr.com/photos/toolmantim/#{photo[:id]}"
   end
 end
 
@@ -127,17 +139,15 @@ get '/projects' do
 end
 
 get '/photos' do
-  @recent_photos = Flickr.photos("search", "per_page" => 8)
+  @recent_photos = Flickr.photos("search", "per_page" => 9)
   @feature_photos = Flickr.photos("search", "tags" => "feature", "per_page" => 500)
   haml :photos
 end
 
-get '/photos/portrait' do
-  haml :photo_portrait
-end
-
-get '/photos/landscape' do
-  haml :photo_landscape
+get '/photos/:id' do
+  @photo = Flickr.photo("getInfo", "photo_id" => params[:id]) || raise(Sinatra::NotFound)
+  @sizes = Flickr.sizes(@photo)
+  haml :photo
 end
 
 get '/sitemap.xml' do
