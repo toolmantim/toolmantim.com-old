@@ -608,25 +608,44 @@ body.photo
     
   .photo img
     :border 20px solid #fff
-
-  .return
-    :margin-top 20px
-    :font-size 1.4em
-    
-    a, a:active
-      :color #666
-      
-    a:hover
-      :color #999
+    :margin-bottom 20px
 
   h1
-    :margin-top 20px
     :font-size 2.4em
+
+  h1 a, h1 a:active, .description p
+    :color #999
+
+  h1 a:hover
+    :color = #fff
+      
     
   .description p
-    :margin 10px 0
     +standard_text_size
     :width 40em
+    
+  .more-photos
+    :margin-top 20px
+    :font-size 1.4em
+
+  p.extra
+    +standard_text_size
+    :margin 10px 0
+    :color #333
+    a
+      &, &:active
+        :color #666
+
+      &:hover
+        :color #bbb
+        
+  p.license
+    :float left
+    +standard_text_size
+    :color #444
+    
+    &:hover
+      :color #999
 
 body.photos
   h2
@@ -636,7 +655,7 @@ body.photos
     :margin 0
     :padding 1em 0 0.5em 0
 
-  .recent, .featured
+  #recent, #featured
     :float left
     :clear left
   
@@ -648,10 +667,10 @@ body.photos
       :margin-right 9px
       :margin-bottom 11px
       
-  .recent
+  #recent
     :padding-top 0
 
-  .featured
+  #featured
     :margin-bottom 20px
     
     a.last

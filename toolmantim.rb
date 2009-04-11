@@ -85,7 +85,7 @@ helpers do
     "http://farm#{photo[:farm]}.static.flickr.com/#{photo[:server]}/#{photo[:id]}_#{photo[:secret]}#{size && "_#{size}"}.jpg"
   end
   def flickr_url(photo)
-    "http://www.flickr.com/photos/toolmantim/#{photo[:id]}"
+    "http://www.flickr.com/photos/toolmantim/#{photo[:id]}/"
   end
 end
 

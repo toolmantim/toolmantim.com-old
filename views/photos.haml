@@ -6,7 +6,7 @@
 
 %h1.major Photos
 
-.recent
+#recent
   %h2
     Most recent from
     %a{:href => "http://flickr.com/photos/toolmantim"} the stream
@@ -16,7 +16,7 @@
       %li
         %a{:href => flickr_url(photo)}= flickr_square(photo)
 
-.featured
+#featured
   %h2 Featured
   
   %a.last{:href => photo_path(@feature_photos[0])}

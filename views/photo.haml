@@ -8,16 +8,28 @@
 
 .photo
   %a{:href => flickr_url(@photo)}
-    %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height]}/
+    %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height], :alt => @photo[:title]}/
 
   - if (@photo/:title).text.strip.length != 0
-    %h1= (@photo/:title).text
+    %h1
+      %a{:href => flickr_url(@photo)}= (@photo/:title).text
 
   - if (@photo/:description).text.strip.length != 0
     .description
       = (@photo/:description).text.split("\n\n").map {|s| "<p>#{s}</p>"}
 
-  %p.return
-    %a{:href => "/photos"}
-      Return to 
-      photos &rarr;
+  %p.extra
+    %a.comments{:href => flickr_url(@photo) + "#DiscussPhoto", :title => "Read and leave comments on Flickr" }
+      - comments = (@photo/:comments).text.to_i
+      - case comments
+      - when 0
+        No comments
+      - when 1
+        1 comments
+      - else
+        == #{comments} comments
+    \|
+    %a.more{:href => "/photos#featured"} More photos &rarr;
+
+  %p.license
+    License: Nothin.
