@@ -1,6 +1,6 @@
 - @hide_about = @hide_skip_nav = @hide_quip = true
 - @body_class = "photo"
-- @page_title = "Photo: "
+- @page_title = "Untitled by Tim Lucas"
 
 - image_padding = 20
 - large_size = @sizes.find {|s| s[:label] == "Large"}
@@ -10,9 +10,10 @@
   %a{:href => flickr_url(@photo)}
     %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height], :alt => @photo[:title]}/
 
-  - if (@photo/:title).text.strip.length != 0
+  - if (title = (@photo/:title).text.strip).length != 0
+    - @page_title = "'#{title}' by Tim Lucas"
     %h1
-      %a{:href => flickr_url(@photo)}= (@photo/:title).text
+      %a{:href => flickr_url(@photo)}= title
 
   - if (@photo/:description).text.strip.length != 0
     .description
