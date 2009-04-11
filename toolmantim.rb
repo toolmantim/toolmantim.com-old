@@ -28,11 +28,12 @@ class Date
 end
 
 class Flickr
-  class << self
-    def featured
-      h = Hpricot(Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.search?api_key=user_id=&tags=feature")))
-      h/:photos
-    end
+  def self.photos(method, params={})
+    Hpricot(
+      Net::HTTP.get(
+        URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}")
+      )
+    )/:photo
   end
 end
 
@@ -126,7 +127,8 @@ get '/projects' do
 end
 
 get '/photos' do
-  @photos = Flickr.featured
+  @recent_photos = Flickr.photos("search", "per_page" => 8)
+  @feature_photos = Flickr.photos("search", "tags" => "feature", "per_page" => 500)
   haml :photos
 end
 

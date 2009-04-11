@@ -619,12 +619,22 @@ body.photo
     :font-size 1.8em
 
 body.photos
-  img
-    :width 75px
-    :height 75px
-  li
-    :float left
-    :margin-right 10px
   h2
     :margin 1em 0
     :font-size 1.8em
+    :clear both
+    :margin 0
+    :padding 2em 0 1em 0
+
+  .recent, .featured
+    ul, li
+      :display inline
+
+    img
+      :float left
+      :margin-right 11px
+      :margin-bottom 11px
+      
+  .featured
+    ul
+      :margin-bottom 20px

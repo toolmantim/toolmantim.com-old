@@ -1,21 +1,31 @@
 - @body_class = "photos"
 - @page_title = "Photos by Tim Lucas"
 
+- def flickr_src(photo, size=nil); "http://farm1.static.flickr.com/#{photo[:server]}/#{photo[:id]}_#{photo[:secret]}#{size && "_#{size}"}.jpg"; end
+
 %h1.major Photos
 
 .recent
   %h2
     Recent from the
     %a{:href => "http://flickr.com/photos/toolmantim"} flickr stream
-  %p{:style => "font-size:1.4em; color: yellow"} (insert string of thumbnails)
+  
+  %ul
+    - for photo in @recent_photos
+      %li
+        %a{:href => "http://www.flickr.com/photos/toolmantim/#{photo[:id]}"}
+          %img{:src => flickr_src(photo, "s")}/
 
 .featured
   %h2 Featured
+  
+  %img.last{:src => flickr_src(@feature_photos[0])}/
+  
   %ul
-    - for photo in @photos
+    - for photo in @feature_photos[1..-1]
       %li
         %a{:href => ""}
-          %img{:src => "http://farm1.static.flickr.com/#{photo/:server}/#{photo/:id}_#{photo/:secret}.jpg"}
+          %img{:src => flickr_src(photo, "s")}/
 
     -# %li.landscape
     -#   %a{:href => "/photos/landscape"}
