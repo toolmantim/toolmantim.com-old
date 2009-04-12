@@ -11,12 +11,9 @@
 
   %h1
     %a{:href => flickr_url(@photo)}
-      - if (title = (@photo/:title).text.strip).length != 0
-        - @page_title = "'#{title}' by Tim Lucas"
-        = title
-      - else
-        - @page_title = "Untitled by Tim Lucas"
-        Untitled
+      = (title = (@photo/:title).text.strip).length != 0 ? title : "Untitled"
+
+  - @page_title = "#{title} - a photo by Tim Lucas"
 
   .description
 
@@ -25,18 +22,16 @@
 
   %p.comments
     %a{:href => flickr_url(@photo) + "#DiscussPhoto", :title => "Read and leave comments on Flickr" }
-      - comments = (@photo/:comments).text.to_i
-      - case comments
-      - when 0
-        No comments
-      - when 1
-        1 comment
-      - else
-        == #{comments} comments
+      = pluralize((@photo/:comments).text, "comment")
 
   %p.license
     %a{:rel => "license", :href => "http://creativecommons.org/licenses/by-sa/2.0/"}
       %img{:src => "http://i.creativecommons.org/l/by-sa/2.0/80x15.png", :alt => "Creative Commons License"}/
+
+  %p.tags
+    Tags:
+    - for tag in @photo/:tag
+      = tag
 
 
   .more-photos

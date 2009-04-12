@@ -627,20 +627,26 @@ body.photo
     p
       :margin-top 0.5em
       
-  p.comments
+  p.comments, p.tags, p.license
     +standard_text_size
-    :margin 10px 0
-    :color #333
+    :margin-top 5px
 
+  p.comments a, p.tags span
+    :padding-left 17px
+
+  p.comments
+    :margin 10px 0 5px 0
     a
       :background transparent url(/images/photo-comments.gif) no-repeat top left
-      :padding-left 17px
       :color #fff
       :opacity 0.6
       
       &:hover
         :opacity 1
-  
+
+  p.tags
+    :color #555
+
   p.license a
     :opacity 0.6
     

@@ -102,6 +102,16 @@ helpers do
   def photo_path(photo)
     "/photos/#{photo[:id]}"
   end
+  def pluralize(number, singular)
+    case number.to_i
+    when 0
+      "No #{singular}s"
+    when 1
+      "1 #{singular}"
+    else
+      "#{number} #{singular}s"
+    end
+  end
 end
 
 before do
