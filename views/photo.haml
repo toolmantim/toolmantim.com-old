@@ -11,7 +11,8 @@
 
   %h1
     %a{:href => flickr_url(@photo)}
-      = (title = (@photo/:title).text.strip).length != 0 ? title : "Untitled"
+      - title = (@photo/:title).text.strip
+      = title.length != 0 ? title : "Untitled"
 
   - @page_title = "#{title} - a photo by Tim Lucas"
 
