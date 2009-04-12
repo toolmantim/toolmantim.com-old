@@ -20,5 +20,6 @@ The following files, directories and their contents are Copyright Tim Lucas. You
 * @/public/favicon.ico@
 * @/public/images/@
 * @/public/files/@
+* @/views/stylesheets/screen.sass@
 
 All other directories and files are MIT Licensed.
