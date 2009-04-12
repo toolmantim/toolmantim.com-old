@@ -604,48 +604,101 @@ body.photo
   :background #000
 
   #body-inner
-    :padding-top 20px
+    :padding-top 40px
     
-  .photo img
+  .main img
     :border 20px solid #fff
     :margin-bottom 20px
 
   h1
     :font-size 2.4em
 
-  h1 a, h1 a:active, .description p
-    :color #999
-
-  h1 a:hover
-    :color = #fff
-      
-    
+  h1 a, h1 a:active
+    :color #fff
+  
   .description p
+    :color #fff
+      
+  .description
     +standard_text_size
-    :width 40em
-    
-  .more-photos
-    :margin-top 20px
-    :font-size 1.4em
+    :max-width 40em
+    :margin-top 0.5em
 
-  p.extra
+    p
+      :margin-top 0.5em
+      
+  p.comments
     +standard_text_size
     :margin 10px 0
     :color #333
-    a
-      &, &:active
-        :color #666
 
+    a
+      :background transparent url(/images/photo-comments.gif) no-repeat top left
+      :padding-left 17px
+      :color #fff
+      :opacity 0.6
+      
       &:hover
-        :color #bbb
-        
-  p.license
-    :float left
-    +standard_text_size
-    :color #444
+        :opacity 1
+  
+  p.license a
+    :opacity 0.6
     
     &:hover
-      :color #999
+      :opacity 1
+      
+  .more-photos
+    :margin-top 50px
+    :margin-bottom 20px
+    :float left
+    :width 100%
+    :overflow hidden
+    :position relative
+
+    ul
+      :clear left
+      :float left
+      :position relative
+      :left 50%
+
+      li
+        :display block
+        :float left
+        :position relative
+        :right 50%
+
+        &.current
+          :opacity 0.5
+
+        a
+          :display block
+          :opacity 0.5
+
+          &:hover
+            :opacity 1
+
+        &.current
+          :margin 0 10px
+
+        &.prev
+          a
+            :background transparent url(/images/photo-next-prev.gif) no-repeat top left
+            :padding-left 12px
+
+        &.next
+          a
+            :padding-right 12px
+            :background transparent url(/images/photo-next-prev.gif) no-repeat top right
+            
+  p.more
+    :text-align center
+    a
+      +standard_text_size
+      :opacity 0.4
+      :color #fff
+      
+      &:hover
+        :opacity 0.7
 
 body.photos
   h2

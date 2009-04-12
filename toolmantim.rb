@@ -28,14 +28,23 @@ class Date
 end
 
 class Flickr
-  def self.photos(method, params={})
-    call(method, params)/:photo
+  def self.recent
+    call("search", "per_page" => 9)/:photo
   end
-  def self.photo(*args)
-    photos(*args).first
+  def self.featured
+    call("search", "tags" => "feature", "per_page" => 500)/:photo
+  end
+  def self.photo(id)
+    call("getInfo", "photo_id" => id).search(:photo).first
   end
   def self.sizes(photo)
     call("getSizes", "photo_id" => photo[:id])/:size
+  end
+  def self.next_previous(photo)
+    featured = featured()
+    [photo, featured].flatten.each {|p| def p.==(other); self[:id] == other[:id]; end }
+    index = featured.index(photo)
+    [index != 0 && featured[index-1], featured[index+1]]
   end
   def self.call(method, params)
     res = Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}"))
@@ -86,6 +95,12 @@ helpers do
   end
   def flickr_url(photo)
     "http://www.flickr.com/photos/toolmantim/#{photo[:id]}/"
+  end
+  def flickr_square(photo)
+    %(<img src="#{flickr_src(photo, "s")}" width="75" height="75" />)
+  end
+  def photo_path(photo)
+    "/photos/#{photo[:id]}"
   end
 end
 
@@ -139,14 +154,15 @@ get '/projects' do
 end
 
 get '/photos' do
-  @recent_photos = Flickr.photos("search", "per_page" => 9)
-  @feature_photos = Flickr.photos("search", "tags" => "feature", "per_page" => 500)
+  @recent_photos = Flickr.recent
+  @feature_photos = Flickr.featured
   haml :photos
 end
 
 get '/photos/:id' do
-  @photo = Flickr.photo("getInfo", "photo_id" => params[:id]) || raise(Sinatra::NotFound)
+  @photo = Flickr.photo(params[:id]) || raise(Sinatra::NotFound)
   @sizes = Flickr.sizes(@photo)
+  @prev_photo, @next_photo = Flickr.next_previous(@photo)
   haml :photo
 end
 
@@ -155,14 +171,14 @@ get '/sitemap.xml' do
   haml :sitemap, :layout => false
 end
 
-get '/sample-tumble' do
-  haml :sample_tumble
-end if Sinatra::Application.environment == :development
-
 not_found do
   content_type 'text/html'
   haml :not_found
 end
+
+get '/sample-tumble' do
+  haml :sample_tumble
+end if Sinatra::Application.environment == :development
 
 error do
   @error = request.env['sinatra.error'].to_s
