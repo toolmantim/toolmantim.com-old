@@ -163,12 +163,14 @@ h1.major
   :position absolute
   :top 90px
   :right 0
+  :text-align right
+
   :font-size 2.4em
   :color #fff
-  
+
   a, a:active
     :color = !very_bright_text
-  
+
   a:hover
     :color = !bright_blue
 
@@ -229,6 +231,20 @@ body.archive
       :margin-left 10px
       :width 410px
       +standard_text_size
+
+p.page-desc
+  :margin-bottom 2em
+  :font-size 1.4em
+  :line-height 1.5em
+  :color = !slightly_dull_text
+
+body.archive p.page-desc
+  :margin-left 230px
+  :width 420px
+
+body.projects p.page-desc
+  :margin-left 340px
+  :width 310px
 
 !article_width = 540px
 
@@ -577,3 +593,149 @@ body.projects-js ol.projects > li
     .page
       :line-height 2.5em
       :color = !dull_text
+      
+body.landscape #body-inner
+  :width = 1024px + 20px + 20px
+
+body.portrait #body-inner
+  :width = 650px + 20px + 20px
+
+body.photo
+  :background #000
+
+  #body-inner
+    :padding-top 40px
+    
+  .main img
+    :border 20px solid #fff
+    :margin-bottom 20px
+
+  h1
+    :font-size 2.4em
+
+  h1 a, h1 a:active
+    :color #fff
+  
+  .description p
+    :color #fff
+      
+  .description
+    +standard_text_size
+    :max-width 40em
+    :margin-top 0.5em
+
+    p
+      :margin-top 0.5em
+      
+  p.comments, p.tags, p.license
+    +standard_text_size
+    :margin-top 5px
+
+  p.comments a, p.tags span
+    :padding-left 17px
+
+  p.comments
+    :margin 10px 0 5px 0
+    a
+      :background transparent url(/images/photo-comments.gif) no-repeat top left
+      :color #fff
+      :opacity 0.6
+      
+      &:hover
+        :opacity 1
+
+  p.tags
+    :color #555
+
+  p.license a
+    :opacity 0.6
+    
+    &:hover
+      :opacity 1
+      
+  .more-photos
+    :margin-top 50px
+    :margin-bottom 20px
+    :float left
+    :width 100%
+    :overflow hidden
+    :position relative
+
+    ul
+      :clear left
+      :float left
+      :position relative
+      :left 50%
+
+      li
+        :display block
+        :float left
+        :position relative
+        :right 50%
+
+        &.current
+          :opacity 0.5
+
+        a
+          :display block
+          :opacity 0.5
+
+          &:hover
+            :opacity 1
+
+        &.current
+          :margin 0 10px
+
+        &.prev
+          a
+            :background transparent url(/images/photo-next-prev.gif) no-repeat top left
+            :padding-left 12px
+
+        &.next
+          a
+            :padding-right 12px
+            :background transparent url(/images/photo-next-prev.gif) no-repeat top right
+            
+  p.more
+    :text-align center
+    a
+      +standard_text_size
+      :opacity 0.4
+      :color #fff
+      
+      &:hover
+        :opacity 0.7
+
+body.photos
+  h2
+    :margin 1em 0
+    :font-size 1.8em
+    :clear both
+    :margin 0
+    :padding 1em 0 0.5em 0
+
+  #recent, #featured
+    :float left
+    :clear left
+  
+    ul, li
+      :display inline
+
+    img
+      :float left
+      :margin-right 9px
+      :margin-bottom 11px
+      
+  #recent
+    :padding-top 0
+
+  #featured
+    :margin-bottom 20px
+    
+    a.last
+      :display block
+      :float left
+      :margin-left -5px
+      
+      img
+        :width 500px

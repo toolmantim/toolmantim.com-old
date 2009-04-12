@@ -1,0 +1,26 @@
+- @body_class = "photos"
+- @page_title = "Photos by Tim Lucas"
+
+
+%h1.major Photos
+
+#recent
+  %h2
+    Most recent from
+    %a{:href => "http://flickr.com/photos/toolmantim"} the stream
+  
+  %ul
+    - for photo in @recent_photos
+      %li
+        %a{:href => flickr_url(photo)}= flickr_square(photo)
+
+#featured
+  %h2 Featured
+  
+  %a.last{:href => photo_path(@feature_photos[0])}
+    %img{:src => flickr_src(@feature_photos[0])}/
+
+  %ul
+    - for photo in @feature_photos[1..-1]
+      %li
+        %a{:href => photo_path(photo)}= flickr_square(photo)

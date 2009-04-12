@@ -1,0 +1,50 @@
+- @hide_about = @hide_skip_nav = @hide_quip = true
+- @body_class = "photo"
+
+- image_padding = 20
+- large_size = @sizes.find {|s| s[:label] == "Large"}
+- @head_content = %(<style type="text/css" media="screen">#body-inner { width: #{large_size[:width].to_i + image_padding * 2}px }</style>)
+
+.photo
+  %a.main{:href => flickr_url(@photo)}
+    %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height], :alt => @photo[:title]}/
+
+  %h1
+    %a{:href => flickr_url(@photo)}
+      = (title = (@photo/:title).text.strip).length != 0 ? title : "Untitled"
+
+  - @page_title = "#{title} - a photo by Tim Lucas"
+
+  .description
+
+    - if (@photo/:description).text.strip.length != 0
+      = (@photo/:description).text.split("\n\n").map {|s| "<p>#{s}</p>"}
+
+  %p.comments
+    %a{:href => flickr_url(@photo) + "#DiscussPhoto", :title => "Read and leave comments on Flickr" }
+      = pluralize((@photo/:comments).text, "comment")
+
+  %p.license
+    %a{:rel => "license", :href => "http://creativecommons.org/licenses/by-sa/2.0/"}
+      %img{:src => "http://i.creativecommons.org/l/by-sa/2.0/80x15.png", :alt => "Creative Commons License"}/
+
+  %p.tags
+    Tags:
+    - for tag in @photo/:tag
+      = tag
+
+
+  .more-photos
+    %ul
+      - if @prev_photo
+        %li.prev
+          %a{:href => photo_path(@prev_photo), :title => @prev_photo[:title]}= flickr_square(@prev_photo)
+      %li.current
+        %span= flickr_square(@photo)
+      - if @next_photo
+        %li.next
+          %a{:href => photo_path(@next_photo), :title => @next_photo[:title]}= flickr_square(@next_photo)
+
+
+  %p.more
+    %a{:href => "/photos#featured"} and more&hellip;
