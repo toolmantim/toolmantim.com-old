@@ -16,9 +16,9 @@
   - @page_title = "#{title} - a photo by Tim Lucas"
 
   .description
-
-    - if (@photo/:description).text.strip.length != 0
-      = (@photo/:description).text.split("\n\n").map {|s| "<p>#{s}</p>"}
+    - description_paras = (@photo/:description).text.strip.split("\n\n").reject {|s| s =~ /(best viewed)|(viewed large)|(on black)/i}
+    - for p in description_paras
+      %p= p
 
   %p.comments
     %a{:href => flickr_url(@photo) + "#DiscussPhoto", :title => "Read and leave comments on Flickr" }
@@ -31,7 +31,7 @@
   %p.tags
     Tags:
     - for tag in @photo/:tag
-      = tag
+      %span{:rel => "tag"}= tag.html
 
 
   .more-photos
