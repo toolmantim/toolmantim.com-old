@@ -49,3 +49,7 @@
 
   %p.more
     %a{:href => "/photos#featured"} and more&hellip;
+    
+- if params[:debug]
+  - require 'erb'
+  = ERB::Util.h @photo.to_s
