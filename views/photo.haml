@@ -1,6 +1,10 @@
 - @hide_about = @hide_skip_nav = @hide_quip = true
 - @body_class = "photo"
 
+- title = (@photo/:title).text.strip
+- title = "Untitled" if title.length == 0
+- @page_title = "#{title} - a photo by Tim Lucas"
+
 - image_padding = 20
 - large_size = @sizes.find {|s| s[:label] == "Large"}
 - @head_content = %(<style type="text/css" media="screen">#body-inner { width: #{large_size[:width].to_i + image_padding * 2}px }</style>)
@@ -10,11 +14,7 @@
     %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height], :alt => @photo[:title]}/
 
   %h1
-    %a{:href => flickr_url(@photo)}
-      - title = (@photo/:title).text.strip
-      = title.length != 0 ? title : "Untitled"
-
-  - @page_title = "#{title} - a photo by Tim Lucas"
+    %a{:href => flickr_url(@photo)}= title
 
   .description
     - description_paras = (@photo/:description).text.strip.split("\n\n").reject {|s| s =~ /(best viewed)|(viewed large)|(on black)/i}
@@ -49,7 +49,3 @@
 
   %p.more
     %a{:href => "/photos#featured"} and more&hellip;
-    
-- if params[:debug]
-  - require 'erb'
-  = ERB::Util.h @photo.to_s
