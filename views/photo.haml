@@ -6,12 +6,12 @@
 - @page_title = "#{title} - a photo by Tim Lucas"
 
 - image_padding = 20
-- large_size = @sizes.find {|s| s[:label] == "Large"}
-- @head_content = %(<style type="text/css" media="screen">#body-inner { width: #{large_size[:width].to_i + image_padding * 2}px }</style>)
+- photo_size = @sizes.find {|s| s[:label] == "Large"} || @sizes.find {|s| s[:label] == "Original"}
+- @head_content = %(<style type="text/css" media="screen">#body-inner { width: #{photo_size[:width].to_i + image_padding * 2}px }</style>)
 
 .photo
   %a.main{:href => flickr_url(@photo)}
-    %img{:src => flickr_src(@photo, "b"), :width => large_size[:width], :height => large_size[:height], :alt => @photo[:title]}/
+    %img{:src => photo_size[:source], :width => photo_size[:width], :height => photo_size[:height], :alt => @photo[:title]}/
 
   %h1
     %a{:href => flickr_url(@photo)}= title
