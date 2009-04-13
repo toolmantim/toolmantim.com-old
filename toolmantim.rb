@@ -44,7 +44,7 @@ class Flickr
     featured = featured()
     [photo, featured].flatten.each {|p| def p.==(other); self[:id] == other[:id]; end }
     index = featured.index(photo)
-    [index != 0 && featured[index-1], featured[index+1]]
+    index && [index != 0 && featured[index-1], featured[index+1]]
   end
   def self.call(method, params)
     res = Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}"))
