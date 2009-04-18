@@ -17,7 +17,7 @@
     %a{:href => flickr_url(@photo)}= title
 
   .description
-    - description_paras = (@photo/:description).text.strip.split("\n\n").reject {|s| s =~ /(best viewed)|(viewed large)|(on black)/i}
+    - description_paras = (@photo/:description).text.strip.split("\n\n").reject {|s| s =~ /(best viewed)|(viewed large)|(on black)|(toolmantim\.com)/i}
     - for p in description_paras
       %p= p
 
