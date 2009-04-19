@@ -1,55 +1,24 @@
+__DIR__ = File.dirname(__FILE__)
+
 require 'rubygems'
-gem 'sinatra', '0.9.0.4'
-require 'sinatra'
 
-gem 'haml', '~> 2.0.0'
-require 'haml'
-
+gem 'sinatra', '0.9.0.4'; require 'sinatra'
+gem 'haml', '~> 2.0.0'; require 'haml'
 gem 'RedCloth', '~> 3.0'
 gem 'rdiscount'
 
-require 'net/http'
-require 'uri'
-require 'hpricot'
+require "#{__DIR__}/lib/flickr"
 
-__DIR__ = File.dirname(__FILE__)
-
-%w(article quip).each do |model|
-  load "#{__DIR__}/lib/#{model}.rb"
-end
-
+load "#{__DIR__}/lib/article.rb"
 Article.path = "#{__DIR__}/articles"
+
+load "#{__DIR__}/lib/quip.rb"
 
 # Add Ruby 1.9's xmlschema method
 class Date
   def xmlschema
     strftime("%Y-%m-%dT%H:%M:%S%Z")
   end unless defined?(xmlschema)
-end
-
-class Flickr
-  def self.recent
-    call("search", "per_page" => 9)/:photo
-  end
-  def self.featured
-    call("search", "tags" => "feature", "per_page" => 500)/:photo
-  end
-  def self.photo(id)
-    call("getInfo", "photo_id" => id).search(:photo).first
-  end
-  def self.sizes(photo)
-    call("getSizes", "photo_id" => photo[:id])/:size
-  end
-  def self.next_previous(photo)
-    featured = featured()
-    [photo, featured].flatten.each {|p| def p.==(other); self[:id] == other[:id]; end }
-    index = featured.index(photo)
-    index && [index != 0 && featured[index-1], featured[index+1]]
-  end
-  def self.call(method, params)
-    res = Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}"))
-    return Hpricot(res) if !res.include?('stat="fail"')
-  end
 end
 
 helpers do
@@ -164,15 +133,15 @@ get '/projects' do
 end
 
 get '/photos' do
-  @recent_photos = Flickr.recent
-  @feature_photos = Flickr.featured
+  @recent_photos = $flickr.recent
+  @feature_photos = $flickr.featured
   haml :photos
 end
 
 get '/photos/:id' do
-  @photo = Flickr.photo(params[:id]) || raise(Sinatra::NotFound)
-  @sizes = Flickr.sizes(@photo)
-  @prev_photo, @next_photo = Flickr.next_previous(@photo)
+  @photo = $flickr.photo(params[:id]) || raise(Sinatra::NotFound)
+  @sizes = $flickr.sizes(@photo)
+  @prev_photo, @next_photo = $flickr.next_previous(@photo)
   haml :photo
 end
 
