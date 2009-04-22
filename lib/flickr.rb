@@ -24,7 +24,7 @@ class Flickr
   end
   def call(method, params)
     res = Net::HTTP.get(URI.parse("http://api.flickr.com/services/rest/?method=flickr.photos.#{method}&api_key=0e5de53043827665f99e9508ce5c40cf&user_id=57794886@N00#{params.collect{|k,v|"&#{k}=#{v}"}}"))
-    return Hpricot(res) if !res.include?('stat="fail"')
+    return Hpricot.XML(res) if !res.include?('stat="fail"')
   end
 end
 
