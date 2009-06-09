@@ -31,7 +31,7 @@
 
   %p.tags
     Tags:
-    = (@photo/:tag).map {|t| %(<a rel="tag" href="http://flickr.com/photos/toolmantim/tags/#{t.html}" title="Other flickr photos tagged with '#{t[:raw]}'">#{t[:raw]}</a>) }.join(", ")
+    = (@photo/:tag).map {|t| %(<a rel="tag" href="http://www.flickr.com/photos/toolmantim/tags/#{t.html}" title="Other flickr photos tagged with '#{t[:raw]}'">#{t[:raw]}</a>) }.join(", ")
 
   .more-photos
     %ul
