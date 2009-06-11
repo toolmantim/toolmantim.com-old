@@ -14,7 +14,7 @@
   
   Gitjour's old conference hack code (our [railscamp fork](http://log.lachstock.com.au/past/2008/10/19/gitjour-the-quickening/) not withstanding) combined with a few design gotchas though warranted a new approach. Ever since Railscamp 3 and the prolific gitjouring I'd wanted to build a git network aggregator. It's pretty much impossible to do a `git log` of a remote repository without fetching the repository itself, and after wanting to build a good web UI for each repository I discovered I could simply have each web interface serve up JSON directly from its repositories using grit, advertise these feeds and projects via bonjour and **BANG**! We'd have all the ingredients we need for git <del>world</del> LAN domination.
 
-  Having started Bananajour before camp I thought I'd have it done in time. 11 hours of coding through Friday night later it was ready for a `gem install` at lunch time on Saturday morning. Apart from gem compatibility issues (damn you Rack 1.0.0 not playing nicely with Sinatra!) it got a fair bit of use at Railscamp, and after much refactoring on return from the sunshine state it is now ready for general consumption.
+  Having started Bananajour before camp I thought I'd have it done in time. 11 hours of coding through Friday night later it was ready for a `gem install` at lunch time on Saturday morning. Apart from gem compatibility issues (damn you Rack 1.0.0 not playing nicely with Sinatra!) it got a fair bit of use at Railscamp, with muchos hacking from [Nathan de Vries](http://github.com/atnan), [Lachlan Hardy](http://github.com/lachlanhardy), [Josh Bassett](http://github.com/nullobject), [Myles Byrne](http://github.com/quackingduck), [Ben Hoskings](http://github.com/benhoskings), [Brett Goulder](http://github.com/brettgo1), [Tony Issakov](https://github.com/tissak), and [Mark Bennett](http://github.com/MarkBennett). After much refactoring on return from the sunshine state it is now ready for general consumption.
   
   To get up and started you simply need to:
   
@@ -23,6 +23,8 @@
   Once that's done run `bananajour` and you're up and running.
   
   The slides for the bananajour presentation I gave this week at [Sydney Ruby Oceania group](http://rubyonrails.com.au/) are [up on slideshare](http://www.slideshare.net/toolmantim/introducing-bananajour) and be sure to check out the readme on the [github project page](http://github.com/toolmantim/bananajour) for more info on usage and hacking instructions. Support, feature discussions and rants should be forwarded to the [bananajour google group](http://groups.google.com/group/bananajour).
+  
+  [Carla Hackett](http://carlahackettdesign.com/), the brain behind [railscamp tee 1, 2](http://railscamptee.com/) and [3](http://railscampteev3.agencyrainford.com/), is reponsible for the awesome logo. Hit her up for all your design lovin.
   
   The Bananajour aggregation app, a central app to show the commit activity across the entire network, never got built in the end—it was worth pouring more love into Bananajour itself—but if someone is keen there's already a name and a logo for it: **Bananarama**!
   
