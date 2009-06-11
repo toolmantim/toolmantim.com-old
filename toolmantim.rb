@@ -3,7 +3,7 @@ __DIR__ = File.dirname(__FILE__)
 require 'rubygems'
 
 gem 'sinatra', '0.9.0.4'; require 'sinatra'
-gem 'haml', '~> 2.0.0'; require 'haml'
+gem 'haml', '2.0.0'; require 'haml'
 gem 'RedCloth', '~> 3.0'
 gem 'rdiscount'
 

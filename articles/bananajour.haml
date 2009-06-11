@@ -1,0 +1,31 @@
+-# title: LAN hacking with Bananajour
+-# published: 2009-06-11
+
+:markdown
+  Yesterday I released [Bananajour](http://github.com/toolmantim/bananajour), a LAN-based, bonjour-aware, git collaboration tool with a healthy potassium-enriched web interface.
+  
+  [![Screenshot of local view of Bananajour 2.1.3](#{article_image_path(@article, "screenshot.png")})](http://github.com/toolmantim/bananajour)
+  
+  Shortly after jumping on the git bandwagon I found myself at [Railscamp 2](http://flickr.com/groups/rails-camp/pool/tags/railscamp2) in November 2007 in [the presentation pit](http://www.flickr.com/photos/lachie/2082955158/in/pool-rails-camp) with 20 odd hackers to explain git, how it worked and to demo the power of its commit and repository model.
+  
+  It took just 3 minutes of rambling through the obscure git commands [to send Lachie to sleep](http://www.flickr.com/photos/lachlanhardy/2079703845/in/pool-rails-camp), the 19 others in the room quickly following Lachie's lead. I wanted to get 3 laptops set up with a publicly served git repository that we could pull between and show decentralised collaboration. What I thought would be straight forward turned out to be **friggin hard**, especially compared to setting up a shared svn repository.
+  
+  Luckily for us LAN collaboration with git has gone from total pain-in-the-ass to pretty-darn-good thanks to tools such as [gitorious](http://gitorious.org/) and [gitjour](http://github.com/chad/gitjour/tree/master). Gitorious was rad, and served us well for while, and gitjour really kicked ass—hats off to Chad, Evan and Rich—and though it was a far cry from the comforts of github and gitorious it was light-weight and decentralised and was [quite a hit at Railscamp 3](http://drnicwilliams.com/2008/06/18/what-is-gitjour-gemjour-starjour/).
+  
+  Gitjour's old conference hack code (our [railscamp fork](http://log.lachstock.com.au/past/2008/10/19/gitjour-the-quickening/) not withstanding) combined with a few design gotchas though warranted a new approach. Ever since Railscamp 3 and the prolific gitjouring I'd wanted to build a git network aggregator. It's pretty much impossible to do a `git log` of a remote repository without fetching the repository itself, and after wanting to build a good web UI for each repository I discovered I could simply have each web interface serve up JSON directly from its repositories using grit, advertise these feeds and projects via bonjour and **BANG**! We'd have all the ingredients we need for git <del>world</del> LAN domination.
+
+  Having started Bananajour before camp I thought I'd have it done in time. 11 hours of coding through Friday night later it was ready for a `gem install` at lunch time on Saturday morning. Apart from gem compatibility issues (damn you Rack 1.0.0 not playing nicely with Sinatra!) it got a fair bit of use at Railscamp, and after much refactoring on return from the sunshine state it is now ready for general consumption.
+  
+  To get up and started you simply need to:
+  
+      sudo gem install toolmantim-bananajour --source http://gems.github.com
+      
+  Once that's done run `bananajour` and you're up and running.
+  
+  The slides for the bananajour presentation I gave this week at [Sydney Ruby Oceania group](http://rubyonrails.com.au/) are [up on slideshare](http://www.slideshare.net/toolmantim/introducing-bananajour) and be sure to check out the readme on the [github project page](http://github.com/toolmantim/bananajour) for more info on usage and hacking instructions. Support, feature discussions and rants should be forwarded to the [bananajour google group](http://groups.google.com/group/bananajour).
+  
+  The Bananajour aggregation app, a central app to show the commit activity across the entire network, never got built in the end—it was worth pouring more love into Bananajour itself—but if someone is keen there's already a name and a logo for it: **Bananarama**!
+  
+  Oh, and keep an eye out for the peanut.
+  
+  ![Peanut](#{article_image_path(@article, "peanut.png")})
