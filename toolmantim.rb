@@ -46,6 +46,7 @@ helpers do
     haml(:"_#{name}", :layout => false)
   end
   def article_html(article)
+    @article = article
     haml(article.template, :layout => false)
   end
   def article_image_path(article, image)
