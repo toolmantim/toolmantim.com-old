@@ -1,5 +1,16 @@
 -# title: Generating cropped thumbnails with acts_as_attachment
 -# published: 2006-09-12
+-# updated: 2009-06-14
+
+.update
+  :markdown
+    **Update**: A few people have emailed me with updates for creating square thumbnails with acts_as_attachment. I&rsquo;d recommend using [the Paperclip plugin](http://thoughtbot.com/projects/paperclip) for doing your image attachments, you can simply use the <code>#</code> syntax for creating square thumbnails.
+    
+    An example from [the Paperclip readme](http://rdoc.info/projects/thoughtbot/paperclip):
+    
+  :plain
+    <pre><code class="ruby">has_attached_file :avatar,
+                      :styles => { :thumb => ["32x32#", :png] }</code></pre>
 
 :textile
   Rick Olson's "acts_as_attachment plugin":http://weblog.techno-weenie.net/articles/acts_as_attachment is the shit when it comes to handling file uploads in Rails, but it lacks the @:crop@ option that the "file_column plugin":http://www.kanthak.net/opensource/file_column/ does.

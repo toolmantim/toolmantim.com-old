@@ -7,6 +7,11 @@
     %p.published
       Published
       = @article.published.strftime("%B %d, %Y")
+      - if @article.updated
+        %span.updated
+          \-
+          Updated
+          = @article.updated.strftime("%B %d, %Y")
 
   .content= article_html(@article)
 
