@@ -57,3 +57,11 @@ $(function() {
     navigator.fadeIn(1000);
   });
 });
+
+// Github ads
+$(function() {
+  $(".github-ad a").click(function() {
+    pageTracker._trackPageview('/outgoing/github.com');
+    return true;
+  });
+})
