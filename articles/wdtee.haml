@@ -1,0 +1,90 @@
+-# title: The WDS09 Tee
+-# published: 2009-09-09
+
+:markdown
+
+  **I've always been a t-shirt kind of guy.**
+
+  Tees are one of the perks you get from living in the warm and mild city of Sydney. Whether it's the shortest coldest day in winter, or the hottest brightest day in summer, you'll no doubt find me, and a bunch of other Sydney-siders, donning the mighty tee.
+
+  Right now [Carla](http://hellotherecanary.com/) and I are currently packing our lives into boxes, preparing to move to Coogee Beach for the summer. Whilst procrastinating the task of packing two garbage bags worth of old tees to take to [Vinnies](http://www.vinnies.org.au/) it's only fitting that I drum up some tee purchasing excitement, this time with the release of **[tshirt09.webdirections.org](http://tshirt09.webdirections.org/)** - the official tee for the Web Directions South conference.
+  
+  [![The WDS09 Tee website](#{article_image_path(@article, "wds09tee-screenshot.jpg")})](http://tshirt09.webdirections.org/)
+  
+  ## The design
+
+  It seems that I've replaced my habit of impulsive Threadless tee purchasing (I was there for the first print of [Flowers in the Attic](http://www.threadless.com/product/114/Flowers_in_the_Attic) man, I WAS THERE!) with a habit of dragging Carla in to design geek tees for every geek event I help organise. Last May I dragged her in, once again, to whip up a new design for the [Rails Camp tee](http://railscamptee.com/), and like all good things a new one-pager Sinatra app had to be built to pimp it: [railscampteev3.agencyrainford.com](http://railscampteev3.agencyrainford.com/).
+  
+  Maxine saw this shiny ordering process and asked if she could have a site just like it for a tshirt project for Web Directions. Anything for a free tee!
+  
+  ![Sketches and mockups](#{article_image_path(@article, "designs.jpg")})
+    
+  After some sketches and a couple of balsamiq mockups I had a pretty good idea of how I wanted it to work. The next step was to bust out some photoshop.
+  
+  ![Photoshop designs](#{article_image_path(@article, "photoshop.jpg")})
+
+  The build was done with the trusty combination of [Sinatra](http://sinatrarb.com/), [HAML](http://haml-lang.com/), [SASS](http://sass-lang.com/) and [fancyviews](http://github.com/quackingduck/fancyviews). Deployment and hosting is on the awesome that is [Heroku](http://heroku.com/).
+
+  ## Embedding custom typefaces with @font-face
+
+  Forget [image-replacement](http://www.mezzoblue.com/tests/revised-image-replacement/), [sifr](http://www.mikeindustries.com/blog/sifr/) and [cufon](http://wiki.github.com/sorccu/cufon/about)—[@font-face](http://webfonts.info/) has traction with most of the major browsers now (IE6+, Firefox 3.5+, Safari 3.1+, Opera, etc).
+  
+  I simply grabbed a couple of free fonts ([ChunkFive](http://www.theleagueofmoveabletype.com/fonts/4-chunk) by [The League of Movable Type](http://www.theleagueofmoveabletype.com/) and [zorque](http://new.myfonts.com/fonts/larabie/zorque/) by [Ray Larabie](http://www.larabiefonts.com/)), converted them to EOT for IE, and declared them via CSS:
+  
+  <pre><code class="css">@font-face {
+    font-family: "ChunkFive";
+    src: url("/chunkfive.eot");
+    src: local("ChunkFive"), url("/chunkfive.otf") format("opentype"); }</code></pre>
+  
+  Using it is as simple as:
+  
+  <pre><code class="css">h1 {
+    font-family: "ChunkFive";
+  }</code></pre>
+  
+  ![Custom typefaces](#{article_image_path(@article, "typefaces.jpg")})
+  
+  One of the many advantages to using <code>@font-face</code> is we get back all the standard webby things such as inline links and images.
+  
+  ## Motion blur with sprites
+  
+  The blurry tshirt effects were made using <a href="http://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprites</a>.
+  
+  ![Sprites](#{article_image_path(@article, "sprites.jpg")})
+  
+  Above is the 5 frame sprite used to animate the male tee. At different stages during the animation I change the offset of the background image to give the effect of motion blur. I did try to get away with just 3 frames but adding an extra two meant I could go with more angle and blur.
+  
+  ## Decorating dom nodes with $$
+  
+  For the JS I used a [Yehuda Katz](http://yehudakatz.com/) and [Myles Byrne](http://github.com/quackingduck) inspired trick of attaching methods directly to DOM nodes using jQuery's <code>data</code> method.
+
+  <pre><code class="javascript">// Decorates dom elements with methods
+  $$ = function(elem, methods) {
+    if (methods) $(elem).data("controller", methods);
+    return $(elem).data("controller");
+  }</code></pre>
+
+  This allows you to construct an object model around the DOM, like so:
+  
+  <pre><code class="javascript">$(function() {
+    var cut = $("#cut"),
+        maleTee = cut.find(".m-tee");
+    $$(cut, {
+      show: function() {
+        cut.show();
+        maleTee.animate({left:"400px"});
+      }
+    });</code></pre>
+  
+  All the local variables are like instance variables, accessible through closure. To get a handle on the object with your custom functions you can use a selector:
+  
+  <pre><code class="javascript">$$("#cut").show();</code></pre>
+  
+  or if you've already got a jquery collection object you can call <code>$$</code> on it instead:
+  
+  <pre><code class="javascript">var cut = $("#cut");
+  $$(cut).show();</code></pre>
+  
+  ## The final test
+  
+  In the end I'm pretty happy with the result, all that's left now is to see if it sells some tees.
