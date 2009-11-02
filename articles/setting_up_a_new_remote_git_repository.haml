@@ -190,7 +190,7 @@
   * remote origin
     URL: ssh://myserver.com/var/git/myapp.git
     New remote branches (next fetch will store in remotes/origin)
-      dev/rails-2
+      rails-2
     Tracked remote branches
       master
   </code></pre>
@@ -198,36 +198,36 @@
   Let's update our mirror of the remote repository by doing a @git fetch@:
   
   <pre><code class="shell">$ git fetch
-  * refs/remotes/origin/master: storing branch 'dev/rails-2' of ssh://myserver.com/var/git/myapp.git
+  * refs/remotes/origin/master: storing branch 'rails-2' of ssh://myserver.com/var/git/myapp.git
     commit: b379203
   $ git remote show origin
   * remote origin
     URL: ssh://myserver.com/var/git/myapp.git
     Tracked remote branches
       master
-      dev/rails-2</code></pre>
+      rails-2</code></pre>
   
   We should now be able to see this in a our list of remote branches:
   
   <pre><code class="shell">$ git branch -a
   * master
-  origin/dev/rails-2
+  origin/rails-2
   origin/master</code></pre>
   
-  If we then wanted to do some work on this remote @dev/rails-2@ branch we create a new local tracking branch like so:
+  If we then wanted to do some work on this remote @rails-2@ branch we create a new local tracking branch like so:
   
-  <pre><code class="shell">$ git checkout --track -b dev/rails-2 origin/dev/rails-2
-  Branch dev/rails-2 set up to track remote branch refs/remotes/origin/dev/rails-2.
-  Switched to a new branch "dev/rails-2"
+  <pre><code class="shell">$ git checkout --track -b rails-2 origin/rails-2
+  Branch rails-2 set up to track remote branch refs/remotes/origin/rails-2.
+  Switched to a new branch "rails-2"
   </code></pre>
   
-  To keep up-to-date and push new changesets we simply use @git push@ and @git pull@ when working in the local @dev/rails-2@ branch.
+  To keep up-to-date and push new changesets we simply use @git push@ and @git pull@ when working in the local @rails-2@ branch.
   
   Also notice, like we manually changed for master, @.git/config@ has a new entry for this new tracking branch:
   
-  <pre><code>[branch "dev/rails-2"]
+  <pre><code>[branch "rails-2"]
     remote = origin
-    merge = refs/heads/dev/rails-2
+    merge = refs/heads/rails-2
   </code></pre>
   
   h2. Further Reading
