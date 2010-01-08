@@ -3,23 +3,25 @@
 
 :markdown
 
+  [![The WDS09 Tee website](#{article_image_path(@article, "wds09tee-screenshot.jpg")})](http://tshirt09.webdirections.org/)
+
   **I've always been a t-shirt kind of guy.**
 
-  Tees are one of the perks you get from living in the warm and mild city of Sydney. Whether it's the shortest coldest day in winter, or the hottest brightest day in summer, you'll no doubt find me, and a bunch of other Sydney-siders, donning the mighty tee.
-
-  Right now [Carla](http://hellotherecanary.com/) and I are currently packing our lives into boxes, preparing to move to Coogee Beach for the summer. Whilst procrastinating the task of packing two garbage bags worth of old tees to take to [Vinnies](http://www.vinnies.org.au/) it's only fitting that I drum up some tee purchasing excitement, this time with the release of **[tshirt09.webdirections.org](http://tshirt09.webdirections.org/)** - the official tee for the Web Directions South conference.
+  Tees are a perk of living in a warm and mild city like Sydney, and some might say I'm a tad obsessed with the trusty old tee, especially those a grey persuasion.
   
-  [![The WDS09 Tee website](#{article_image_path(@article, "wds09tee-screenshot.jpg")})](http://tshirt09.webdirections.org/)
+  As I'm currently packing up two boxes of old tees to take to [Vinnies](http://www.vinnies.org.au/) in preparation for our move to Coogee Beach for the summer, it's only fitting that I drum up some tee purchasing excitement with the release of the official tee for the Web Directions South conference: **[tshirt09.webdirections.org](http://tshirt09.webdirections.org/)**
+
+  <object width="501" height="388"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=6492952&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=0095ff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=6492952&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=0095ff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="501" height="388"></embed></object>
   
   ## The design
 
   It seems that I've replaced my habit of impulsive Threadless tee purchasing (I was there for the first print of [Flowers in the Attic](http://www.threadless.com/product/114/Flowers_in_the_Attic) man, I WAS THERE!) with a habit of dragging Carla in to design geek tees for every geek event I help organise. Last May I dragged her in, once again, to whip up a new design for the [Rails Camp tee](http://railscamptee.com/), and like all good things a new one-pager Sinatra app had to be built to pimp it: [railscampteev3.agencyrainford.com](http://railscampteev3.agencyrainford.com/).
   
-  Maxine saw this shiny ordering process and asked if she could have a site just like it for a tshirt project for Web Directions. Anything for a free tee!
+  Maxine saw this shiny ordering process and asked if she could have a site just like it for a tshirt project for Web Directions.
   
   ![Sketches and mockups](#{article_image_path(@article, "designs.jpg")})
     
-  After some sketches and a couple of balsamiq mockups I had a pretty good idea of how I wanted it to work. The next step was to bust out some photoshop.
+  After some sketches and a couple of balsamiq mockups I had a pretty good idea of how I wanted it to work, the next step was to bust out some photoshop.
   
   ![Photoshop designs](#{article_image_path(@article, "photoshop.jpg")})
 
@@ -27,7 +29,7 @@
 
   ## Embedding custom typefaces with @font-face
 
-  Forget [image-replacement](http://www.mezzoblue.com/tests/revised-image-replacement/), [sifr](http://www.mikeindustries.com/blog/sifr/) and [cufon](http://wiki.github.com/sorccu/cufon/about)—[@font-face](http://webfonts.info/) has traction with most of the major browsers now (IE6+, Firefox 3.5+, Safari 3.1+, Opera, etc).
+  Forget [image-replacement](http://www.mezzoblue.com/tests/revised-image-replacement/), [sifr](http://www.mikeindustries.com/blog/sifr/) and [cufon](http://wiki.github.com/sorccu/cufon/about)! [@font-face](http://webfonts.info/) has traction with most of the major browsers now (IE6+, Firefox 3.5+, Safari 3.1+, Opera, etc).
   
   I simply grabbed a couple of free fonts ([ChunkFive](http://www.theleagueofmoveabletype.com/fonts/4-chunk) by [The League of Movable Type](http://www.theleagueofmoveabletype.com/) and [zorque](http://new.myfonts.com/fonts/larabie/zorque/) by [Ray Larabie](http://www.larabiefonts.com/)), converted them to EOT for IE, and declared them via CSS:
   
@@ -36,7 +38,7 @@
     src: url("/chunkfive.eot");
     src: local("ChunkFive"), url("/chunkfive.otf") format("opentype"); }</code></pre>
   
-  Using it is as simple as:
+  Using the font is as simple as:
   
   <pre><code class="css">h1 {
     font-family: "ChunkFive";
