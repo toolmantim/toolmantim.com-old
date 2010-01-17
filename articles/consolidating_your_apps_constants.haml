@@ -1,6 +1,6 @@
 -# title: Consolidating your app&#8217;s constants
 -# published: 2007-05-18
--# updated: 2007-05-22
+-# updated: 2010-01-17
 
 :textile
   bq. Sprinkling constants doth maketh a mad-man
@@ -35,7 +35,7 @@
   
   <pre><code class="ruby">require File.join(File.dirname(__FILE__), 'boot')
   
-  require 'my_app_config'
+  require File.join(File.dirname(__FILE__), 'my_app_config')
   
   Rails::Initializer.run do |config|
     # ...
