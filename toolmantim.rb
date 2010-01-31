@@ -1,19 +1,20 @@
 __DIR__ = File.dirname(__FILE__)
 
+ENV['TZ'] = 'Australia/Sydney'
+
 File.file?(gems_file = "#{__DIR__}/.gems") && File.read(gems_file).each do |gem_decl|
   gem_name, version = gem_decl[/^([^\s]+)/,1], gem_decl[/--version '?([^\s]+)'?/,1]
   version ? gem(gem_name, version) : gem(gem_name)
 end
-
 require 'sinatra'
 require 'haml'
 
-require "#{__DIR__}/lib/flickr"
+$:.unshift "#{__DIR__}/lib"
+require "flickr"
+require "article"
+require "quip"
 
-load "#{__DIR__}/lib/article.rb"
 Article.path = "#{__DIR__}/articles"
-
-load "#{__DIR__}/lib/quip.rb"
 
 # Add Ruby 1.9's xmlschema method
 class Date
