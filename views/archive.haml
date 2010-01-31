@@ -1,7 +1,7 @@
 - @body_class = "archive"
-- @page_title = "Articles on toolmantim.com"
+- @page_title = "toolmantim.com - Thoughts"
 
-%h1.major Articles
+%h1.major Thoughts
 
 %p.page-desc A random collection of infrequently-updated mostly-tech-related howtos, updates and what-nots.
 
@@ -17,4 +17,4 @@
               - for article in @articles_by_year_then_month[year][month].sort
                 %li
                   %h4
-                    %a{:href => "/articles/#{article.slug}"}= article.title
+                    %a{:href => "/thoughts/#{article.slug}"}= article.title

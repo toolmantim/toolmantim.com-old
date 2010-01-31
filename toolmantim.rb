@@ -1,11 +1,12 @@
 __DIR__ = File.dirname(__FILE__)
 
-require 'rubygems'
+File.file?(gems_file = "#{__DIR__}/.gems") && File.read(gems_file).each do |gem_decl|
+  gem_name, version = gem_decl[/^([^\s]+)/,1], gem_decl[/--version '?([^\s]+)'?/,1]
+  version ? gem(gem_name, version) : gem(gem_name)
+end
 
-gem 'sinatra', '0.9.0.4'; require 'sinatra'
-gem 'haml', '2.0.0'; require 'haml'
-gem 'RedCloth', '~> 3.0'
-gem 'rdiscount'
+require 'sinatra'
+require 'haml'
 
 require "#{__DIR__}/lib/flickr"
 
@@ -23,7 +24,7 @@ end
 
 helpers do
   def article_path(article)
-    "/articles/#{article.slug}"
+    "/thoughts/#{article.slug}"
   end
   def next_article(article)
     next_index = @articles.index(article) - 1
@@ -50,7 +51,7 @@ helpers do
     haml(article.template, :layout => false)
   end
   def article_image_path(article, image)
-    "/images/articles/#{article.slug}/#{image}"
+    "/images/thoughts/#{article.slug}/#{image}"
   end
   def absoluteify_links(html)
     html.
@@ -84,6 +85,14 @@ helpers do
   end
 end
 
+# De-slashify
+before do
+  if request.path != "/" && request.path[-1..-1] == "/"
+    redirect request.path[0..-2], 301
+    halt
+  end
+end
+
 before do
   @articles = Article.all.sort
 end
@@ -100,17 +109,13 @@ end
   end
 end
 
-get '/articles/:id' do
-  @article = Article[params[:id]] || raise(Sinatra::NotFound)
-  haml :article
-end
+get('/articles')      { redirect "/thoughts", 301 }
+get('/articles.atom') { redirect "/thoughts", 301 }
+get('/articles/:id')  { redirect "/thoughts/#{params[:id]}", 301 }
+get('/article/:year/:month/:day/:id') { redirect "/thoughts/#{params[:id]}", 301 }
+get('/images/articles/:slug/:image') { redirect "/images/thoughts/#{params[:slug]}/#{params[:image]}", 301 }
 
-# Legacy URLs for articles
-get '/article/:year/:month/:day/:id' do
-  redirect "/articles/#{params[:id]}", 301
-end
-
-get '/articles' do
+get '/thoughts' do
   @articles_by_year_then_month = @articles.inject({}) do |acc, article|
     acc[article.published.year] ||= {}
     acc[article.published.year][article.published.month] ||= []
@@ -120,17 +125,18 @@ get '/articles' do
   haml :archive
 end
 
-get '/articles.atom' do
+get '/thoughts.atom' do
   content_type 'application/atom+xml'
   haml :feed, :layout => false
 end
 
-get '/tech/atom.xml' do
-  redirect 'http://feeds.feedburner.com/toolmantim', 301
+get '/thoughts/:id' do
+  @article = Article[params[:id]] || raise(Sinatra::NotFound)
+  haml :article
 end
 
-get '/projects' do
-  haml :projects
+get '/tech/atom.xml' do
+  redirect 'http://feeds.feedburner.com/toolmantim', 301
 end
 
 get '/photos' do

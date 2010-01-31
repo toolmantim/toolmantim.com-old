@@ -11,7 +11,9 @@ module Quip
       "complication and elaboration",
       "the present moment",
       "what isn&#8217;t being said",
-      "social networks"
+      "social networks",
+      "salt water",
+      "the motion of the ocean"
     ]
   end
   def self.random

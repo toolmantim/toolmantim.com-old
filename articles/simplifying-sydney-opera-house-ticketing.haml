@@ -1,0 +1,44 @@
+-# title: Simplifying Sydney Opera House’s online ticket purchasing
+-# published: 2010-01-31
+
+:markdown
+
+  [![The current sydneyoperahouse.com.au website design](#{article_image_path(@article, "home.jpg")})](http://www.sydneyoperahouse.com/)
+
+  [The Sydney Opera House](http://en.wikipedia.org/wiki/Sydney_Opera_House) is one of Australia's most famous cultural venues and host to over 450 musical and cultural performances per year. In 2007 locals [Frost Design](http://www.frostdesign.com.au/) were tasked with overhauling Sydney Opera House's brand and, along with the funky new brand, [a funky new website](http://www.sydneyoperahouse.com/).
+
+  For the most part, [sydneyoperahouse.com](http://www.sydneyoperahouse.com/) is great; the homepage gives generous real estate to the popular upcoming events, each event has its own permalinkable page with photographs and obligatory social networking Share Bar™, and the site allows you to purchase tickets to the multitude of seasonal and limited seat events.
+  
+  There is though two glaring problems with the Sydney Opera House’s ticketing sales process which irk me every time I buy tickets, problems bad enough that my techno-savvy friends misunderstood whether they could even purchase tickets to the [upcoming Massive Attack gig](http://www.sydneyoperahouse.com/whatson/massive_attack.aspx) in March.
+
+  ## Problem Number 1
+
+  Glance at the following page for the upcoming Massive Attack gig and see how you might go about buying tickets:
+
+  ![The design of the event page](#{article_image_path(@article, "event.jpg")})
+
+  You might first notice the ticket buying information in the orange right hand column, but most probably it's unclear what you should do and what action to take to buy tickets.
+  
+  I'll give it away: the little <strong>15</strong> on the calendar—that's what you have to click. Not immediately obvious or persuasive is it?
+  
+  How can we make this more obvious? How can we help to make sure my mates don't miss out on tickets? Firstly, the calendar is being drowned by the content above and below—it should be moved into it's own section. Secondly, the month controls are distracting and unnecessary—there's only one date, let alone month! Thirdly, the promotional code can be taken off as it can be entered in the next step of the checkout process (though it may have been put on the event page for good reason, though I can't see why).
+  
+  The end result:
+  
+  ![Redesign of ticket purchase section](#{article_image_path(@article, "orange-column-before-after.jpg")})
+  
+  ## Problem Number 2
+
+  About fifty percent (by my rough calculations) of the events being sold on Sydney Opera House's website have a single performance. If you're selling tickets to an event that has only one performance why should I have to click the date on a calendar, and then choose the one time, and then finally hit a buy tickets button?
+  
+  A better way: just one big fat <strong>BUY TICKETS</strong> button!
+  
+  ![Ticket purchase button for one-night-only](#{article_image_path(@article, "event-button.jpg")})
+  
+  ## Developing the user experience
+
+  Designing an interface which elegantly handles many different scenarios is hard. You can sketch solutions on paper, ask a designer to cater for them in photoshop, and discover them in user testing; but all of these tasks are done early on and might not work when it comes to the working product. Tricky scenarios are either glossed over or not understood early enough, and solutions are jimmied in during development. The end result: a crummy user experience. My guess is that the initial design lacked, and the dev team stood in to fill the gaps.
+
+  A process that handles the complexity of different scenarios is early and ongoing high-fi prototyping, a process I'm calling **user experience development**, one that I've been doing for much of the past year. Early and continously through the development process you build lightweight versions of the web application to test a specific aspect of design. Different scenarios are tested with the prototype, different interface solutions and approaches are explored with freedom, and the learnings and working prototype itself are shared with the entire project team and serves to inform both overall strategy, front-end and back-end development. The end result is a much deeper understanding for the whole team, less sacrifices in the final product and richer end-user experience.
+  
+  Trying to solve all the scenarios in a rich web app with pictures (sketches, wireframes or photoshop), or leaving the details to late in the game, just doesn't yield the same results; something I think the Sydney Opera House's ticket ordering process shows.
