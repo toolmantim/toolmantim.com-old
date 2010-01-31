@@ -514,7 +514,6 @@ body.archive p.page-desc
   .prevnext
     :font-size 1.4em
     :text-align center
-    :height 2.5em
     a
       +highlight_link
       &.prev
@@ -523,6 +522,9 @@ body.archive p.page-desc
         :float right
       &:hover
         +highlight_link_hover
+    .page
+      :line-height 2.5em
+      :color = !dull_text
       
 body.landscape #body-inner
   :width = 1024px + 20px + 20px
