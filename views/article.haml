@@ -1,8 +1,17 @@
 - @page_title = @article.title
 
+:ruby
+  if custom_title_size = @article.custom_title_size
+    @head_content = capture_haml do
+      haml_tag :style,
+               ".article .about h1 { width: #{custom_title_size.first}px; height: #{custom_title_size.last}px; background-image: url(/images/thoughts/#{@article.slug}/title.png); }",
+               {:type => "text/css"}
+    end
+  end
+
 .article
   .about
-    %h1= @article.title
+    %h1{:class => ("custom-title" if custom_title_size)}= @article.title
 
     %p.published
       Published

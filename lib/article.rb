@@ -41,6 +41,10 @@ class Article
   def updated
     @updated ||= self.class.parse_date(template_variable("updated"))
   end
+  def custom_title_size
+    size = template_variable("custom title size")
+    size && size.split("x").map {|s| s.to_i}
+  end
   def last_modified
     updated || published
   end
