@@ -6,6 +6,12 @@
 
   In part 1 I... In this Part II I'll cover redesigning the interface for handling multiple dates and times.
 
+  ## 2
+  
+  So far I've shown how we can simplify the beginning of the ticket sales process by improving the layout and giving special treating to the 50% case of a single date and time. These two changes could improve the site significantly, and be done relatively easily.
+  
+  But 50% is only half of the ticket sales. What about the other 50%? In part II I'll look at the current calendar/time method for booking events with multiple dates and times. I'll demonstrate the problems that it introduces and a more effective design that'll this other 50% choose and buy tickets to events with 2 to 99 performances.
+
   ## Multiple dates and times
   
   If 50% of events are one-night-only performances then the other 50% must be a mix of many dates and times. Before even thinking about an improved interface we should look at the schedules the events being featured this month:
@@ -19,4 +25,3 @@
   We've events with 2, 4, 16, and ~ 100 performances each. Optimism is the only event with multiple performances in a single day.
   
   How well does the calendar interface work to show the times? For the events with few dates it seems like overkill. For the events with many dates it certainly seems an easier way to browse, especially those with multiple times (like Optimism).
-  

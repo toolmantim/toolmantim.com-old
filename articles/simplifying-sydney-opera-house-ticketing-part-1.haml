@@ -2,31 +2,45 @@
 -# published: 2010-01-31
 -# custom title size: 484x60
 
+.intro
+  %p In this two-parter I turn my eye toward Sydney Opera House's online ticket ordering process, redesigning what's broken. Part I show's how to make the ticket sales process more persuasive and how to simplify the process for the 50% of events that have only a single performance. Part II extends these design changes to accommodate the trickier 50% of events, those with many different dates and times.
+
 :markdown
+
+  ## Part 1
 
   [![The current sydneyoperahouse.com.au website design](#{article_image_path(@article, "home.jpg")})](http://www.sydneyoperahouse.com/)
 
   [The Sydney Opera House](http://en.wikipedia.org/wiki/Sydney_Opera_House) is one of Australia's most famous cultural venues and host to over 450 musical and cultural performances per year. In 2007 locals [Frost Design](http://www.frostdesign.com.au/) were tasked with overhauling Sydney Opera House's brand and, along with the funky new brand, [a funky new website](http://www.sydneyoperahouse.com/).
 
-  For the most part, [sydneyoperahouse.com](http://www.sydneyoperahouse.com/) is great; the homepage gives generous real estate to the popular upcoming events, each event has its own permalinkable page with photographs and obligatory social networking Share Bar™, and the site allows you to purchase tickets to the multitude of seasonal and limited seat events. There is though some large improvements that could be made to the ticketing sales process, and in this two part series I step through the major issues, redesigning each as I go.
+  For the most part [sydneyoperahouse.com](http://www.sydneyoperahouse.com/) is great; the home page gives generous real estate to the popular upcoming events, each event has its own permalinkable page with photographs and obligatory social networking Share Bar™, and the site allows you to purchase tickets to the multitude of seasonal and limited seat events. 
   
-  This part 1 covers the first things that need improving: obviousness of how to buy, and one-night-only performances—two things that bug me almost every time I use sydneyoperahouse.com to buy tickets, problems bad enough that my techno-savvy friends misunderstood whether they could even purchase tickets to the [upcoming Massive Attack gig](http://www.sydneyoperahouse.com/whatson/massive_attack.aspx) in March.
+  Though it's possible to buy tickets through the Opera House's site I keep seeing two major design problems which I'm waging cuts a huge percentage of Sydney Opera House's online ticket sales. The first problem is the lack of obviousness as to how to buy tickets. The second problem is how tickets are sold for the 50% of the events which have a single performance.
   
   ## Problem 1: Obviousness
 
-  Glance at the following page for the upcoming Massive Attack gig and see how you might go about buying tickets:
+  After purchasing tickets to the [upcoming Massive Attack gig](http://www.sydneyoperahouse.com/whatson/massive_attack.aspx) in March at the Opera House I promptly emailed a bunch of friends telling them to grab tickets. Through a combination of confusing copy and bad design (both of which I noticed when buying my tickets) one of my most techno-savvy friends didn't realise she could even purchase tickets.
+
+  Glance at the following page, the same one my friend was looking at, and see how you might go about buying tickets:
 
   ![The design of the event page](#{article_image_path(@article, "event.jpg")})
 
   You might notice the ticket buying information in the orange right hand column, but it's unclear what you should do and what action you need to take to buy tickets.
   
-  I'll give it away. The little <strong>15</strong> on the calendar, that's what you have to click. That's not exactly persuasive, nor even obvious.
+  If you haven't guessed I'll tell you: the little <strong>15</strong> on the calendar, that's what you have to click. Not exactly persuasive or obvious.
   
-  How can we make this more obvious? How can we help to make sure my mates don't miss out on tickets? Firstly, the calendar is being drowned by the content above and below—it should be moved into it's own section. Secondly, the month controls are distracting and unnecessary—there's only one date, let alone month! Thirdly, the promotional code can be taken off as it can be entered in the next step of the checkout process (though it may have been put on the event page for good reason, we'll pull it out for now).
+  So what about the design is causing the confusion? A few things:
+  
+  1. The calendar is being drowned by the content above and below, it looks as if the Buy Tickets heading applies to that entire column. If we moved Buy Tickets into its own right column section, separating it from the information below, that'd go a long way.
+  2. The most important item to encourage clicking is the little 15 on the calendar, but it looks exactly the same as the two "GO" buttons.
+  3. The month controls are distracting and unnecessary—there's only one date, let alone month!
+  4. The promotional code seems unecessary at this stage. It also turns out that it can be entered in the next step of the checkout process. For lack of knowing why it's there we'll take it out to provide more focus on the calendar.
   
   The end result:
   
   ![Redesign of ticket purchase section](#{article_image_path(@article, "orange-column-before-after.jpg")})
+
+  This new design puts the most important call to action (the calender) in the top right with an icon and clear space to attract the eye.
   
   ## Problem 2: One-night-only performances
 
@@ -35,17 +49,3 @@
   A better way: just one big fat <strong>BUY TICKETS</strong> button!
   
   ![Ticket purchase button for one-night-only](#{article_image_path(@article, "event-button.jpg")})
-  
-  ## A process
-
-  Designing an interface which elegantly handles many different scenarios is hard. You can sketch solutions on paper, ask a designer to cater for them in photoshop, and discover them in user testing; but all of these tasks are done early on and might not work when it comes to the working product. Tricky scenarios are either glossed over or not understood early enough, and solutions are jimmied in during development. The end result: a crummy user experience. My guess is that the initial design lacked, and the dev team stood in to fill the gaps.
-
-  A process that handles the complexity of different scenarios is early and ongoing high-fi prototyping, a process I'm calling **user experience development**, one that I've been doing for much of the past year. Early and continously through the development process you build lightweight versions of the web application to test a specific aspect of design. Different scenarios are tested with the prototype, different interface solutions and approaches are explored with freedom, and the learnings and working prototype itself are shared with the entire project team and serves to inform both overall strategy, front-end and back-end development. The end result is a much deeper understanding for the whole team, less sacrifices in the final product and richer end-user experience.
-  
-  Trying to solve all the scenarios in a rich web app with pictures (sketches, wireframes or photoshop), or leaving the details to late in the game, just doesn't yield the same results; something I think the Sydney Opera House's ticket ordering process shows.
-  
-  ## The other 50% - Part II
-  
-  So far I've shown how we can simplify the beginning of the ticket sales process by improving the layout and giving special treating to the 50% case of a single date and time. These two changes could improve the site significantly, and be done relatively easily.
-  
-  But 50% is only half of the ticket sales. What about the other 50%? In part II I'll look at the current calendar/time method for booking events with multiple dates and times. I'll demonstrate the problems that it introduces and a more effective design that'll this other 50% choose and buy tickets to events with 2 to 99 performances.
