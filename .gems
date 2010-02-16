@@ -2,3 +2,4 @@ sinatra --version 0.9.4
 rdiscount --version 1.5.5
 RedCloth --version 4.2.2
 haml --version 2.2.8
+hpricot --version 0.8.2
