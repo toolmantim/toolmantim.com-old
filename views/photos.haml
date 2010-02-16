@@ -7,7 +7,7 @@
 #recent
   %h2
     Most recent from
-    %a{:href => "http://flickr.com/photos/toolmantim"} the stream
+    %a{:href => "http://flickr.com/photos/toolmantim", :rel => "me"} the stream
   
   %ul
     - for photo in @recent_photos
