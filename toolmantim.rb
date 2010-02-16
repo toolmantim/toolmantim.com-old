@@ -8,6 +8,7 @@ File.file?(gems_file = "#{__DIR__}/.gems") && File.read(gems_file).each do |gem_
 end
 require 'sinatra'
 require 'haml'
+require 'sass'
 
 $:.unshift "#{__DIR__}/lib"
 require "flickr"
