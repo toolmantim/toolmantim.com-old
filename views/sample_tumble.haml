@@ -1,6 +1,11 @@
 - @include_tumble_stylesheet = true
 
+%h1.major
+  %a{:href => "/"} Tumble
+  
 .tumble
+  %p.page-desc My wee lil’ scrapbook of design inspiration.
+
   .post
     .info
       %p.date
@@ -257,6 +262,3 @@
     %span.page Page 1 of 41
     %a.next{ :href => "/page/2", :rel => "next" }
       Later Edition »
-      
-%h1.major
-  %a{:href => "/"} Tumble
