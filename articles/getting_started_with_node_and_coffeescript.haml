@@ -71,9 +71,9 @@
   &lt;/head&gt;
   </code></pre>
   
-  After loading jQuery and CoffeeScript loads, CoffeeScript finds, compiles and executes all the `text/coffeescript` script elements.
+  jQuery and CoffeeScript are loading, and ten CoffeeScript finds, compiles and evals all the `text/coffeescript` script elements.
   
-  `$ ->` compiles to `$(function() {`, which defines an a `$(document).ready` jQuery callback, with the function body (the line below) calling `puts`.
+  `$ ->` compiles to `$(function() {`, which defines a `$(document).ready` jQuery event handler which simply calls `puts`.
   
   `puts` is a function that takes a `msg` argument and simply appends it to the body.
   
