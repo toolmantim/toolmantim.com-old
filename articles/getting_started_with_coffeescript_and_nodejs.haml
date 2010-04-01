@@ -1,0 +1,106 @@
+-# title: Getting started with CoffeeScript and Node
+-# published: 2010-04-02
+
+:markdown
+  Around these parts you used to find write-ups on how to get started with various new tech I'd been using. Well it's 2010 and time to revive that tradition, with a primer on getting up-and-running with [Node](http://nodejs.org/) and [CoffeeScript](http://jashkenas.github.com/coffee-script/).
+  
+  ## Node
+  
+  [Node](http://nodejs.org/) is a new Javascript runtime suited to writing asynchronous HTTP and socket-based apps.
+  
+  Node marries Google's lightning-fast [v8 Javascript engine](http://code.google.com/p/v8/) (which powers Chrome's JS) with a completely asynchronous standard library. This is interesting for us web geeks as the majority of software we write spends most of its time, not burning CPU cycles doing hard calculations, but waiting on IO. Async programming is nothing new but [Ryan Dahl](http://tinyclouds.org/) figured Javascript's event-driven culture might be the perfect breeding ground for making async programming accessible, the [list of 3rd party Node modules](http://wiki.github.com/ry/node/modules) indicates it seems to be working.
+  
+  ## CoffeeScript
+  
+  [CoffeeScript](http://jashkenas.github.com/coffee-script/) is a technicolor dreamcoat for our old pal Javascript.
+  
+  The features a programming language provides and the syntax you use to wield those features are two core aspects of a programming language. I've found Javascript can provide more power and flexibility than Ruby for composing software, but it Javascript fairs much worse at allowing concise expression.
+  
+  What if we could have the JS language features, but with an expressive syntax that rivals not only Ruby but most other languages? That, mate, is why I'm introducing you to CoffeeScript.
+  
+  CoffeeScript doesn't bring any new language features to the table—no library functions or object models—it's purely just a new syntax, one built with an understanding of how Javascript is and could be written, and a keen eye for beautiful and expressive syntax.
+  
+  You can compile CoffeeScript to Javascript via the `coffee` command line tool, directly in the browser via `<script type="text/coffeescript">`, or in any JS runtime via `CoffeeScript.compile`.
+    
+  As well as compilation, CoffeeScript provides a binary (that same `coffee` command) which wraps Node with CoffeeScript capabilities, meaning you can `#!/usr/bin/env coffee`, and you're off to the races! The Node and CoffeeScript integration also means that as long as you've done a `require 'coffeescript'` you can `require` `.coffee` files just as you do your `.js` files.
+  
+  ## Web serving with Node and CoffeeScript
+  
+  Let's get started by writing a simple web server:
+  
+  <pre><code class="coffeescript">http: require(&quot;http&quot;)
+  sys: require(&quot;sys&quot;)
+  fs: require(&quot;fs&quot;)
+  
+  http.createServer((req, res) -&gt;
+
+    sys.puts req.url
+
+    switch req.url
+      when &quot;/&quot;
+        fs.readFile &quot;index.html&quot;, (err, data) -&gt;
+          res.writeHead 200, {&quot;Content-Type&quot;:&quot;text/html&quot;, &quot;Content-Length&quot;:data.length}
+          res.write data
+          res.close()
+      else
+        res.writeHead 404, {&quot;Content-Type&quot;:&quot;text/plain&quot;, &quot;Content-Length&quot;:9}
+        res.write &quot;Not found&quot;
+        res.close()
+
+  ).listen(5678, &quot;localhost&quot;)
+  
+  sys.puts &quot;Listening on port 5678&quot;
+  </code></pre>
+  
+  The above code creates a HTTP server that serves up index.html without ever blocking on IO—anonymous functions are passed into both `createServer` and `fs.readFile` which are only called when IO is complete.
+  
+  ## HTML with jQuery and CoffeeScript
+  
+  So we've a simple backend HTTP server, but what about the front-end? We can write that in CoffeeScript too:
+  
+  <pre><code class="html">&lt;!DOCTYPE html&gt;
+  &lt;html lang=&quot;en-x-lolcat&quot;&gt;
+  &lt;head&gt;
+    &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://jashkenas.github.com/coffee-script/extras/coffee-script.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/coffeescript&quot;&gt;
+      puts: (msg) -&gt; $(&quot;&lt;p/&gt;&quot;).text(msg).appendTo(document.body)
+      $ -&gt;
+        puts &quot;Oh hai!&quot;
+    &lt;/script&gt;
+  &lt;/head&gt;
+  </code></pre>
+  
+  The above code loads jQuery and CoffeeScript. CoffeeScript then finds, compiles and executes all the `text/coffeescript` script elements.
+  
+  `$ ->`, the equivalent to `$(function() {` or `$(document).ready({`, defines an onload function, with the function body (the line below) calling the `puts` function assigned above.
+  
+  `puts` simply takes a `msg` argument and appends it to the body.
+  
+  Simple!
+  
+  ## Booting it up
+  
+  So how do we run all of this? We'll use Node/v8 via the `coffee` command on the backend, and a web browser on the front-end, with CoffeeScript pitching in on both sides.
+  
+  Copy the server code into `server.coffee`, the HTML page into `index.html`, and, finally, run `coffee server.coffee`. If all's well you should see something like:
+  
+  <pre><code class="shell">$ coffee server.coffee
+  Listening on port 5678
+  </code></pre>
+  
+  Now fire up `http://localhost:5678/`
+  
+  Woohoo! You've just added a few more deadly tools to your geeky [utilikilt](http://github.com/blog/282-github-in-europe).
+  
+  ## For bonus points: sockets!
+  
+  If you're feeling brave you should add some [WebSocket](http://en.wikipedia.org/wiki/Web_Sockets) shenanigans to the html page and a WebSocket server on the Node side of things. That's when this stuff gets really fun!
+  
+  ## It's the future I tells ya
+  
+  It's hard to argue this combo aint pretty darn sweet.
+  
+  Javascript is ubiquitus, v8 is seriously fast (which means for those *blocking* calculations it should scream too), and CoffeeScript makes programming Javascript a pleasure.
+  
+  This is one stack I'll be spending plenty of quality time with.

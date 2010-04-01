@@ -278,3 +278,18 @@ CodeHighlighter.addStyle("shell",{
 		exp: /(\$ ?)([^\n]+)/
 	}
 });
+
+CodeHighlighter.addStyle("coffeescript",{
+	string : {
+		exp  : /'[^']*'|"[^"]*"/
+	},
+	keywords : {
+		exp  : /\b(else|if|switch|when)\b/
+	},
+  symbol : {
+    exp  : /\b\d+\b/
+  },
+  func  : {
+    exp  : /\-&gt;/
+  }
+});
