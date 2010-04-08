@@ -61,15 +61,14 @@
   <pre><code class="html">&lt;!DOCTYPE html&gt;
   &lt;html lang=&quot;en-x-lolcat&quot;&gt;
   &lt;head&gt;
-    &lt;title&gt;Teh coffees and nodes&lt;/title&gt;
-    &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;http://jashkenas.github.com/coffee-script/extras/coffee-script.js&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/coffeescript&quot;&gt;
-      puts: (msg) -&gt; $(&quot;&lt;p/&gt;&quot;).text(msg).appendTo(document.body)
-      $ -&gt;
-        puts &quot;Oh hai!&quot;
-    &lt;/script&gt;
-  &lt;/head&gt;
+  &lt;title&gt;Teh coffees and nodes&lt;/title&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;http://jashkenas.github.com/coffee-script/extras/coffee-script.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/coffeescript&quot;&gt;
+    puts: (msg) -&gt; $(&quot;&lt;p/&gt;&quot;).text(msg).appendTo(document.body)
+    $ -&gt;
+      puts &quot;Oh hai!&quot;
+  &lt;/script&gt;
   </code></pre>
   
   Firstly we load jQuery and CoffeeScript, and then CoffeeScript finds, compiles and evals all the `text/coffeescript` script elements.
