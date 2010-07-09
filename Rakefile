@@ -1,4 +1,4 @@
 desc "Run toolmantim.com"
 task :default do
-  exec "ruby toolmantim.rb"
+  exec "rackup -p 4567"
 end

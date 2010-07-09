@@ -20,6 +20,9 @@
     - if @show_open_id_delegate
       %link{:rel => "openid.server", :href => "http://www.myopenid.com/server"}/
       %link{:rel => "openid.delegate", :href => "http://toolmantim.myopenid.com"}/
+
+    %script{:type => "text/javascript", :src => "http://use.typekit.com/giz5uom.js"}
+    %script{:type => "text/javascript"} try { Typekit.load(); } catch (e) {}
       
     = @head_content
 
